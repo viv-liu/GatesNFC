@@ -8,6 +8,20 @@
     android:padding="25dp"
     >
 
+    <TextView
+        android:id="@+id/tv_writeMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName" >
+    </EditText>
+
     <Button
         android:id="@+id/write_tag_button"
         android:layout_width="wrap_content"

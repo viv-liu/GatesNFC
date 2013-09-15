@@ -19,8 +19,11 @@ public final class R {
     }
     public static final class id {
         public static final int card_view=0x7f050000;
-        public static final int text_view=0x7f050002;
-        public static final int write_tag_button=0x7f050001;
+        public static final int editText1=0x7f050003;
+        public static final int text_view=0x7f050005;
+        public static final int tv_name=0x7f050001;
+        public static final int tv_writeMode=0x7f050002;
+        public static final int write_tag_button=0x7f050004;
     }
     public static final class layout {
         public static final int card_activity=0x7f030000;

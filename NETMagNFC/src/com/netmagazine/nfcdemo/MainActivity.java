@@ -14,9 +14,11 @@ import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 /**
@@ -25,15 +27,18 @@ import android.widget.TextView;
  */
 public class MainActivity extends Activity implements OnClickListener {
 	private NfcAdapter mAdapter;
-	private boolean mInWriteMode;
+	private boolean mInWriteMode = false;
 	private Button mWriteTagButton;
+	private TextView tv_writeMode;
+	private EditText et_name;
 	private TextView mTextView;
+	
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-      
+       
         // grab our NFC Adapter
         mAdapter = NfcAdapter.getDefaultAdapter(this);
         
@@ -41,9 +46,15 @@ public class MainActivity extends Activity implements OnClickListener {
         mWriteTagButton = (Button)findViewById(R.id.write_tag_button);
         mWriteTagButton.setOnClickListener(this);
         
+        // Shows value of mInWriteMode
+        tv_writeMode = (TextView)findViewById(R.id.tv_writeMode);
+        tv_writeMode.setText(String.valueOf(mInWriteMode));
+        
+        // EditText field to fill out patient name
+        et_name = (EditText)findViewById(R.id.editText1);
         // TextView that we'll use to output messages to screen
         mTextView = (TextView)findViewById(R.id.text_view);
-    }
+	}
     
 	public void onClick(View v) {
 		if(v.getId() == R.id.write_tag_button) {
@@ -65,6 +76,7 @@ public class MainActivity extends Activity implements OnClickListener {
     public void onNewIntent(Intent intent) {
 		if(mInWriteMode) {
 			mInWriteMode = false;
+			tv_writeMode.setText(String.valueOf(mInWriteMode));
 			
 			// write to newly scanned tag
 			Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
@@ -77,6 +89,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	 */
 	private void enableWriteMode() {
 		mInWriteMode = true;
+		tv_writeMode.setText(String.valueOf(mInWriteMode));
 		
 		// set up a PendingIntent to open the app when a tag is scanned
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
@@ -102,7 +115,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		// record that contains our custom "retro console" game data, using custom MIME_TYPE
 		
 		// Generates string corresponding to game console, convert to bytes
-		byte[] payload = getRandomConsole().getBytes();
+		byte[] payload = getNameFromET().getBytes();
 		// Converts NFC_DEMO string into bytes following US-ASCII conventions  
 		byte[] mimeBytes = MimeType.NFC_DEMO.getBytes(Charset.forName("US-ASCII"));
 		// Makes a compiled NdefRecord containing the type(MimeType) and payload(game console string)
@@ -124,7 +137,13 @@ public class MainActivity extends Activity implements OnClickListener {
 				
 				// work out how much space we need for the data
 				int size = message.toByteArray().length;
-				if (ndef.getMaxSize() < size) {
+				int maxSize = ndef.getMaxSize();
+				// Log results: header stuff + Sherlock Holmes is 94 bytes!!
+				// header is 53 bytes
+				// Sherlock Holmes is 41 bytes
+				Log.d("Ndef maxSize", String.valueOf(maxSize));
+				Log.d("message size", String.valueOf(size));
+				if (maxSize < size) {
 					displayMessage("Tag doesn't have enough free space.");
 					return false;
 				}
@@ -157,6 +176,9 @@ public class MainActivity extends Activity implements OnClickListener {
         return false;
     }
 	
+	private String getNameFromET() {
+		return et_name.getText().toString();
+	}
 	private String getRandomConsole() {
 		double rnd = Math.random();
 		if(rnd<0.25) return "nes";
