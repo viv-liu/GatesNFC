@@ -25,14 +25,16 @@ public class CardActivity extends Activity {
 		// ImageView that we'll use to display cards
         //mCardView = (ImageView)findViewById(R.id.card_view);
         
-        // see if app was started from a tag and show game console
+        // see if app was started from a tag and show the String stored
         Intent intent = getIntent();
         if(intent.getType() != null && intent.getType().equals(MimeType.NFC_DEMO)) {
         	Parcelable[] rawMsgs = getIntent().getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
             NdefMessage msg = (NdefMessage) rawMsgs[0];
             NdefRecord cardRecord = msg.getRecords()[0];
             String patientName = new String(cardRecord.getPayload());
-            tv_name.setText("Patient's name: " + patientName);
+            String cutName = patientName.substring(2, 5); //Takes from char 2-5 of name
+            											  //Eg) abcdefghi == cde
+            tv_name.setText("Patient's name: " + cutName);
             //displayCard(consoleName);
         }
 	}

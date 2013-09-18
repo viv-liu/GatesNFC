@@ -139,8 +139,10 @@ public class MainActivity extends Activity implements OnClickListener {
 				int size = message.toByteArray().length;
 				int maxSize = ndef.getMaxSize();
 				// Log results: header stuff + Sherlock Holmes is 94 bytes!!
-				// header is 53 bytes
-				// Sherlock Holmes is 41 bytes
+				// Shen is 83 bytes
+				// ShenShen is 87 bytes
+				// Thus Shen is actually 4 bytes (as expected)
+				// And Header is 79 bytes
 				Log.d("Ndef maxSize", String.valueOf(maxSize));
 				Log.d("message size", String.valueOf(size));
 				if (maxSize < size) {
