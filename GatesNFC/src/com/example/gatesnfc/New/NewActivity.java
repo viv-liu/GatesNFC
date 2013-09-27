@@ -78,13 +78,13 @@ public class NewActivity extends FragmentActivity {
 			Locale l = Locale.getDefault();
 			switch (position) {
 			case 0: return "Child's name";
-			/*case 1: return getString(R.string.tutorial_title_section2).toUpperCase(l);
-			case 2:	return getString(R.string.tutorial_title_section3).toUpperCase(l);
-			case 3:	return getString(R.string.tutorial_title_section4).toUpperCase(l);
-			case 4:	return getString(R.string.tutorial_title_section5).toUpperCase(l);
-			case 5:	return getString(R.string.tutorial_title_section6).toUpperCase(l);
-			case 6:	return getString(R.string.tutorial_title_section7).toUpperCase(l);
-			case 7:	return getString(R.string.tutorial_title_section8).toUpperCase(l);*/
+			case 1: return "Child's age";
+//			case 2:	return getString(R.string.tutorial_title_section3).toUpperCase(l);
+//			case 3:	return getString(R.string.tutorial_title_section4).toUpperCase(l);
+//			case 4:	return getString(R.string.tutorial_title_section5).toUpperCase(l);
+//			case 5:	return getString(R.string.tutorial_title_section6).toUpperCase(l);
+//			case 6:	return getString(R.string.tutorial_title_section7).toUpperCase(l);
+//			case 7:	return getString(R.string.tutorial_title_section8).toUpperCase(l);
 			}
 			return null;
 		}
