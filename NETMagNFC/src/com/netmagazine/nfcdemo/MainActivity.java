@@ -20,19 +20,21 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
- * Retro console "collectable cards/top trumps" NFC demo
- * @author richardleggett http://www.richardleggett.co.uk
  */
 public class MainActivity extends Activity implements OnClickListener {
 	private NfcAdapter mAdapter;
 	private boolean mInWriteMode = false;
+	private boolean mInWaitMode = false;
 	private Button mWriteTagButton;
+	private Button mWaitTagButton;
 	private TextView tv_writeMode;
 	private EditText et_name;
 	private TextView mTextView;
-	
+	private TextView mTextView2;
+	private TextView tv_waitMode;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,14 +48,21 @@ public class MainActivity extends Activity implements OnClickListener {
         mWriteTagButton = (Button)findViewById(R.id.write_tag_button);
         mWriteTagButton.setOnClickListener(this);
         
+        mWaitTagButton = (Button)findViewById(R.id.foreground_button);
+        mWaitTagButton.setOnClickListener(this);
+        
         // Shows value of mInWriteMode
         tv_writeMode = (TextView)findViewById(R.id.tv_writeMode);
         tv_writeMode.setText(String.valueOf(mInWriteMode));
+        
+        tv_waitMode = (TextView)findViewById(R.id.tv_waitMode);
+        tv_waitMode.setText(String.valueOf(mInWaitMode));
         
         // EditText field to fill out patient name
         et_name = (EditText)findViewById(R.id.editText1);
         // TextView that we'll use to output messages to screen
         mTextView = (TextView)findViewById(R.id.text_view);
+        mTextView2 = (TextView)findViewById(R.id.text_view2);
 	}
     
 	public void onClick(View v) {
@@ -61,20 +70,54 @@ public class MainActivity extends Activity implements OnClickListener {
 			displayMessage("Touch and hold tag against phone to write.");
 			enableWriteMode();
 		}
+		if(v.getId() == R.id.foreground_button) {
+			if (mInWaitMode){
+				displayMessage("Not Waiting");
+				mInWaitMode = false;
+				tv_waitMode.setText(String.valueOf(mInWaitMode));
+				disableWaitMode();
+			}
+			else{
+				displayMessage("Waiting");
+				enableWaitMode();
+			}
+		}
 	}
 	
+	
+	//NFC tag causes the app to PAUSE so must close foreground dispatch
 	@Override
 	protected void onPause() {
 		super.onPause();
+		Log.d("PAUSING", String.valueOf(mInWaitMode));
 		disableWriteMode();
+		disableWaitMode();
 	}
-	
+	//MUST RESUME MY FOREGROUND DISPATCH TO CONTINUE it after pause
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if(mInWaitMode) {
+			enableWaitMode();
+		}
+		if (mInWriteMode) {
+			enableWriteMode();
+		}
+		
+	}
 	/**
 	 * Called when our blank tag is scanned executing the PendingIntent
 	 */
 	@Override
     public void onNewIntent(Intent intent) {
-		if(mInWriteMode) {
+		
+		Log.d("Intent_Value", String.valueOf(mInWaitMode));
+		
+		if(mInWaitMode) {
+			Toast.makeText(this, "Still Waiting", Toast.LENGTH_LONG).show();
+			Log.d("INSIDER", String.valueOf(mInWaitMode));
+		}
+		else if(mInWriteMode) {
 			mInWriteMode = false;
 			tv_writeMode.setText(String.valueOf(mInWriteMode));
 			
@@ -82,7 +125,14 @@ public class MainActivity extends Activity implements OnClickListener {
 			Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 			writeTag(tag);
 		}
+
     }
+	
+	private void waitAgain() {
+		mInWaitMode = true;
+		mAdapter.disableForegroundDispatch(this);
+		enableWaitMode();
+	}
 	
 	/**
 	 * Force this Activity to get NFC events first
@@ -101,6 +151,26 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 	
 	private void disableWriteMode() {
+		mAdapter.disableForegroundDispatch(this);
+	}
+	
+	
+	private void enableWaitMode() {
+		mInWaitMode = true;
+		tv_waitMode.setText(String.valueOf(mInWaitMode));
+		
+		// set up a PendingIntent to open the app when a tag is scanned
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+            new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+        IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
+        IntentFilter[] filters = new IntentFilter[] { tagDetected };
+        
+		Log.d("Passed Intent", String.valueOf(mInWaitMode));	
+		
+		mAdapter.enableForegroundDispatch(this, pendingIntent, filters, null);
+	}
+	
+	private void disableWaitMode() {
 		mAdapter.disableForegroundDispatch(this);
 	}
 	
@@ -181,14 +251,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	private String getNameFromET() {
 		return et_name.getText().toString();
 	}
-	private String getRandomConsole() {
-		double rnd = Math.random();
-		if(rnd<0.25) return "nes";
-		else if(rnd<0.5) return "snes";
-		else if(rnd<0.75) return "megadrive";
-		else return "mastersystem";
-	}
-	
+
 	private void displayMessage(String message) {
 		mTextView.setText(message);
 	}

@@ -39,4 +39,26 @@
         android:gravity="center_horizontal"
         android:textSize="25sp"
         />
+
+    <Button
+        android:id="@+id/foreground_button"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Foreground Dispatch Waiting" />
+
+    <TextView
+        android:id="@+id/tv_waitMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+    
+        <TextView 
+        android:id="@+id/text_view2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:gravity="center_horizontal"
+        android:textSize="25sp"
+        />
 </LinearLayout>
