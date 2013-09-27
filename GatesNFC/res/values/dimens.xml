@@ -1,0 +1,19 @@
+<resources>
+
+    <!-- a set of predefined spacing that will be used to define layouts. -->
+    <dimen name="extra_small_margin">4dp</dimen>
+    <dimen name="small_margin">8dp</dimen>
+    <dimen name="medium_margin">16dp</dimen>
+    <dimen name="large_margin">32dp</dimen>
+    <dimen name="extra_large_margin">64dp</dimen>
+    
+    <dimen name="small_text">12sp</dimen>
+    <dimen name="medium_text">18sp</dimen>
+    <dimen name="large_text">22sp</dimen>
+    <dimen name="extra_large_text">32sp</dimen>
+    
+    
+	<dimen name="exercise_icon_size">48sp</dimen>
+	
+	<dimen name="maximum_image_height">300sp</dimen>
+</resources>
