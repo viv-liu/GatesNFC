@@ -1,5 +1,8 @@
 package com.example.gatesnfc.New;
 
+import com.countrypicker.CountryPicker;
+import com.countrypicker.CountryPickerListener;
+
 import com.example.gatesnfc.R;
 
 import android.os.Bundle;
@@ -11,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SingleTextEntryFragment extends Fragment {
 	@SuppressWarnings("unused")
@@ -81,7 +85,10 @@ public class SingleTextEntryFragment extends Fragment {
 			FilterArray2[1] = filter;
 			et_field.setFilters(FilterArray2);
 			break;
-//		case 3:	dummyTextView.setText(R.string.tutorial_description_section3); break;
+		case 3:	 
+
+			
+			break;
 //		case 4:	dummyTextView.setText(R.string.tutorial_description_section4); break;
 //		case 5:	dummyTextView.setText(R.string.tutorial_description_section5); break;
 //		case 6:	dummyTextView.setText(R.string.tutorial_description_section6); break;

@@ -1,6 +1,9 @@
 package com.example.gatesnfc.New;
 
 import java.util.Locale;
+
+import com.countrypicker.CountryPicker;
+import com.countrypicker.CountryPickerListener;
 import com.example.gatesnfc.R;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +13,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.widget.Toast;
 
 public class NewActivity extends FragmentActivity {
@@ -94,6 +99,29 @@ public class NewActivity extends FragmentActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
+		MenuItem item = menu.findItem(R.id.show_dialog);
+		item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				CountryPicker picker = CountryPicker.newInstance("Select Country");
+				picker.setListener(new CountryPickerListener() {
+
+					@Override
+					public void onSelectCountry(String name, String code) {
+						Toast.makeText(
+								NewActivity.this,
+								"Country Name: " + name + " - Code: " + code
+										+ " - Currency: "
+										+ CountryPicker.getCurrencyCode(code),
+								Toast.LENGTH_SHORT).show();
+					}
+				});
+				
+				picker.show(getSupportFragmentManager(), "COUNTRY_PICKER");
+				return false;
+			}
+		});
 		return true;
 	}
 }

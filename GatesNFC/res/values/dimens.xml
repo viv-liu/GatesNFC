@@ -16,4 +16,9 @@
 	<dimen name="exercise_icon_size">48sp</dimen>
 	
 	<dimen name="maximum_image_height">300sp</dimen>
+	
+	
+	    <dimen name="cp_dialog_width">200dp</dimen>
+    <dimen name="cp_dialog_height">300dp</dimen>
+	
 </resources>
