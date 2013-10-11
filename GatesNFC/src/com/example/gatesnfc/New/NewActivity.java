@@ -65,7 +65,11 @@ public class NewActivity extends FragmentActivity {
 			Fragment fragment;
 			
 			if(position+1 < NUM_STEPS){
-				fragment = SingleTextEntryFragment.newInstance(position);
+				if(position == 1) {
+					fragment = DateEntryFragment.newInstance(position);
+				}
+				else 
+					fragment = SingleTextEntryFragment.newInstance(position);
 			} else {
 				fragment = null;
 			}
@@ -82,8 +86,8 @@ public class NewActivity extends FragmentActivity {
 		public CharSequence getPageTitle(int position) {
 			Locale l = Locale.getDefault();
 			switch (position) {
-			case 0: return "Child's name";
-			case 1: return "Child's age";
+			case 0: return "Name";
+			case 1: return "Birthdate";
 //			case 2:	return getString(R.string.tutorial_title_section3).toUpperCase(l);
 //			case 3:	return getString(R.string.tutorial_title_section4).toUpperCase(l);
 //			case 4:	return getString(R.string.tutorial_title_section5).toUpperCase(l);

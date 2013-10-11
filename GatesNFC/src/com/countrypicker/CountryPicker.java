@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
@@ -138,6 +139,7 @@ public class CountryPicker extends DialogFragment implements
 			throws java.io.IOException {
 		InputStream inputStream = context.getResources().openRawResource(
 				R.raw.countries);
+		//TODO: change to other records as well && create new JSON in raw/
 		BufferedReader reader = new BufferedReader(new InputStreamReader(
 				inputStream));
 		StringBuffer result = new StringBuffer();
@@ -208,6 +210,8 @@ public class CountryPicker extends DialogFragment implements
 					Country country = selectedCountriesList.get(position);
 					listener.onSelectCountry(country.getName(),
 							country.getCode());
+					view.setBackgroundColor(Color.RED);
+					// TODO: only allow one selection, Toggle?
 				}
 			}
 		});
