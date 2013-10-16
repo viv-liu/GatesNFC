@@ -289,46 +289,63 @@ public final class R {
     }
     public static final class id {
         public static final int RelativeLayout1=0x7f0a0007;
-        public static final int action_settings=0x7f0a0016;
-        public static final int button1=0x7f0a000e;
-        public static final int button2=0x7f0a000f;
+        public static final int RelativeLayout_text_change=0x7f0a0020;
+        public static final int action_settings=0x7f0a0022;
+        public static final int add_immunization=0x7f0a000c;
+        public static final int address=0x7f0a0017;
         public static final int button_existing=0x7f0a0000;
         public static final int button_new=0x7f0a0002;
         public static final int button_sets=0x7f0a0001;
         public static final int container=0x7f0a0005;
         public static final int country_picker_listview=0x7f0a0004;
         public static final int country_picker_search=0x7f0a0003;
-        public static final int editText1=0x7f0a0010;
-        public static final int pager=0x7f0a0012;
-        public static final int pager_title_strip=0x7f0a0013;
-        public static final int row_icon=0x7f0a0014;
-        public static final int row_title=0x7f0a0015;
-        public static final int show_dialog=0x7f0a0017;
-        public static final int tableRow1=0x7f0a0008;
-        public static final int tableRow2=0x7f0a000a;
-        public static final int tableRow3=0x7f0a000c;
-        public static final int textView_dad_name=0x7f0a000d;
+        public static final int dad_name=0x7f0a0015;
+        public static final int editText1=0x7f0a0018;
+        public static final int immunization_picker_listview=0x7f0a001d;
+        public static final int immunization_picker_search=0x7f0a001c;
+        public static final int input_text=0x7f0a0021;
+        public static final int list_immunization=0x7f0a000b;
+        public static final int mDate=0x7f0a0011;
+        public static final int mom_name=0x7f0a0013;
+        public static final int name=0x7f0a000f;
+        public static final int pager=0x7f0a001a;
+        public static final int pager_title_strip=0x7f0a001b;
+        public static final int row_icon=0x7f0a001e;
+        public static final int row_title=0x7f0a001f;
+        public static final int show_dialog=0x7f0a0023;
+        public static final int tableLayout1=0x7f0a0008;
+        public static final int tableRow1=0x7f0a0009;
+        public static final int tableRow2=0x7f0a0012;
+        public static final int tableRow3=0x7f0a0014;
+        public static final int tableRow4=0x7f0a0016;
+        public static final int tableRow5=0x7f0a000d;
+        public static final int tableRow6=0x7f0a0010;
         public static final int textView_date=0x7f0a0006;
-        public static final int textView_label=0x7f0a0011;
-        public static final int textView_mom_name=0x7f0a000b;
-        public static final int textView_name=0x7f0a0009;
+        public static final int textView_label=0x7f0a0019;
+        public static final int textView_name=0x7f0a000a;
+        public static final int unique_id=0x7f0a000e;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int country_picker=0x7f030001;
         public static final int fragment_container=0x7f030002;
         public static final int fragment_date_entry=0x7f030003;
-        public static final int fragment_patient_summary=0x7f030004;
-        public static final int fragment_single_text_entry=0x7f030005;
-        public static final int fragment_view_pager=0x7f030006;
-        public static final int row=0x7f030007;
-        public static final int title=0x7f030008;
+        public static final int fragment_immunization_sum=0x7f030004;
+        public static final int fragment_patient_summary=0x7f030005;
+        public static final int fragment_single_text_entry=0x7f030006;
+        public static final int fragment_view_pager=0x7f030007;
+        public static final int immunization_picker=0x7f030008;
+        public static final int row=0x7f030009;
+        public static final int text_input_frag=0x7f03000a;
+        public static final int title=0x7f03000b;
     }
     public static final class menu {
         public static final int main=0x7f090000;
     }
     public static final class raw {
         public static final int countries=0x7f040000;
+        public static final int immunizations=0x7f040001;
+        public static final int list_immunes=0x7f040002;
     }
     public static final class string {
         public static final int action_settings=0x7f070001;

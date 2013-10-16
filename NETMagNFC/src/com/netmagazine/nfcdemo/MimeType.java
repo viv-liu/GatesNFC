@@ -16,7 +16,7 @@ public class MimeType {
 	 * 
 	 * -Vivian
 	 * */
-	public static final String NFC_DEMO = "application/vnd.netmagazine.nfcdemo";
+	public static final String NFC_DEMO = "application/vnd.example.gatesnfc.existing";
 	/**
 	 * Should write a function where if it doesn't detect this special class then it will
 	 * go to the new user page
