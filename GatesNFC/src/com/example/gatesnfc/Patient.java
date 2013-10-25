@@ -5,6 +5,31 @@ import java.util.Calendar;
 
 public class Patient {
 
+	// Indices for immArray
+	public final static int BCG = 0;
+	public final static int HepB1 = 1, HepB2 = 2, HepB3 = 3, HepB4 = 4;
+	public final static int Pol_type1 = 5, Pol_type2 = 6, Pol1 = 7, Pol2 = 8, Pol3 = 9, Pol4 = 10;
+	public final static int DTP1 = 11, DTP2 = 12, DTP3 = 13;
+	public final static int HIB1 = 14, HIB2 = 15, HIB3 = 16;
+	public final static int PC_type = 17, PC1 = 18, PC2 = 19, PC3 = 20;
+	public final static int ROT_TYPE = 21, ROT1 = 22, ROT2 = 23, ROT3 = 24;
+	public final static int MEA1 = 25, MEA2 = 26;
+	public final static int RUB = 27;
+	public final static int HPV1 = 28, HPV2 = 29, HPV3 = 30;
+	public final static int JE_type = 31, JE1 = 32, JE2 = 33;
+	public final static int YF1 = 34;
+	public final static int TBE1 = 35, TBE2 = 36, TBE3 = 37;
+	public final static int TYP_type = 38, TYP1 = 39, TYP2 = 40, TYP3 = 41, TYP4 = 42;
+	public final static int CHO_type = 43, CHO1 = 44, CHO2 = 45, CHO3 = 46;
+	public final static int MENG_type1 = 47, MENG_type2 = 48, MENG1 = 49, MENG2 = 50;
+	public final static int RAB1 = 51, RAB2 = 52, RAB3 = 53;
+	public final static int MUP1 = 54, MUP2 = 55;
+	public final static int INF1 = 56, INF2 = 57;
+	public final static int HepA1 = 58;
+	
+	// Actual immunization array
+	private boolean[] immArray;
+	
 	//String variables
 	private String code;
 	public String firstName = "", lastName = "";
@@ -15,68 +40,13 @@ public class Patient {
 	public String street = "", optional = "", region = "", country = "", postal = "";
 	public String notes = "";
 	
-	//Immunizations Booleans
-	private boolean BCG;
-	private boolean HepB1;
-	private boolean HepB2;
-	private boolean HepB3;
-	private boolean HepB4;
-	private boolean Pol_type1;
-	private boolean Pol_type2;
-	private boolean Pol1;
-	private boolean Pol2;
-	private boolean Pol3;
-	private boolean Pol4;
-	private boolean DTP1;
-	private boolean DTP2;
-	private boolean DTP3;
-	private boolean HIB1;
-	private boolean HIB2;
-	private boolean HIB3;
-	private boolean PC_type;
-	private boolean PC1;
-	private boolean PC2;
-	private boolean PC3;
-	private boolean ROT_TYPE;
-	private boolean ROT1;
-	private boolean ROT2;
-	private boolean ROT3;
-	private boolean MEA1;
-	private boolean MEA2;
-	private boolean RUB;
-	private boolean HPV1;
-	private boolean HPV2;
-	private boolean HPV3;
-	private boolean JE_type;
-	private boolean JE1;
-	private boolean JE2;
-	private boolean YF1;
-	private boolean TBE1;
-	private boolean TBE2;
-	private boolean TBE3;
-	private boolean TYP_type;
-	private boolean TYP1;
-	private boolean TYP2;
-	private boolean TYP3;
-	private boolean TYP4;
-	private boolean CHO_type;
-	private boolean CHO1;
-	private boolean CHO2;
-	private boolean CHO3;
-	private boolean MENG_type1;
-	private boolean MENG_type2;
-	private boolean MENG1;
-	private boolean MENG2;
-	private boolean RAB1;
-	private boolean RAB2;
-	private boolean RAB3;
-	private boolean MUP1;
-	private boolean MUP2;
-	private boolean INF1;
-	private boolean INF2;
-	private boolean HepA1;
-	
-	
+	public Patient() {
+		// size of array = max index + 1
+		immArray = new boolean[HepA1 + 1];
+		for(int i = 0; i < immArray.length; i++) {
+			immArray[i] = false;
+		}
+	}
 	//Get and set string subfunctions
 	public String getCode() {
 		return this.code;
@@ -85,38 +55,6 @@ public class Patient {
 	public void setCode(String code) {
 		this.code = code;
 	}
-
-//	public String getName() {
-//		return this.name;
-//	}
-//
-//	public void setName(String name) {
-//		this.name = name;
-//	}
-//	
-//	public String get_momName() {
-//		return this.mom_name;
-//	}
-//
-//	public void set_momName(String name) {
-//		this.mom_name = name;
-//	}
-//
-//	public String get_dadName() {
-//		return this.dad_name;
-//	}
-//
-//	public void set_dadName(String name) {
-//		this.dad_name = name;
-//	}
-//	
-//	public String getAdd() {
-//		return this.address;
-//	}
-//
-//	public void setAdd(String add) {
-//		this.address = add;
-//	}
 	
 	public String getNotes() {
 		return this.notes;
@@ -138,8 +76,7 @@ public class Patient {
 		Class<?> c = this.getClass();
 		Field f = c.getDeclaredField(mI);
 		f.setAccessible(true);
-		
-		return (Boolean) f.get(this);
+		return immArray[(Integer) f.get(this)];
 	}
 	
 	public void setImmunization(String mI) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException
@@ -148,16 +85,18 @@ public class Patient {
 		Field f = c.getDeclaredField(mI);
 		f.setAccessible(true);
 		//Toggles the Boolean on click
-		if ((Boolean) f.get(this))
+		int index = (Integer) f.get(this);
+		if (immArray[index])
 		{
-			f.set(this, false);
+			immArray[index] = false;
 		}
 		else
 		{
-			f.set(this, true);
+			immArray[index] = true;
 		}
 	}
-	
-	
+	public String immunizationsToString() {
+		
+		return null;
+	}
 }
-
