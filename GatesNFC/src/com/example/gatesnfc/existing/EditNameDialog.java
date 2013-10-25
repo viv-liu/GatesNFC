@@ -42,19 +42,19 @@ public class EditNameDialog extends DialogFragment implements OnEditorActionList
         if (EditorInfo.IME_ACTION_DONE == actionId) {
         	//Directly change existing activity patient info
         	if (mType == "Name"){
-        		ExistingActivity.p_existing.setName(v.getText().toString());
+        		ExistingActivity.p_existing.firstName = (v.getText().toString());
         	}
         	if (mType == "momName")
         	{
-        		ExistingActivity.p_existing.set_momName(v.getText().toString());
+        		ExistingActivity.p_existing.mom_firstName = (v.getText().toString());
         	}
         	if (mType == "dadName")
         	{
-        		ExistingActivity.p_existing.set_dadName(v.getText().toString());
+        		ExistingActivity.p_existing.dad_firstName = (v.getText().toString());
         	}
         	if (mType == "address")
         	{
-        		ExistingActivity.p_existing.setAdd(v.getText().toString());
+        		ExistingActivity.p_existing.street = (v.getText().toString());
         	}
         	if (mType == "id")
         	{

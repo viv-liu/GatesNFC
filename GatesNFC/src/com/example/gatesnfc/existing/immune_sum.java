@@ -57,7 +57,7 @@ public class immune_sum extends Fragment implements OnClickListener{
 
 	@Override
 	public void onClick(View view) {
-		// TODO Auto-generated method stub
+		// TODO Create a ListView that auto-updates a list in the page
 		switch(view.getId()) {
 		case R.id.textView_name:
 			updateView();

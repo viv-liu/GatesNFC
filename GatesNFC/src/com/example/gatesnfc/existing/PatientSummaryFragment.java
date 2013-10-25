@@ -52,7 +52,7 @@ public class PatientSummaryFragment extends Fragment implements OnClickListener{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// load the layout elements from an xml file
-		rootView = inflater.inflate(R.layout.fragment_patient_summary, container, false);
+		rootView = inflater.inflate(R.layout.existing_patient_summary, container, false);
 		
 		//Set Views by patientName created in Existing Activity
 		nameView = (Button) rootView.findViewById(R.id.name);
@@ -115,10 +115,10 @@ public class PatientSummaryFragment extends Fragment implements OnClickListener{
 	}
 
 	public void updateView(){
-		nameView.setText (ExistingActivity.p_existing.getName());
-		momNameView.setText (ExistingActivity.p_existing.get_momName());
-		dadNameView.setText (ExistingActivity.p_existing.get_dadName());
-		addressView.setText (ExistingActivity.p_existing.getAdd());
+		nameView.setText (ExistingActivity.p_existing.firstName);
+		momNameView.setText (ExistingActivity.p_existing.mom_firstName);
+		dadNameView.setText (ExistingActivity.p_existing.dad_firstName);
+		addressView.setText (ExistingActivity.p_existing.street);
 		uniqueIdView.setText (ExistingActivity.p_existing.getCode());
 	}	
 	

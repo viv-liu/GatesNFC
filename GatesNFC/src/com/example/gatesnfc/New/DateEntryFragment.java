@@ -1,13 +1,7 @@
 package com.example.gatesnfc.New;
 
 import com.example.gatesnfc.R;
-
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -22,12 +16,13 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 
 public class DateEntryFragment extends Fragment implements OnClickListener {
-
+	@SuppressWarnings("unused")
 	private static final String TAG = DateEntryFragment.class.getSimpleName();
 	public static final String ARG_SECTION_NUMBER = "section_number";
-	private static final String DATEFORMAT = "MMM dd, yyyy";
+	public static final String DATEFORMAT = "MMM dd, yyyy";
 	private static TextView tv_date;
-	private static Calendar cal;
+	public static Calendar cal;
+	private DialogFragment datePickerDialog;
 	public DateEntryFragment() {
 	}
 	
@@ -49,7 +44,7 @@ public class DateEntryFragment extends Fragment implements OnClickListener {
 		cal = Calendar.getInstance();
 		tv_date.setText(DateFormat.format(DATEFORMAT, cal).toString());
 		
-		int section_number = getArguments().getInt(ARG_SECTION_NUMBER);		
+		//int section_number = getArguments().getInt(ARG_SECTION_NUMBER);		
 		
 		return rootView;
 	}	
@@ -63,8 +58,12 @@ public class DateEntryFragment extends Fragment implements OnClickListener {
 	}
 	
 	public void showDatePickerDialog() {
-	    DialogFragment newFragment = new DatePickerFragment();
-	    newFragment.show(getActivity().getFragmentManager(), "datePicker");
+		if(datePickerDialog == null) {
+			datePickerDialog = new DatePickerFragment();
+		}
+		// To ensure only one datePickerDialog is visible at a time
+		if(!datePickerDialog.isVisible())
+	    datePickerDialog.show(getActivity().getFragmentManager(), "datePicker");
 	}
 	
 	public static class DatePickerFragment extends DialogFragment

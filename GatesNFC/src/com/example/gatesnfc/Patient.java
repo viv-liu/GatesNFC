@@ -1,16 +1,19 @@
 package com.example.gatesnfc;
 
 import java.lang.reflect.Field;
+import java.util.Calendar;
 
 public class Patient {
 
 	//String variables
 	private String code;
-	private String name;
-	private String mom_name;
-	private String dad_name;
-	private String address;
-	private String notes;
+	public String firstName = "", lastName = "";
+	public Calendar birthday = Calendar.getInstance();
+	public String mom_firstName = "", mom_lastName = "";
+	public String dad_firstName = "", dad_lastName = "";
+	public int number = 0;
+	public String street = "", optional = "", region = "", country = "", postal = "";
+	public String notes = "";
 	
 	//Immunizations Booleans
 	private boolean BCG;
@@ -83,37 +86,37 @@ public class Patient {
 		this.code = code;
 	}
 
-	public String getName() {
-		return this.name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public String get_momName() {
-		return this.mom_name;
-	}
-
-	public void set_momName(String name) {
-		this.mom_name = name;
-	}
-
-	public String get_dadName() {
-		return this.dad_name;
-	}
-
-	public void set_dadName(String name) {
-		this.dad_name = name;
-	}
-	
-	public String getAdd() {
-		return this.address;
-	}
-
-	public void setAdd(String add) {
-		this.address = add;
-	}
+//	public String getName() {
+//		return this.name;
+//	}
+//
+//	public void setName(String name) {
+//		this.name = name;
+//	}
+//	
+//	public String get_momName() {
+//		return this.mom_name;
+//	}
+//
+//	public void set_momName(String name) {
+//		this.mom_name = name;
+//	}
+//
+//	public String get_dadName() {
+//		return this.dad_name;
+//	}
+//
+//	public void set_dadName(String name) {
+//		this.dad_name = name;
+//	}
+//	
+//	public String getAdd() {
+//		return this.address;
+//	}
+//
+//	public void setAdd(String add) {
+//		this.address = add;
+//	}
 	
 	public String getNotes() {
 		return this.notes;
@@ -123,6 +126,13 @@ public class Patient {
 		this.notes = Notes;
 	}
 	
+	public void setBirthday(Calendar cal) {
+		birthday = cal;
+	}
+	
+	public String getAddressString() {
+		return number + " " + street + ", " + optional + ", " + region + ", " + country + ", " + postal; 
+	}
 	public Boolean getImmunization(String mI) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException
 	{
 		Class<?> c = this.getClass();
@@ -150,3 +160,4 @@ public class Patient {
 	
 	
 }
+

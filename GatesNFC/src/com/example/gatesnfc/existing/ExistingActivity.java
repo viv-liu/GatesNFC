@@ -19,9 +19,10 @@ public class ExistingActivity extends FragmentActivity {
 	
 	static ViewPager mViewPager;
 	public static Patient p_existing;
-
+	public static Patient p_reset;
 
 	protected static Object c_existing;	
+	protected static Object c_reset;
 	
 	static final int NUM_STEPS = 3;
 	
@@ -47,8 +48,10 @@ public class ExistingActivity extends FragmentActivity {
 		mViewPager.setAdapter(mSectionsPagerAdapter);
 		
 		p_existing = new Patient();
+		p_reset = new Patient();
 		
 		Class<?> c_existing = p_existing.getClass();
+		Class<?> c_reset = p_reset.getClass();
 		
 		//Dummy Info
 		//TODO: Create a backup so on reset (in menu options) goes back to the original default
@@ -58,51 +61,29 @@ public class ExistingActivity extends FragmentActivity {
 		notes = "This is Notes";
 		address = "16 My house";
 		unique_id = "007";
-		p_existing.setName(patientName);
-		p_existing.set_dadName(dadName);
-		p_existing.set_momName(momName);
+		p_existing.firstName = (patientName);
+		p_existing.dad_firstName = (dadName);
+		p_existing.mom_firstName = (momName);
 		p_existing.setNotes(notes);
-		p_existing.setAdd(address);
+		p_existing.street = (address);
 		p_existing.setCode(unique_id);
+		// Initializing a RESET
+		p_reset.firstName = (patientName);
+		p_reset.dad_firstName = (dadName);
+		p_reset.mom_firstName = (momName);
+		p_reset.setNotes(notes);
+		p_reset.street = (address);
+		p_reset.setCode(unique_id);
 		
 		try {
 			p_existing.setImmunization("DTP1");
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchFieldException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
 			p_existing.setImmunization("DTP2");
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchFieldException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
 			p_existing.setImmunization("HepB1");
-		} catch (IllegalArgumentException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (NoSuchFieldException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
 			p_existing.setImmunization("HepA1");
+			p_reset.setImmunization("DTP1");
+			p_reset.setImmunization("DTP2");
+			p_reset.setImmunization("HepB1");
+			p_reset.setImmunization("HepA1");
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -113,6 +94,7 @@ public class ExistingActivity extends FragmentActivity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}	
 
 
