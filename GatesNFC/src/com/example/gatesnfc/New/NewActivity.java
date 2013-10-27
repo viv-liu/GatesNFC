@@ -1,13 +1,22 @@
 package com.example.gatesnfc.New;
 
+
 import com.countrypicker.CountryPicker;
 import com.countrypicker.CountryPickerListener;
+
+import com.example.gatesnfc.NFC_WRITE_ACTIVITY;
 import com.example.gatesnfc.Patient;
 import com.example.gatesnfc.PrefUtils;
 import com.example.gatesnfc.R;
 
+
 import android.app.AlertDialog;
+
 import android.content.DialogInterface;
+import android.content.Intent;
+
+import android.nfc.NfcAdapter;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -23,32 +32,23 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
+
 public class NewActivity extends FragmentActivity implements OnClickListener{
 	private final int NAME = 0, BIRTHDATE = 1, PARENTSNAME = 2, ADDRESS = 3, VACCINE = 4, NOTES = 5, SUMMARY = 6;
 	private static final int NUM_PAGES = 7;
 	SectionsPagerAdapter mSectionsPagerAdapter;
 	static ViewPager mViewPager;	
 	public static Patient patient;
+	
+	private String mResult;
+	private String mMessage;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fragment_view_pager);
 
-		patient = new Patient();
-		try {
-			patient.getImmunization("HepA1");
-			patient.getPackagedImmuneString();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchFieldException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the app.
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -96,6 +96,8 @@ public class NewActivity extends FragmentActivity implements OnClickListener{
 		patient = new Patient();
 	}	
 
+	
+	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO: confirm onBackPressed: Your unsaved info will die. 
@@ -225,8 +227,8 @@ public class NewActivity extends FragmentActivity implements OnClickListener{
 			break;
 		case R.id.button_complete:
 			// TODO: NFC storing here.
-			Toast.makeText(this, "Do some NFC storing...", Toast.LENGTH_SHORT).show();
-			finish();
+			store_Data();
+			Toast.makeText(this, mResult, Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.button_name:
 			mViewPager.setCurrentItem(NAME);
@@ -248,4 +250,43 @@ public class NewActivity extends FragmentActivity implements OnClickListener{
 			break;
 		}
 	}
+
+
+
+	private void store_Data() {
+		
+		mMessage = "ABCDEFG";
+		Intent i = new Intent(this, NFC_WRITE_ACTIVITY.class);
+		i.putExtra("SendData", mMessage);
+		startActivityForResult(i, 1);
+		
+	}
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		  if (requestCode == 1) {
+
+		     if(resultCode == RESULT_OK){    
+		    	 
+				 String result=data.getStringExtra("result"); 
+		    	 
+		    	 AlertDialog.Builder dlgAlert= new AlertDialog.Builder(this)
+		        .setTitle(result)
+		        .setCancelable(true)
+		        .setPositiveButton("Yes Done", new DialogInterface.OnClickListener() {
+		            public void onClick(DialogInterface dialog, int whichButton) {
+		            }
+		        })
+		        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		            public void onClick(DialogInterface dialog, int whichButton) {
+		            }
+		        });
+				AlertDialog box=dlgAlert.create();
+		        box.show();         
+		     }
+		     if (resultCode == RESULT_CANCELED) {    
+		         //Write your code if there's no result
+		     }
+		  }
+		}//onActivityResult
 }

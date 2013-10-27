@@ -64,5 +64,6 @@ public class PatientSummaryFragment extends Fragment {
 		
 		return rootView;
 	}	
+	
 }
 

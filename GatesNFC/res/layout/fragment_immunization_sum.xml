@@ -1,51 +1,59 @@
-<?xml version="1.0" encoding="utf-8"?><RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/RelativeLayout1"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TableLayout
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        
+        <TableLayout
         android:id="@+id/tableLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp" >
+        android:layout_centerHorizontal="true" >
 
         <TableRow
             android:id="@+id/tableRow1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
 
-            <TextView
+            <Button
+                style="?android:attr/buttonBarButtonStyle"
+                android:id="@+id/add_immunization"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Name: " />
+                android:text="Add" />
 
-            <TextView
-                android:id="@+id/textView_name"
+            <Button
+                style="?android:attr/buttonBarButtonStyle"
+                android:id="@+id/remove_immunization"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sherlock Holmes" />
+                android:text="Remove" />
         </TableRow>
-    </TableLayout>
-    
-        <Button
-        android:id="@+id/list_immunization"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="28dp"
-        android:text="List Immunizations" />
+        
+        </TableLayout>
+        
+    </RelativeLayout>
 
-    <Button
-        android:id="@+id/add_immunization"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/immunization_picker_search"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/list_immunization"
-        android:layout_alignLeft="@+id/list_immunization"
-        android:layout_marginBottom="19dp"
-        android:text="Add Immunizations" />
-    
-</RelativeLayout>
+        android:layout_margin="10dp"
+        android:hint="@string/search"
+        android:drawableLeft="@drawable/search_icon" />
+
+    <ListView
+        android:id="@+id/immunization_picker_listview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp" >
+    </ListView>
+
+</LinearLayout>

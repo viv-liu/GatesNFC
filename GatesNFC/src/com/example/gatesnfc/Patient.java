@@ -1,14 +1,7 @@
 package com.example.gatesnfc;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.BitSet;
 import java.util.Calendar;
-
-import com.example.gatesnfc.New.DateEntryFragment;
-
-import android.text.format.DateFormat;
-import android.util.Log;
 
 public class Patient {
 
