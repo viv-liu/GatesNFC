@@ -38,6 +38,7 @@ public class NewActivity extends FragmentActivity implements OnClickListener{
 		patient = new Patient();
 		try {
 			patient.getImmunization("HepA1");
+			patient.getPackagedImmuneString();
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

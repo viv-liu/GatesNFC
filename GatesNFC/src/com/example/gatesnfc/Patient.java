@@ -1,7 +1,14 @@
 package com.example.gatesnfc;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Calendar;
+
+import com.example.gatesnfc.New.DateEntryFragment;
+
+import android.text.format.DateFormat;
+import android.util.Log;
 
 public class Patient {
 
@@ -46,6 +53,7 @@ public class Patient {
 		for(int i = 0; i < immArray.length; i++) {
 			immArray[i] = false;
 		}
+		getDOBString();
 	}
 	//Get and set string subfunctions
 	public String getCode() {
@@ -95,8 +103,51 @@ public class Patient {
 			immArray[index] = true;
 		}
 	}
-	public String immunizationsToString() {
+	
+	public String getDOBString() {
+		String s = "";
+		char year = (char) (birthday.get(Calendar.YEAR)- 2000);
+		char month = (char) birthday.get(Calendar.MONTH);
+		char date = (char) (birthday.get(Calendar.DATE));
+		s += String.valueOf(year);
+		s += String.valueOf(month);
+		s += String.valueOf(date);
+		// Testing purposes
+		/*Log.d("month", String.valueOf(birthday.get(Calendar.MONTH)));
+		Log.d("DOB", DateFormat.format(DateEntryFragment.DATEFORMAT, birthday).toString());
+		Log.d("year", String.valueOf(year));
+		Log.d("month", String.valueOf(month));
+		Log.d("date", String.valueOf(date));
+		Log.d("s", s);*/
 		
 		return null;
+	}
+	public String getPackagedImmuneString() {
+		int[] intSet = new int[64];
+		String s = "";
+		int ascii = 0;
+		for(int i = 0; i < intSet.length; i++) {
+			// Construct int array identical to immArray
+			if(i < immArray.length) {
+				if(immArray[i]) {
+					intSet[i] = 1;	
+				} else {
+					intSet[i] = 0;
+				}
+			} else { 
+				// Past index 58 of immArray, just default load with 0s
+				intSet[i] = 0; 
+			}
+			// Every 7, 15, 23th index
+			if( (i+1)%8 == 0 ) {
+				for(int j = 0; j < 8; j++) {
+					// manually convert intSet's bit sequence to an ascii number (bits to int)
+					ascii += intSet[i-7 + j] * Math.pow(2, j);
+				}
+				s += Character.toString((char) ascii);
+				ascii = 0;
+			}
+		}
+		return s;
 	}
 }
