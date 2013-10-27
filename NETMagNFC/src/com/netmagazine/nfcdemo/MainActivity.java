@@ -180,7 +180,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	private boolean writeTag(Tag tag) {
 		// record to launch Play Store if app is not installed
 		// Literally looks for this package in the phone, if not found, launch Google Play.
-		NdefRecord appRecord = NdefRecord.createApplicationRecord("com.netmagazine.nfcdemo");
+//		NdefRecord appRecord = NdefRecord.createApplicationRecord("");
 		
 		// record that contains our custom "retro console" game data, using custom MIME_TYPE
 		
@@ -192,7 +192,7 @@ public class MainActivity extends Activity implements OnClickListener {
         NdefRecord cardRecord = new NdefRecord(NdefRecord.TNF_MIME_MEDIA, mimeBytes, 
         										new byte[0], payload);
         // Puts cardRecord above appRecord
-		NdefMessage message = new NdefMessage(new NdefRecord[] { cardRecord, appRecord});
+		NdefMessage message = new NdefMessage(new NdefRecord[] {cardRecord});
         
 		try {
 			// see if tag is already NDEF formatted

@@ -1,6 +1,7 @@
 package com.example.gatesnfc;
 
 import com.example.gatesnfc.New.NewActivity;
+import com.example.gatesnfc.existing.ExistingActivity;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -56,9 +57,18 @@ public class MainActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+
 		case R.id.button_existing:
-			showWaitingDialog();
+			Intent e = new Intent(this, NFC_read.class);
+			startActivity(e);
 			break;
+			//TODO: Actual case above, test case below so don't need to keep scanning NFC
+//		case R.id.button_existing:
+//		Intent e = new Intent(this, ExistingActivity.class);
+//		e.putExtra("SentData", "Timmy");
+//		e.putExtra("SentCode", "007");
+//		startActivity(e);
+//		break;
 		case R.id.button_new:
 			Intent i = new Intent(this, NewActivity.class);
 			startActivity(i);
@@ -68,13 +78,5 @@ public class MainActivity extends Activity implements OnClickListener {
 			break;
 		}
 	}
-	
-	private void showWaitingDialog() {
-		AlertDialog.Builder dlgAlert= new AlertDialog.Builder(this)
-        .setTitle("Searching for NFC...")
-        .setCancelable(true);
-		AlertDialog box=dlgAlert.create();
-        box.show();
-        Log.d("showing waiting dialog", "lol");
-	}
+
 }
