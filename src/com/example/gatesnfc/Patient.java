@@ -3,8 +3,14 @@ package com.example.gatesnfc;
 import java.lang.reflect.Field;
 import java.util.Calendar;
 
-public class Patient {
+import android.util.Log;
 
+public class Patient {
+	// String dividers. Note: Can't be accessed on keyboard! 1 byte long
+	private final static String DIVIDER = Character.toString((char) 0);		// Separates FIELDS
+	private final static String SMALL_DIVIDER = Character.toString((char) 2);	// Separates parts of fields
+	
+	private final static int EXPECTED_NUM_DATE_BYTES = 6;
 	// Indices for immArray
 	public final static int BCG = 0;
 	public final static int HepB1 = 1, HepB2 = 2, HepB3 = 3, HepB4 = 4;
@@ -28,7 +34,7 @@ public class Patient {
 	public final static int HepA1 = 58;
 	
 	// Actual immunization array
-	private boolean[] immArray;
+	private Calendar[] immDatesArray;
 	
 	//String variables
 	private String code;
@@ -36,15 +42,15 @@ public class Patient {
 	public Calendar birthday = Calendar.getInstance();
 	public String mom_firstName = "", mom_lastName = "";
 	public String dad_firstName = "", dad_lastName = "";
-	public int number = 0;
-	public String street = "", optional = "", region = "", country = "", postal = "";
+	public String number = "";
+	public String street = "", optional = "", city = "", region = "", country = "", postal = "";
 	public String notes = "";
 	
 	public Patient() {
 		// size of array = max index + 1
-		immArray = new boolean[HepA1 + 1];
-		for(int i = 0; i < immArray.length; i++) {
-			immArray[i] = false;
+		immDatesArray = new Calendar[HepA1 + 1];
+		for(int i = 0; i < immDatesArray.length; i++) {
+			immDatesArray[i] = null;
 		}
 		getDOBString();
 	}
@@ -61,25 +67,215 @@ public class Patient {
 		return this.notes;
 	}
 
-	public void setNotes(String Notes) {
-		this.notes = Notes;
+	public void setNotes(String notes) {
+		this.notes = notes;
 	}
 	
 	public void setBirthday(Calendar cal) {
 		birthday = cal;
 	}
 	
-	public String getAddressString() {
-		return number + " " + street + ", " + optional + ", " + region + ", " + country + ", " + postal; 
+	public Calendar getImmunizationDate(String mI) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException
+	{
+		Class<?> c = this.getClass();
+		Field f = c.getDeclaredField(mI);
+		f.setAccessible(true);
+		return immDatesArray[(Integer) f.get(this)];
 	}
+	
+	public void setImmunizationDate(String mI, Calendar cal) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException
+	{
+		Class<?> c = this.getClass();
+		Field f = c.getDeclaredField(mI);
+		f.setAccessible(true);
+		int index = (Integer) f.get(this);
+		immDatesArray[index] = cal;
+	}
+	
+	public String constructPatientString() {
+		String s = "";
+		s += firstName + DIVIDER + lastName + DIVIDER;
+		s += getDOBString() + DIVIDER;
+		s += mom_firstName + DIVIDER + mom_lastName + DIVIDER;
+		s += dad_firstName +DIVIDER + dad_lastName + DIVIDER;
+		s += constructAddressString() + DIVIDER;
+		s += getImmuneString() + DIVIDER;
+		s += notes;
+		return s;
+	}
+	
+	public boolean decryptPatientString(String s) {
+		String frag = "";
+		char letter = 'a';
+		int count = 0;
+		for(int i = 0; i < s.length(); i++) {
+			letter = s.charAt(i);
+			frag += s.charAt(i);
+			if(letter == DIVIDER.charAt(0)) {		// compares letter to DIVIDER char
+				switch (count++) {
+				case 0: firstName = frag; break;
+				case 1: lastName = frag; break;
+				case 2: birthday = decryptCalendarString(frag); break;
+				case 3: mom_firstName = frag; break;
+				case 4: mom_lastName = frag; break;
+				case 5: dad_firstName = frag; break;
+				case 6: dad_lastName = frag; break;
+				case 7: number = frag; break;
+				case 8: street = frag; break;
+				case 9: optional = frag; break;
+				case 10: city = frag; break;
+				case 11: region = frag; break;
+				case 12: country = frag; break;
+				case 13: postal = frag; break;
+				case 14: decryptImmuneString(frag); break;
+				case 15: notes = frag; break;
+				}
+				frag = "";
+			}
+		}
+		return false;
+	}
+	/**
+	 * Get Date of Birth string
+	 * @return
+	 */
+	private String getDOBString() {	
+		return constructCalendarString(birthday);
+	}
+	
+	private String constructAddressString() {
+		return number + DIVIDER + street + DIVIDER + optional + DIVIDER + city + DIVIDER + region + DIVIDER + country + DIVIDER + postal; 
+	}
+	public String getAddressString() {
+		return number + " " + street + ", " + optional + ", " + city + " " + region + ", " + country + " " + postal; 
+	}
+	
+	private void decryptImmuneString(String s) {
+		String frag = "";
+		int immArrayIndex = 0;
+		for(int i = 0; i < s.length(); i++) {
+			frag += s.charAt(i);
+			if(s.charAt(i) == SMALL_DIVIDER.charAt(0)) {
+				immDatesArray[immArrayIndex++] = decryptCalendarString(frag);
+				frag = "";
+			}
+		}
+		Log.d("decryptImmuneString: final immArrayIndex", String.valueOf(immArrayIndex));
+	}
+	/**
+	 * Converts entire immDatesArray of Calendar objects into a string
+	 * Each calendar object is expected to be EXPECTED_NUM_DATE_BYTES = 6 
+	 * Empty entries of the array are loaded with a 1 byte SMALL_DIVIDER.
+	 * 
+	 * ie. 		date + SMALL_DIVIDER + date + date +SMALL_DIVIDER
+	 * 	Bytes:		6				1				6			6				1
+	 * @return
+	 */
+	public String getImmuneString() {
+		String s = "";
+		for(int i = 0; i < immDatesArray.length; i++) {
+			if(immDatesArray[i] != null) {
+				s += constructCalendarString(immDatesArray[i]);
+			} else {
+				s += SMALL_DIVIDER;
+			}
+		}
+		Log.d("ImmString bytes: ", String.valueOf(s.getBytes().length));
+		return s;
+	}
+	
+	/**
+	 * Expects a 6 char string terminated with a DIVIDER (null) character and produces
+	 * a calendar object.
+	 * @param s
+	 * @return
+	 */
+	private Calendar decryptCalendarString(String s) {
+		assert(s.length() == 7);
+		Calendar c = Calendar.getInstance();
+		String frag = "";
+		int calField = 0;
+		for (int i = 0; i < s.length(); i++) {
+			frag += s.charAt(i);
+			switch(i) {
+			case 1:
+				calField = Integer.parseInt(frag);
+				c.set(Calendar.YEAR, calField + 2000);
+				frag = "";	
+				break;
+			case 3:
+				calField = Integer.parseInt(frag);
+				c.set(Calendar.MONTH, calField);
+				frag = "";	
+				break;
+			case 5:
+				calField = Integer.parseInt(frag);
+				c.set(Calendar.DATE, calField);
+				frag = "";	
+				break;
+			}
+		}
+		return c;
+	}
+	/** Converts a calendar object into numbers and into a string sequence
+	 * ie October 31, 2013 is converted to "130931"~
+	 * 
+	 * ~ Year = Current year - 2000
+	 * Returns a string of byte length: 6*/
+		private String constructCalendarString(Calendar c) {	
+			int year = c.get(Calendar.YEAR)- 2000;
+			int month = c.get(Calendar.MONTH);	// month is an index 0 - 11, where January = 0
+			int date = c.get(Calendar.DATE);
+			String s = String.valueOf(year);
+			if (month < 10) {
+				// Pad the single digit of month
+				s += "0" + String.valueOf(month); 
+			} else {
+				s += String.valueOf(month);
+			}
+			if(date < 10) {
+				// Pad the single digit of date
+				s += "0" + String.valueOf(date);
+			} else {
+				s += String.valueOf(date);
+			}
+			// Just in case
+			assert(s.getBytes().length == EXPECTED_NUM_DATE_BYTES);
+			return s;
+		}
+
+	/**
+	 * LEGACY METHOD
+	 * 
+	 * Checks if immDatesArray entry has a valid Calendar object. 
+	 * @param mI
+	 * @return
+	 * @throws NoSuchFieldException
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 */
 	public Boolean getImmunization(String mI) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException
 	{
 		Class<?> c = this.getClass();
 		Field f = c.getDeclaredField(mI);
 		f.setAccessible(true);
-		return immArray[(Integer) f.get(this)];
+		if(immDatesArray[(Integer) f.get(this)] != null) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
+	/**
+	 * LEGACY METHOD
+	 * 
+	 * Sets immDatesArray entry with a Calendar object with current date and time
+	 * 
+	 * @param mI
+	 * @throws NoSuchFieldException
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 */
 	public void setImmunization(String mI) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException
 	{
 		Class<?> c = this.getClass();
@@ -87,60 +283,6 @@ public class Patient {
 		f.setAccessible(true);
 		//Toggles the Boolean on click
 		int index = (Integer) f.get(this);
-		if (immArray[index])
-		{
-			immArray[index] = false;
-		}
-		else
-		{
-			immArray[index] = true;
-		}
-	}
-	
-	public String getDOBString() {
-		String s = "";
-		char year = (char) (birthday.get(Calendar.YEAR)- 2000);
-		char month = (char) birthday.get(Calendar.MONTH);
-		char date = (char) (birthday.get(Calendar.DATE));
-		s += String.valueOf(year);
-		s += String.valueOf(month);
-		s += String.valueOf(date);
-		// Testing purposes
-		/*Log.d("month", String.valueOf(birthday.get(Calendar.MONTH)));
-		Log.d("DOB", DateFormat.format(DateEntryFragment.DATEFORMAT, birthday).toString());
-		Log.d("year", String.valueOf(year));
-		Log.d("month", String.valueOf(month));
-		Log.d("date", String.valueOf(date));
-		Log.d("s", s);*/
-		
-		return null;
-	}
-	public String getPackagedImmuneString() {
-		int[] intSet = new int[64];
-		String s = "";
-		int ascii = 0;
-		for(int i = 0; i < intSet.length; i++) {
-			// Construct int array identical to immArray
-			if(i < immArray.length) {
-				if(immArray[i]) {
-					intSet[i] = 1;	
-				} else {
-					intSet[i] = 0;
-				}
-			} else { 
-				// Past index 58 of immArray, just default load with 0s
-				intSet[i] = 0; 
-			}
-			// Every 7, 15, 23th index
-			if( (i+1)%8 == 0 ) {
-				for(int j = 0; j < 8; j++) {
-					// manually convert intSet's bit sequence to an ascii number (bits to int)
-					ascii += intSet[i-7 + j] * Math.pow(2, j);
-				}
-				s += Character.toString((char) ascii);
-				ascii = 0;
-			}
-		}
-		return s;
+		immDatesArray[index] = (immDatesArray[index] == null) ? Calendar.getInstance() : null;
 	}
 }

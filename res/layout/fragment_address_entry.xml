@@ -32,6 +32,7 @@
         android:id="@+id/editText_al1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="textPersonName"
         android:hint="Main St." />
 
     <TextView
@@ -44,8 +45,22 @@
         android:id="@+id/editText_al2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="textPersonName"
         android:hint="Unit 5" />
+    
+    <TextView
+        android:id="@+id/TextView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="City/Town" />
 
+    <EditText
+        android:id="@+id/editText_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Toronto" />
+    
     <RelativeLayout
         android:id="@+id/RelativeLayout2"
         android:layout_width="match_parent"
@@ -68,7 +83,8 @@
                 android:id="@+id/editText_region"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Toronto" />
+                android:inputType="textPersonName"
+                android:hint="Ontario" />
         </LinearLayout>
 
         <LinearLayout
@@ -88,7 +104,9 @@
                 android:id="@+id/editText_postal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="10120"
+		        android:hint="10120"
+		        android:ems="10"
+		        android:inputType="textPostalAddress" 
                 android:maxLength="6" />
         </LinearLayout>
     </RelativeLayout>
@@ -104,5 +122,4 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Canada" />
-
 </LinearLayout>

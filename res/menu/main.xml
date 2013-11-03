@@ -6,9 +6,9 @@
         android:showAsAction="never"
         android:title="@string/action_settings"/>
     
-    <item
-        android:id="@+id/show_dialog"
-        android:showAsAction="always|withText"
-        android:title="@string/show_dialog"/>
+    
+    <item android:title="@string/show_dialog" 
+        android:showAsAction="never" 
+        android:id="@+id/show_dialog"/>
 
 </menu>

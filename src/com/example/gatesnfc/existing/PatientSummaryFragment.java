@@ -1,6 +1,8 @@
 package com.example.gatesnfc.existing;
 
 import com.example.gatesnfc.R;
+import com.example.gatesnfc.New.DateEntryFragment;
+
 import java.util.Calendar;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -115,13 +117,13 @@ public class PatientSummaryFragment extends Fragment implements OnClickListener{
 	}
 
 	public static void updateView(){
-		nameView.setText (ExistingActivity.p_existing.firstName);
-		momNameView.setText (ExistingActivity.p_existing.mom_firstName);
-		dadNameView.setText (ExistingActivity.p_existing.dad_firstName);
-		addressView.setText (ExistingActivity.p_existing.street);
+		nameView.setText (ExistingActivity.p_existing.firstName + " " + ExistingActivity.p_existing.lastName);
+		mDateView.setText(DateFormat.format(DateEntryFragment.DATEFORMAT, ExistingActivity.p_existing.birthday).toString());
+		momNameView.setText (ExistingActivity.p_existing.mom_firstName + " " + ExistingActivity.p_existing.mom_lastName);
+		dadNameView.setText (ExistingActivity.p_existing.dad_firstName + " " + ExistingActivity.p_existing.dad_lastName);
+		addressView.setText (ExistingActivity.p_existing.getAddressString());
 		uniqueIdView.setText (ExistingActivity.p_existing.getCode());
-	}	
-	
+	}
 	
 	public void showDatePickerDialog() {
 		cal = Calendar.getInstance();

@@ -4,12 +4,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <!-- textPersonName gets rid of the new line button with a done button -->
     <EditText
         android:id="@+id/country_picker_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:hint="@string/search"
+        android:inputType="textPersonName" 
         android:drawableLeft="@drawable/search_icon" />
 
     <ListView

@@ -1,6 +1,5 @@
 package com.example.gatesnfc.existing;
 
-import com.example.gatesnfc.DeepCopy;
 import com.example.gatesnfc.NFC_write;
 import com.example.gatesnfc.R;
 
@@ -53,7 +52,6 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 		Intent intent = getIntent();
 		getStringData = intent.getStringExtra("SentData"); //Data in string form
 		getCodeData = intent.getStringExtra("SentCode"); 
-		// TODO: populate a patient class with string data
 
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the app.
@@ -64,6 +62,8 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 		mViewPager.setAdapter(mSectionsPagerAdapter);
 		
 		p_existing = new Patient();
+		p_existing.decryptPatientString(getStringData);
+		Log.d("ExistingActivity readMessage", getStringData);
 		p_reset = new Patient();
 		
 		Class<?> c_existing = p_existing.getClass();
@@ -72,19 +72,19 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 		//Dummy Info
 		//TODO: Create a backup so on reset (in menu options) goes back to the original default
 		unique_id = getCodeData;
-		patientName = getStringData;
+/*		patientName = getStringData;
 		momName ="Wanda";
 		dadName = "Cosmo";
 		notes = "This is Notes";
-		address = "16 My house";
+		address = "16 My house";*/
 
 		
-		p_existing.firstName = (patientName);
+	/*	p_existing.firstName = (patientName);
 		p_existing.dad_firstName = (dadName);
 		p_existing.mom_firstName = (momName);
 		p_existing.setNotes(notes);
 		p_existing.street = (address);
-		p_existing.setCode(unique_id);
+		p_existing.setCode(unique_id);*/
 		// Initializing a RESET
 		p_reset.firstName = (patientName);
 		p_reset.dad_firstName = (dadName);

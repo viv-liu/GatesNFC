@@ -61,7 +61,6 @@ public class PatientSummaryFragment extends Fragment {
 		address.setText(NewActivity.patient.getAddressString());
 		notes.setText(NewActivity.patient.notes);
 		
-		
 		return rootView;
 	}	
 	

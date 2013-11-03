@@ -9,7 +9,6 @@ import com.example.gatesnfc.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.NdefMessage;
@@ -89,11 +88,11 @@ public class NFC_write extends Activity implements OnClickListener {
 	        Log.d("mID", mID);
 	        //TODO: For some odd reason... even though both mID and The ID are the same,
 	        //the below condition is not being satisfied
-			if (mID == theID || mID == null)
-			{
+			///if (mID == theID || mID == null)
+			//{
 				writeToTag();
-			}
-			else
+			//}
+			/*else
 			{
 				 AlertDialog.Builder dlgAlert= new AlertDialog.Builder(this)
 			        .setTitle("ID not Matching \n Are you sure you want to overwrite")
@@ -115,7 +114,7 @@ public class NFC_write extends Activity implements OnClickListener {
 				 
 					AlertDialog box=dlgAlert.create();
 		            box.show();
-			}
+			}*/
 
 		}
     }

@@ -1,6 +1,5 @@
 package com.example.gatesnfc.New;
 
-
 import com.countrypicker.CountryPicker;
 import com.countrypicker.CountryPickerListener;
 
@@ -9,13 +8,9 @@ import com.example.gatesnfc.Patient;
 import com.example.gatesnfc.PrefUtils;
 import com.example.gatesnfc.R;
 
-
 import android.app.AlertDialog;
-
 import android.content.DialogInterface;
 import android.content.Intent;
-
-import android.nfc.NfcAdapter;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,13 +20,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Toast;
-
+import android.widget.Button;
 
 public class NewActivity extends FragmentActivity implements OnClickListener{
 	private final int NAME = 0, BIRTHDATE = 1, PARENTSNAME = 2, ADDRESS = 3, VACCINE = 4, NOTES = 5, SUMMARY = 6;
@@ -40,7 +31,7 @@ public class NewActivity extends FragmentActivity implements OnClickListener{
 	static ViewPager mViewPager;	
 	public static Patient patient;
 	
-	private String mResult;
+	//private String mResult;
 	private String mMessage;
 
 
@@ -72,12 +63,13 @@ public class NewActivity extends FragmentActivity implements OnClickListener{
 					break;
 				case ADDRESS: if(AddressEntryFragment.et_number.getText().toString() != null && 
 								!AddressEntryFragment.et_number.getText().toString().isEmpty()) {
-									patient.number = Integer.valueOf(AddressEntryFragment.et_number.getText().toString());
+									patient.number = AddressEntryFragment.et_number.getText().toString();
 								}
 							  patient.street = AddressEntryFragment.et_street.getText().toString();
 							  patient.optional = AddressEntryFragment.et_optional.getText().toString();
+							  patient.city = AddressEntryFragment.et_city.getText().toString();
 							  patient.region = AddressEntryFragment.et_region.getText().toString();
-							  patient.country = AddressEntryFragment.country;
+							  patient.country = AddressEntryFragment.b_country.getText().toString();
 							  patient.postal = AddressEntryFragment.et_postal.getText().toString();
 					break;
 				case VACCINE:
@@ -173,38 +165,9 @@ public class NewActivity extends FragmentActivity implements OnClickListener{
 			return null;
 		}
 	}
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		MenuItem item = menu.findItem(R.id.show_dialog);
-		item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			
-			@Override
-			public boolean onMenuItemClick(MenuItem item) {
-				CountryPicker picker = CountryPicker.newInstance("Select Country");
-				picker.setListener(new CountryPickerListener() {
-
-					@Override
-					public void onSelectCountry(String name, String code) {
-						Toast.makeText(
-								NewActivity.this,
-								"Country Name: " + name + " - Code: " + code
-										+ " - Currency: "
-										+ CountryPicker.getCurrencyCode(code),
-								Toast.LENGTH_SHORT).show();
-					}
-				});
-				
-				picker.show(getSupportFragmentManager(), "COUNTRY_PICKER");
-				return false;
-			}
-		});
-		return true;
-	}
 
 	@Override
-	public void onClick(View v) {
+	public void onClick(final View v) {
 		switch(v.getId()) {
 		case R.id.button_country:
 			// Open up CountryPicker 
@@ -213,20 +176,26 @@ public class NewActivity extends FragmentActivity implements OnClickListener{
 
 				@Override
 				public void onSelectCountry(String name, String code) {
-					Toast.makeText(
+					// Leave this blurb here as a reference
+					/*Toast.makeText(
 							NewActivity.this,
 							"Country Name: " + name + " - Code: " + code
 									+ " - Currency: "
 									+ CountryPicker.getCurrencyCode(code),
-							Toast.LENGTH_SHORT).show();
+							Toast.LENGTH_SHORT).show();*/
+					// Update preferences 
 					PrefUtils.setStringPreference(NewActivity.this, PrefUtils.COUNTRY_KEY, name);
+					// Update the button
+					((Button)v).setText(name);
+					// Update patient
+					NewActivity.patient.country = name;
 					picker.dismiss();
 				}
 			});
 			picker.show(this.getSupportFragmentManager(), "COUNTRY_PICKER");
 			break;
 		case R.id.button_complete:
-			// TODO: NFC storing here.
+			mMessage = patient.constructPatientString(); // Actual storing lol
 			store_Data();
 			break;
 		case R.id.button_name:
@@ -258,11 +227,11 @@ public class NewActivity extends FragmentActivity implements OnClickListener{
 	 * for it is a new patient.
 	 * In other types of writes would need to pass it the Unique ID code of the
 	 * read NFC tag
+	 * 
+	 * Expects mMessage to be loaded.
 	 */
 
 	private void store_Data() {
-		//TODO: put the real data to be stored here
-		mMessage = "ABCDEFG";
 		String ID = "AD4503E0";
 		Intent i = new Intent(this, NFC_write.class);
 		i.putExtra("SendData", mMessage);
