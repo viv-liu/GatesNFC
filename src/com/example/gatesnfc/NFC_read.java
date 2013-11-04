@@ -19,8 +19,7 @@ import android.widget.Button;
 
 public class NFC_read extends Activity implements OnClickListener {
 	public static String mMessage;
-	
-	
+
 	private NfcAdapter mAdapter;
 	private boolean mInReadMode;
 	private Button mReadTagButton;
@@ -36,6 +35,7 @@ public class NFC_read extends Activity implements OnClickListener {
         // button that starts the tag-Read procedure
         mReadTagButton = (Button)findViewById(R.id.read_nfc);
         mReadTagButton.setOnClickListener(this);
+        mReadTagButton.setBackgroundResource(R.drawable.rectangle);
         
 	}
 	
@@ -47,7 +47,6 @@ public class NFC_read extends Activity implements OnClickListener {
 	}
 	
 	private void displayMessage(String message) {
-		// TODO Auto-generated method stub
 		
 		AlertDialog.Builder dlgAlert= new AlertDialog.Builder(this)
         .setTitle(message);
@@ -76,7 +75,6 @@ public class NFC_read extends Activity implements OnClickListener {
 				
 	        byte[] tagId = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
 	        String theID = ByteArrayToHexString(tagId);
-	        /*Temporarily pass a set class from this intent to the patient summary frag*/
 	            
 			Intent e = new Intent(this, ExistingActivity.class);
 			e.putExtra("SentData", mMessage);

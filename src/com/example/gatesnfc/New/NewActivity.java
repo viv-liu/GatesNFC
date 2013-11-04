@@ -73,7 +73,7 @@ public class NewActivity extends FragmentActivity implements OnClickListener{
 							  patient.postal = AddressEntryFragment.et_postal.getText().toString();
 					break;
 				case VACCINE:
-					//TODO: Shen lol
+					//TODO: When Immunizations work in ExistingActivity properly so don't need to change both sets all the time
 					break;
 				case NOTES:	patient.notes = NotesEntryFragment.et_notes.getText().toString();
 					break;
@@ -92,7 +92,6 @@ public class NewActivity extends FragmentActivity implements OnClickListener{
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO: confirm onBackPressed: Your unsaved info will die. 
 		if(keyCode == KeyEvent.KEYCODE_BACK){
 			AlertDialog.Builder dlgAlert= new AlertDialog.Builder(this)
 	        .setTitle("Are you sure?")
@@ -195,7 +194,7 @@ public class NewActivity extends FragmentActivity implements OnClickListener{
 			picker.show(this.getSupportFragmentManager(), "COUNTRY_PICKER");
 			break;
 		case R.id.button_complete:
-			mMessage = patient.constructPatientString(); // Actual storing lol
+			mMessage = patient.constructPatientString();
 			store_Data();
 			break;
 		case R.id.button_name:
@@ -232,6 +231,7 @@ public class NewActivity extends FragmentActivity implements OnClickListener{
 	 */
 
 	private void store_Data() {
+		//TODO: Change this to work
 		String ID = "AD4503E0";
 		Intent i = new Intent(this, NFC_write.class);
 		i.putExtra("SendData", mMessage);

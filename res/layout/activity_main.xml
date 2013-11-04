@@ -2,28 +2,33 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <Button
-        android:id="@+id/button_existing"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="Existing" />
-
-    <Button
-        android:id="@+id/button_sets"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/button_existing"
-        android:layout_centerHorizontal="true"
-        android:text="Sets" />
-
+    
     <Button
         android:id="@+id/button_new"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button_existing"
-        android:layout_alignLeft="@+id/button_sets"
-        android:text="New" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="80dip"
+        android:padding="30dip"
+        android:text="New Patient"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="40sp" />
+    
+    
+    <Button
+        android:id="@+id/button_existing"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/button_new"
+        android:layout_marginTop="80dip"
+        android:padding="30dip"
+        android:text="Existing Patient"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="40sp" />
+
 
 </RelativeLayout>

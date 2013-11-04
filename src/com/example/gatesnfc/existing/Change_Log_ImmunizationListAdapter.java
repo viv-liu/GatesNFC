@@ -61,10 +61,10 @@ public class Change_Log_ImmunizationListAdapter extends BaseAdapter {
 		if (convertView == null) {
 			cell = new Cell();
 			cellView = inflater.inflate(R.layout.change_log_row, null);
-			cell.immune_name = (TextView) cellView.findViewById(R.id.row_title);
-			cell.immune_date = (TextView) cellView.findViewById(R.id.row_date);
-			cell.immune_old_name = (TextView) cellView.findViewById(R.id.row_old_title);
-			cell.immune_old_date = (TextView) cellView.findViewById(R.id.row_old_date);
+			cell.immune_name = (TextView) cellView.findViewById(R.id.change_row_title);
+			cell.immune_date = (TextView) cellView.findViewById(R.id.change_row_date);
+			cell.immune_old_name = (TextView) cellView.findViewById(R.id.change_row_old_title);
+			cell.immune_old_date = (TextView) cellView.findViewById(R.id.change_row_old_date);
 			cellView.setTag(cell);
 		} else {
 			cell = (Cell) cellView.getTag();

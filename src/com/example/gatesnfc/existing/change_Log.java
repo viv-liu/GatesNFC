@@ -57,11 +57,14 @@ Comparator<Immunization>{
 	private EditText searchEditText;
 	private ListView ImmunizationListView;
 	private ListView NImmunizationListView;
+	private ListView DemoListView;
 
 	/**
 	 * Adapter for the listview
 	 */
 	private Change_Log_ImmunizationListAdapter adapter;
+	private Change_Log_ImmunizationListAdapter Nadapter;
+	private Change_Log_DemoListAdapter Dadapter;
 
 	/**
 	 * Hold all Immunizations, sorted by Immunization name
@@ -73,7 +76,7 @@ Comparator<Immunization>{
 	 */
 	private ArrayList<Immunization> selectedImmunizationsList;
 	private ArrayList<Immunization> removedImmunizationsList;
-	private Change_Log_ImmunizationListAdapter Nadapter;
+
 
 	public EditText getSearchEditText() {
 		return searchEditText;
@@ -97,37 +100,67 @@ Comparator<Immunization>{
 		setValuesList = new ArrayList<String>();
 		// load the layout elements from an xml file
 		
-		Button confirm_log = (Button) rootView.findViewById(R.id.confirm_log);
-		Button reset_log = (Button) rootView.findViewById(R.id.reset_log);
+		Button confirm_log = (Button) rootView.findViewById(R.id.change_confirm_log);
+		Button reset_log = (Button) rootView.findViewById(R.id.change_reset_log);
 		
 		confirm_log.setOnClickListener(this);
 	    reset_log.setOnClickListener(this);
 	    
-	    updateView();
+	    ImmunizationListView = (ListView) rootView
+ 				.findViewById(R.id.change_immunization_picker_listview);
+ 		NImmunizationListView = (ListView) rootView.findViewById(R.id.change_immunization_picker_listview_N);
+ 		DemoListView = (ListView) rootView.findViewById(R.id.demographics_change);
+ 		
+		// Get Immunizations from the json
+ 		getAllImmunizations();
+ 		
+ 		// Set adapter
+ 		adapter = new Change_Log_ImmunizationListAdapter(getActivity(), selectedImmunizationsList);
+ 		adapter.mStatus = true;
+ 		ImmunizationListView.setAdapter(adapter);
+ 		
+ 		Nadapter = new Change_Log_ImmunizationListAdapter(getActivity(), removedImmunizationsList);
+ 		Nadapter.mStatus = false;
+ 		NImmunizationListView.setAdapter(Nadapter);
+ 		
+ 		//TODO: How to do the demographics change_log?
+// 		Dadapter = new Change_Log_DemoListAdapter(getActivity(), 0)
+ 		
+ 		
+ 		// Inform listener
+ 		ImmunizationListView.setOnItemClickListener(new OnItemClickListener() {
+ 			
+ 			@Override
+ 			public void onItemClick(AdapterView<?> parent, View view,
+ 					int position, long id) {
+ 					Immunization Immunization = selectedImmunizationsList.get(position);
+ 					//TODO: need to show up dialog for reset
+ 			}
+ 		});
 	    
 		// Link layout elements to code        	
 		return rootView;
 	}
 	
-	/**
-	 * Search allImmunizationsList contains text and put result into
-	 * selectedImmunizationsList
-	 * 
-	 * @param text
-	 */
-	@SuppressLint("DefaultLocale")
-	private void search(String text) {
-		selectedImmunizationsList.clear();
-
-		for (Immunization Immunization : allImmunizationsList) {
-			if (Immunization.getName().toLowerCase(Locale.ENGLISH)
-					.contains(text.toLowerCase())) {
-				selectedImmunizationsList.add(Immunization);
-			}
-		}
-
-		adapter.notifyDataSetChanged();
-	}
+//	/**
+//	 * Search allImmunizationsList contains text and put result into
+//	 * selectedImmunizationsList
+//	 * 
+//	 * @param text
+//	 */
+//	@SuppressLint("DefaultLocale")
+//	private void search(String text) {
+//		selectedImmunizationsList.clear();
+//
+//		for (Immunization Immunization : allImmunizationsList) {
+//			if (Immunization.getName().toLowerCase(Locale.ENGLISH)
+//					.contains(text.toLowerCase())) {
+//				selectedImmunizationsList.add(Immunization);
+//			}
+//		}
+//
+//		adapter.notifyDataSetChanged();
+//	}
 
 	/**
 	 * Support sorting the Immunizations list
@@ -141,7 +174,7 @@ Comparator<Immunization>{
 	@Override
 	public void onClick(View view) {
 		switch(view.getId()) {
-		case R.id.confirm_log:
+		case R.id.change_confirm_log:
 			//TODO: Either put this in Existing or in this
 			//TODO: temp testing measure to updateView
 			Log.d("Confirm", "Clicked");
@@ -151,13 +184,16 @@ Comparator<Immunization>{
 	}
 
 	public void updateView(){
-		
+		removedImmunizationsList.clear();
+		selectedImmunizationsList.clear();
  		// Get view components
- 		searchEditText = (EditText) rootView
- 				.findViewById(R.id.immunization_picker_search);
+// 		searchEditText = (EditText) rootView
+// 				.findViewById(R.id.change_immunization_picker_search);
  		ImmunizationListView = (ListView) rootView
- 				.findViewById(R.id.immunization_picker_listview);
- 	
+ 				.findViewById(R.id.change_immunization_picker_listview);
+ 		NImmunizationListView = (ListView) rootView.findViewById(R.id.change_immunization_picker_listview_N);
+ 		DemoListView = (ListView) rootView.findViewById(R.id.demographics_change);
+ 		
 		// Get Immunizations from the json
  		getAllImmunizations();
  		
@@ -166,10 +202,14 @@ Comparator<Immunization>{
  		adapter.mStatus = true;
  		ImmunizationListView.setAdapter(adapter);
  		
-// 		Nadapter = new Change_Log_ImmunizationListAdapter(getActivity(), removedImmunizationsList);
-// 		Nadapter.mStatus = false;
-// 		NImmunizationListView.setAdapter(Nadapter);
-
+ 		Nadapter = new Change_Log_ImmunizationListAdapter(getActivity(), removedImmunizationsList);
+ 		Nadapter.mStatus = false;
+ 		NImmunizationListView.setAdapter(Nadapter);
+ 		
+ 		//TODO: How to do the demographics change_log?
+// 		Dadapter = new Change_Log_DemoListAdapter(getActivity(), 0)
+ 		
+ 		
  		// Inform listener
  		ImmunizationListView.setOnItemClickListener(new OnItemClickListener() {
  			
@@ -177,29 +217,34 @@ Comparator<Immunization>{
  			public void onItemClick(AdapterView<?> parent, View view,
  					int position, long id) {
  					Immunization Immunization = selectedImmunizationsList.get(position);
- 					showDatePickerDialog();
- 					//TODO: need to pass data to and from this
+ 					//TODO: need to show up dialog for reset
  			}
  		});
- 		
- 		// Search for which Immunizations matched user query
- 		searchEditText.addTextChangedListener(new TextWatcher() {
-
- 			@Override
- 			public void onTextChanged(CharSequence s, int start, int before,
- 					int count) {
- 			}
-
- 			@Override
- 			public void beforeTextChanged(CharSequence s, int start, int count,
- 					int after) {
- 			}
-
- 			@Override
- 			public void afterTextChanged(Editable s) {
- 				search(s.toString());
- 			}
- 		});
+// 		
+// 		// Search for which Immunizations matched user query
+// 		searchEditText.addTextChangedListener(new TextWatcher() {
+//
+// 			@Override
+// 			public void onTextChanged(CharSequence s, int start, int before,
+// 					int count) {
+// 			}
+//
+// 			@Override
+// 			public void beforeTextChanged(CharSequence s, int start, int count,
+// 					int after) {
+// 			}
+// 			@Override
+//	 		public void afterTextChanged(Editable s) {
+//
+// 			try{
+//
+// 	 				search(s.toString());
+// 				} catch (NullPointerException e) {
+// 					e.printStackTrace();
+// 				}
+// 			}
+//
+// 		});
  		
 	}
 	
@@ -281,36 +326,5 @@ Comparator<Immunization>{
 		reader.close();
 		return result.toString();
 	}
-	
-	public void showDatePickerDialog() {
-		cal = Calendar.getInstance();
-	    DialogFragment newFragment = new DatePickerFragment();
-	    newFragment.show(getActivity().getFragmentManager(), "datePicker");
-	}
-	
-	public static class DatePickerFragment extends DialogFragment
-    implements DatePickerDialog.OnDateSetListener {
-
-		private static final String DATEFORMAT = "MMM dd, yyyy";
-
-		@Override
-		public Dialog onCreateDialog(Bundle savedInstanceState) {
-			// Use the current date as the date in the cal object
-			int year = cal.get(Calendar.YEAR);
-			int month = cal.get(Calendar.MONTH); 
-			int day = cal.get(Calendar.DATE);
-		
-		// Create a new instance of DatePickerDialog and return it
-		return new DatePickerDialog(getActivity(), this, year, month, day);
-		}
-		
-		public void onDateSet(DatePicker view, int year, int month, int day) {
-			cal.set(Calendar.YEAR, year);
-			cal.set(Calendar.MONTH, month);
-			cal.set(Calendar.DATE, day);
-			//TODO: How to change the Value in the Patient Class
-		}
-	}	
-	
 	
 }

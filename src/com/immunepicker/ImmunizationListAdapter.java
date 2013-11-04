@@ -3,6 +3,7 @@ package com.immunepicker;
 import java.util.List;
 
 import android.content.Context;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ public class ImmunizationListAdapter extends BaseAdapter {
 	private Context context;
 	List<Immunization> Immunizations;
 	LayoutInflater inflater;
+	
+	public static final String DATEFORMAT = "MMM dd, yyyy";
 
 	/**
 	 * Constructor
@@ -67,7 +70,7 @@ public class ImmunizationListAdapter extends BaseAdapter {
 
 		cell.immune_name.setText(Immunization.getName());
 		//TODO: create a find by Date and place it in there
-		cell.immune_date.setText("The Date is Here");
+		cell.immune_date.setText(DateFormat.format(DATEFORMAT, Immunization.getDate()).toString());
 		
 		return cellView;
 	}

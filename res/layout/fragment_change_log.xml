@@ -2,23 +2,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-
-    <EditText
-        android:id="@+id/immunization_picker_search"
+    
+   <ListView
+        android:id="@+id/demographics_change"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:hint="@string/search"
-        android:drawableLeft="@drawable/search_icon" />
+        android:layout_height="wrap_content">
+    </ListView>
 
     <ListView
-        android:id="@+id/immunization_picker_listview"
+        android:id="@+id/change_immunization_picker_listview"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp" >
+        android:layout_height="wrap_content">
+    </ListView>
+    
+    <ListView
+        android:id="@+id/change_immunization_picker_listview_N"
+        android:layout_width="match_parent" 
+        android:layout_height="wrap_content" >
     </ListView>
     
         <RelativeLayout
@@ -39,14 +39,14 @@
 
             <Button
                 style="?android:attr/buttonBarButtonStyle"
-                android:id="@+id/confirm_log"
+                android:id="@+id/change_confirm_log"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Confirm Changes" />
 
             <Button
                 style="?android:attr/buttonBarButtonStyle"
-                android:id="@+id/reset_log"
+                android:id="@+id/change_reset_log"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Reset All Changes" />

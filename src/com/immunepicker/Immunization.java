@@ -1,31 +1,23 @@
 package com.immunepicker;
 
+import java.util.Calendar;
+
 /**
  * POJO
  *
  */
 public class Immunization {
-	private String Date;
+	private Calendar Date;
 	private String name;
 	
-	private String oldName;
-	private String oldDate;
-
-	public String getDate() {
+	public Calendar getDate() {
 		return Date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(Calendar date) {
 		this.Date = date;
 	}
 	
-	public String getOldDate() {
-		return oldDate;
-	}
-
-	public void setOldDate(String date) {
-		this.oldDate = date;
-	}
 
 	public String getName() {
 		return name;
@@ -33,14 +25,6 @@ public class Immunization {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-	
-	public String getOldName() {
-		return oldName;
-	}
-
-	public void setOldName(String name) {
-		this.oldName = name;
 	}
 
 }

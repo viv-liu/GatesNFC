@@ -1,40 +1,27 @@
 package com.example.gatesnfc.existing;
 
-import com.example.gatesnfc.R;
-import com.example.gatesnfc.New.DateEntryFragment;
-
-import java.util.Calendar;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.InputFilter;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 
-public class PatientSummaryFragment extends Fragment implements OnClickListener{
+import com.example.gatesnfc.R;
 
-	private static InputFilter[] nameFilter;
+public class PatientSummaryFragment extends Fragment {
 	public static final String ARG_SECTION_NUMBER = "section_number";
+	public static final String DATEFORMAT = "MMM dd, yyyy";
 	
-	private View rootView;
-	
-	private static Button nameView;
-	private static Button momNameView;
-	private static Button dadNameView;
-	private static Button addressView;
-	private static Button uniqueIdView;
-	private static Button mDateView;
-
-	private String mStatus;
-	
-	private static Calendar cal;
+	public static Button name;
+	public static Button birthdate;
+	public static Button mom;
+	public static Button dad;
+	public static Button address;
+	public static Button notes;
+	public static Button code;
 	
 	public PatientSummaryFragment() {
 	}
@@ -46,113 +33,41 @@ public class PatientSummaryFragment extends Fragment implements OnClickListener{
 		args.putInt(PatientSummaryFragment.ARG_SECTION_NUMBER, position + 1);
 		
 		myFragment.setArguments(args);
-		nameFilter = new InputFilter[1];
-		nameFilter[0] = new InputFilter.LengthFilter(10);
 	    return myFragment;
 	}
 		
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		// load the layout elements from an xml file
-		rootView = inflater.inflate(R.layout.existing_patient_summary, container, false);
+		View rootView = inflater.inflate(R.layout.existing_fragment_patient_summary, container, false);	
 		
-		//Set Views by patientName created in Existing Activity
-		nameView = (Button) rootView.findViewById(R.id.name);
-		momNameView = (Button) rootView.findViewById(R.id.mom_name);
-		dadNameView = (Button) rootView.findViewById(R.id.dad_name);
-		addressView = (Button) rootView.findViewById(R.id.address);
-		uniqueIdView = (Button) rootView.findViewById(R.id.unique_id);
-		mDateView = (Button) rootView.findViewById(R.id.mDate);
+		code = (Button)rootView.findViewById(R.id.button_id);
+		name = (Button)rootView.findViewById(R.id.button_name);
+		birthdate = (Button)rootView.findViewById(R.id.button_birthdate);
+		mom = (Button)rootView.findViewById(R.id.button_mom);
+		dad = (Button)rootView.findViewById(R.id.button_dad);
+		address = (Button)rootView.findViewById(R.id.button_address);
+		notes = (Button)rootView.findViewById(R.id.button_notes);
+				
+		// Set listener to ExistingActivity
+		code.setOnClickListener((OnClickListener) getActivity());
+		name.setOnClickListener((OnClickListener) getActivity());
+		birthdate.setOnClickListener((OnClickListener) getActivity());
+		mom.setOnClickListener((OnClickListener) getActivity());
+		dad.setOnClickListener((OnClickListener) getActivity());
+		address.setOnClickListener((OnClickListener) getActivity());
+		notes.setOnClickListener((OnClickListener) getActivity());
 		
-		nameView.setOnClickListener(this);
-		momNameView.setOnClickListener(this);
-		dadNameView.setOnClickListener(this);
-		addressView.setOnClickListener(this);
-		uniqueIdView.setOnClickListener(this);
-		mDateView.setOnClickListener(this);
+		// Set text for all buttons
+		code.setText(ExistingActivity.p_existing.getCode());
+		name.setText(ExistingActivity.p_existing.firstName + " " + ExistingActivity.p_existing.lastName);
+		birthdate.setText(DateFormat.format(DATEFORMAT, ExistingActivity.p_existing.birthday).toString());
+		mom.setText(ExistingActivity.p_existing.mom_firstName + " " + ExistingActivity.p_existing.mom_lastName);
+		dad.setText(ExistingActivity.p_existing.dad_firstName + " " + ExistingActivity.p_existing.dad_lastName);
+		address.setText(ExistingActivity.p_existing.getAddressString());
+		notes.setText(ExistingActivity.p_existing.notes);
 		
-		updateView();
-
-		// Link layout elements to code        	
 		return rootView;
-	}
-
-	@Override
-	public void onClick(View view) {
-		// TODO DATE PICKER
-		switch(view.getId()) {
-		case R.id.name:
-			mStatus = "Name";
-			showDialog();
-			break;
-		case R.id.mom_name:
-			mStatus = "momName";
-			showDialog();
-			break;
-		case R.id.dad_name:
-			mStatus = "dadName";
-			showDialog();
-			break;
-		case R.id.unique_id:
-			mStatus = "id";
-			showDialog();
-			break;
-		case R.id.address:
-			mStatus = "address";
-			showDialog();
-			break;
-		case R.id.mDate:
-			showDatePickerDialog();
-		}
-	}	
-	
-	private void showDialog() {
-        EditNameDialog dialog = new EditNameDialog();
-        dialog.setTargetFragment(this, 0);
-        dialog.show(getFragmentManager(), "dialog");
-    }
-	
-	public String getStatus() {
-		return mStatus;
-	}
-
-	public static void updateView(){
-		nameView.setText (ExistingActivity.p_existing.firstName + " " + ExistingActivity.p_existing.lastName);
-		mDateView.setText(DateFormat.format(DateEntryFragment.DATEFORMAT, ExistingActivity.p_existing.birthday).toString());
-		momNameView.setText (ExistingActivity.p_existing.mom_firstName + " " + ExistingActivity.p_existing.mom_lastName);
-		dadNameView.setText (ExistingActivity.p_existing.dad_firstName + " " + ExistingActivity.p_existing.dad_lastName);
-		addressView.setText (ExistingActivity.p_existing.getAddressString());
-		uniqueIdView.setText (ExistingActivity.p_existing.getCode());
-	}
-	
-	public void showDatePickerDialog() {
-		cal = Calendar.getInstance();
-	    DialogFragment newFragment = new DatePickerFragment();
-	    newFragment.show(getActivity().getFragmentManager(), "datePicker");
-	}
-	
-	public static class DatePickerFragment extends DialogFragment
-    implements DatePickerDialog.OnDateSetListener {
-
-		private static final String DATEFORMAT = "MMM dd, yyyy";
-
-		@Override
-		public Dialog onCreateDialog(Bundle savedInstanceState) {
-			// Use the current date as the date in the cal object
-			int year = cal.get(Calendar.YEAR);
-			int month = cal.get(Calendar.MONTH); 
-			int day = cal.get(Calendar.DATE);
-		
-		// Create a new instance of DatePickerDialog and return it
-		return new DatePickerDialog(getActivity(), this, year, month, day);
-		}
-		
-		public void onDateSet(DatePicker view, int year, int month, int day) {
-			cal.set(Calendar.YEAR, year);
-			cal.set(Calendar.MONTH, month);
-			cal.set(Calendar.DATE, day);
-			mDateView.setText(DateFormat.format(DATEFORMAT, cal).toString());
-		}
 	}	
 	
 }
+

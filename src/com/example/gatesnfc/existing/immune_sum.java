@@ -29,6 +29,7 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +50,7 @@ Comparator<Immunization>{
 	private static Calendar cal;
 	
 	private List<String> setValuesList;
+	private static Immunization selectedImmunization;
 	
 	/**
 	 * View components
@@ -84,6 +86,7 @@ Comparator<Immunization>{
 		myFragment.setArguments(args);
 		nameFilter = new InputFilter[1];
 		nameFilter[0] = new InputFilter.LengthFilter(10);
+
 	    return myFragment;
 	}
 		
@@ -156,7 +159,8 @@ Comparator<Immunization>{
 	    	   for (i = 0; i < setValuesList.size(); i++)
 	    	   {
 	    		   try {
-						//Set the selected Immunization to True
+						//Set the selected Immunization to True, by default the date is set to today
+	    			    //User can change date once it appears in list
 						ExistingActivity.p_existing.setImmunization(setValuesList.get(i));
 					} catch (IllegalArgumentException e) {
 						e.printStackTrace();
@@ -167,8 +171,12 @@ Comparator<Immunization>{
 					}
 	    	   }
 	       }
-	       updateView(); //Since stuff changed, update the view
 	    }
+	    else if (requestCode == 2)
+	    {
+	    	//TODO: Get date Picker Dialog
+	    }
+	    updateView(); //Always updateView
 	}
 	
 	
@@ -225,9 +233,8 @@ Comparator<Immunization>{
  			@Override
  			public void onItemClick(AdapterView<?> parent, View view,
  					int position, long id) {
- 					Immunization Immunization = selectedImmunizationsList.get(position);
+ 					selectedImmunization = selectedImmunizationsList.get(position);
  					showDatePickerDialog();
- 					//TODO: need to pass data to and from this
  			}
  		});
 
@@ -277,6 +284,7 @@ Comparator<Immunization>{
 					//If its true then set as below
 					Immunization Immunization = new Immunization();
 					Immunization.setName(jsonObject.getString(key));
+					Immunization.setDate(ExistingActivity.p_existing.getImmunizationDate(jsonObject.getString(key)));
 					theList.add(Immunization);
 				}
 				//else don't display
@@ -323,18 +331,27 @@ Comparator<Immunization>{
 	    newFragment.show(getActivity().getFragmentManager(), "datePicker");
 	}
 	
+	public void onDatePicked(DialogFragment dialog) {
+		//TODO: Update the View once clicked... it's proving difficult
+			updateView();
+    }
+	
 	public static class DatePickerFragment extends DialogFragment
     implements DatePickerDialog.OnDateSetListener {
 
-		private static final String DATEFORMAT = "MMM dd, yyyy";
-
+	    public interface DatePickerDialogListener {
+	        public void onDatePicked(DialogFragment dialog);
+	    }
+	    
+	 // Use this instance of the interface to deliver action events
+	    DatePickerDialogListener mListener;
+		
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			// Use the current date as the date in the cal object
 			int year = cal.get(Calendar.YEAR);
 			int month = cal.get(Calendar.MONTH); 
 			int day = cal.get(Calendar.DATE);
-		
 		// Create a new instance of DatePickerDialog and return it
 		return new DatePickerDialog(getActivity(), this, year, month, day);
 		}
@@ -343,9 +360,15 @@ Comparator<Immunization>{
 			cal.set(Calendar.YEAR, year);
 			cal.set(Calendar.MONTH, month);
 			cal.set(Calendar.DATE, day);
-			//TODO: How to change the Value in the Patient Class
-		}
-	}	
-	
-	
+			try {
+				ExistingActivity.p_existing.setImmunizationDate(selectedImmunization.getName(), cal);
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (NoSuchFieldException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}	
+		}	
+	}
 }

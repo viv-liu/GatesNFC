@@ -12,9 +12,6 @@ public class MimeType {
 	 * of CardActivity's intent filter. CardActivity will only be launched when: 
 	 * 		- an NFC chip is detected
 	 * 		- the type of data in the NFC == NFC_DEMO
-	 * 		- some default category that I don't know much about.
-	 * 
-	 * -Vivian
 	 * */
 	public static final String NFC_DEMO = "application/vnd.example.gatesnfc.existing";
 }

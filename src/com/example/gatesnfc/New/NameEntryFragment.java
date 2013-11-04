@@ -13,8 +13,6 @@ import android.widget.EditText;
 import com.example.gatesnfc.R;
 
 public class NameEntryFragment extends Fragment {
-	@SuppressWarnings("unused")
-	private static final String TAG = NameEntryFragment.class.getSimpleName();
 	private static InputFilter[] nameFilter;
 	public static final String ARG_SECTION_NUMBER = "section_number";
 	public static EditText et_firstname;
@@ -44,6 +42,7 @@ public class NameEntryFragment extends Fragment {
 	        		return null; 
 	            }
 		};
+		//TODO: Change Length Filter Length
 		nameFilter[1] = new InputFilter.LengthFilter(10);
 	    return myFragment;
 	}

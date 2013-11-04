@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="200dip"
-    android:layout_height="wrap_content"
-    android:orientation="vertical" >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
     <Button
         android:id="@+id/read_nfc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Read from NFC" />
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:textSize="40sp"
+        android:textColor="@color/white"
+        android:text="Read from NFC"
+        android:textAlignment="center" />
 
-</LinearLayout>
+</RelativeLayout>

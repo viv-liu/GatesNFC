@@ -1,7 +1,6 @@
 package com.example.gatesnfc;
 
 import com.example.gatesnfc.New.NewActivity;
-import com.example.gatesnfc.existing.ExistingActivity;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -10,8 +9,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -26,8 +25,12 @@ public class MainActivity extends Activity implements OnClickListener {
 		setContentView(R.layout.activity_main);
 		bNew = (Button) findViewById(R.id.button_new);
 		bNew.setOnClickListener(this);
+
 		bExisting = (Button) findViewById(R.id.button_existing);
 		bExisting.setOnClickListener(this);
+		
+		bExisting.setBackgroundResource(R.drawable.rectangle);
+		bNew.setBackgroundResource(R.drawable.rectangle);
 		
 	}
 
@@ -36,6 +39,15 @@ public class MainActivity extends Activity implements OnClickListener {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+	
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	        case R.id.help:
+	            //TODO: Create Help Function
+	            return true;
+	     }
+		return false;
 	}
 	
 	
@@ -57,23 +69,13 @@ public class MainActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 
-//		case R.id.button_existing:
-//			Intent e = new Intent(this, NFC_read.class);
-//			startActivity(e);
-//			break;
-			//TODO: Actual case above, test case below so don't need to keep scanning NFC
 		case R.id.button_existing:
-		Intent e = new Intent(this, ExistingActivity.class);
-		e.putExtra("SentData", "Timmy");
-		e.putExtra("SentCode", "007");
-		startActivity(e);
-		break;
+			Intent e = new Intent(this, NFC_read.class);
+			startActivity(e);
+			break;
 		case R.id.button_new:
 			Intent i = new Intent(this, NewActivity.class);
 			startActivity(i);
-			break;
-		default:
-			Log.d("clicked", "lol");
 			break;
 		}
 	}

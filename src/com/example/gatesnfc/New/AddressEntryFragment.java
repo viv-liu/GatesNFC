@@ -77,7 +77,6 @@ public class AddressEntryFragment extends Fragment {
 		if(country != null && !country.isEmpty()) {
 			b_country.setText(country);
 		} 
-		//int section_number = getArguments().getInt(ARG_SECTION_NUMBER);
 				
 		return rootView;
 	}
