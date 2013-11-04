@@ -2,6 +2,7 @@ package com.add_immunepicker;
 
 import java.util.List;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,19 +34,16 @@ public class Add_ImmunizationListAdapter extends BaseAdapter {
 	
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return Immunizations.size();
 	}
 
 	@Override
 	public Object getItem(int arg0) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public long getItemId(int arg0) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -68,6 +66,16 @@ public class Add_ImmunizationListAdapter extends BaseAdapter {
 			cell = (Cell) cellView.getTag();
 		}
 
+		if(Immunization.getTF())
+		{
+			cellView.setBackgroundColor(Color.parseColor("#6dcde5"));
+		}
+		else
+		{
+			cellView.setBackgroundColor(Color.parseColor("#00000000"));
+		}
+
+		
 		cell.textView.setText(Immunization.getName());
 		
 		return cellView;

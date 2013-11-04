@@ -5,5 +5,5 @@ package com.add_immunepicker;
  *
  */
 public interface Add_ImmunizationPickerListener {
-	public void onSelectImmunization(String name, String code);
+	public void onSelectImmunization(String name);
 }

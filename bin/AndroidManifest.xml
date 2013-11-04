@@ -17,7 +17,9 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.example.gatesnfc.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+  			android:configChanges="orientation|keyboardHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,22 +32,23 @@
         
         <activity
             android:name="com.example.gatesnfc.NFC_write"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+   			android:configChanges="orientation|keyboardHidden" >
             <intent-filter>
       			<action android:name="android.nfc.action.NDEF_DISCOVERED"/>
-      			<!-- mimeType is a fake data type that CardActivity is designed to handle  -->
-      			<data android:mimeType="application/vnd.example.gatesnfc.existing"/>
       			<category android:name="android.intent.category.DEFAULT"/>
     		</intent-filter>
             
          </activity>
          
                 <activity
+            android:screenOrientation="portrait"
+   			android:configChanges="orientation|keyboardHidden"
             android:name="com.example.gatesnfc.NFC_read"
             android:label="@string/app_name" >
             <intent-filter>
-      			<action android:name="android.nfc.action.NDEF_DISCOVERED"/>
-      			<!-- mimeType is a fake data type that CardActivity is designed to handle  -->
+      			<action android:name="android.nfc.action.TAG_DISCOVERED"/>
       			<data android:mimeType="application/vnd.example.gatesnfc.existing"/>
       			<category android:name="android.intent.category.DEFAULT"/>
     		</intent-filter>
@@ -53,14 +56,17 @@
          </activity>
          
         <activity
-            android:name="com.example.gatesnfc.existing.ExistingActivity">
+            android:name="com.example.gatesnfc.existing.ExistingActivity"
+            android:screenOrientation="portrait"
+   			android:configChanges="orientation|keyboardHidden"
+            >
         </activity>
          
-        <activity android:name="com.example.gatesnfc.New.NewActivity">
+        <activity android:name="com.example.gatesnfc.New.NewActivity"
+            android:screenOrientation="portrait"
+   			android:configChanges="orientation|keyboardHidden">
             
         </activity>
-        
-        <activity android:name="com.example.gatesnfc.existing.CopyOfExistingActivity"></activity>
         
     </application>
 

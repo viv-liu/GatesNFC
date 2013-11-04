@@ -2,14 +2,13 @@ package com.remove_immunepicker;
 
 public class Curr_Immunization {
 	private String name;
-	private String TF;
+	private boolean TF;
 
 	public String getName() {
-		// TODO Auto-generated method stub
 		return this.name;
 	}
 	
-	public String getTF() {
+	public boolean getTF() {
 		return this.TF;
 	}
 
@@ -17,8 +16,15 @@ public class Curr_Immunization {
 		this.name = input;
 	}
 	
-	public void setTF(String input) {
-		this.TF = input;
+	public void setTF() {
+		if (TF)
+			{
+		TF = false;;
+			}
+		else
+		{
+			TF = true;
+		}
 	}
 
 }

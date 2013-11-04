@@ -52,7 +52,6 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 	private String getStringData;
 	private String getCodeData;
 
-
 	private String mMessage;
 
 	private String mStatus;
@@ -132,7 +131,6 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 		}
 	}
 	
-	//TODO: how did you get the NewActivity onClick Listeners to happen in NewActivity?
 	@Override
 	public void onClick(View v) {
 		switch(v.getId()) {
@@ -233,6 +231,7 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 		//TODO: For some odd reason this crashes..
 		//seems to be trying to parse the First Name to the Calendar for some reason?
 		String reset = p_reset.constructPatientString();
+		Log.d("p_reset string", reset);
 		p_existing.decryptPatientString(reset);
 		updateView();
 		
@@ -275,13 +274,10 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 				}
 			}
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoSuchFieldException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

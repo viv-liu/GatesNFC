@@ -15,7 +15,6 @@ import org.json.JSONObject;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
@@ -106,7 +105,6 @@ public class Add_ImmunizationPicker extends DialogFragment implements
 						//If its true then set as below
 						Add_Immunization Immunization = new Add_Immunization();
 						Immunization.setName(jsonObject.getString(key));
-						Immunization.setTF("True");
 						allImmunizationsList.add(Immunization);
 					}
 					//else don't display
@@ -141,7 +139,6 @@ public class Add_ImmunizationPicker extends DialogFragment implements
 			throws java.io.IOException {
 		InputStream inputStream = context.getResources().openRawResource(
 				R.raw.list_immunes);
-		//TODO: change to other records as well && create new JSON in raw/
 		BufferedReader reader = new BufferedReader(new InputStreamReader(
 				inputStream));
 		StringBuffer result = new StringBuffer();
@@ -222,10 +219,9 @@ public class Add_ImmunizationPicker extends DialogFragment implements
 					int position, long id) {
 				if (listener != null) {
 					Add_Immunization Immunization = selectedImmunizationsList.get(position);
-					listener.onSelectImmunization(Immunization.getName(),
-							Immunization.getTF());
-					view.setBackgroundColor(Color.BLUE);
-					// TODO: only allow one selection, Toggle?
+					listener.onSelectImmunization(Immunization.getName());
+					Immunization.setTF();
+					adapter.notifyDataSetChanged();
 				}
 			}
 		});
@@ -284,7 +280,6 @@ public class Add_ImmunizationPicker extends DialogFragment implements
 
 	@Override
 	public void onClick(View view) {
-		// TODO Need to figure out how to send a confirmation back to activity that called it
 		
 		switch(view.getId()) {
 		case R.id.confirm_picker:

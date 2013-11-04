@@ -69,7 +69,6 @@ public class ImmunizationListAdapter extends BaseAdapter {
 		}
 
 		cell.immune_name.setText(Immunization.getName());
-		//TODO: create a find by Date and place it in there
 		cell.immune_date.setText(DateFormat.format(DATEFORMAT, Immunization.getDate()).toString());
 		
 		return cellView;

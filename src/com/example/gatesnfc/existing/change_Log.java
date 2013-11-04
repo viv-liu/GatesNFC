@@ -134,6 +134,7 @@ Comparator<Immunization>{
  			public void onItemClick(AdapterView<?> parent, View view,
  					int position, long id) {
  					Immunization Immunization = selectedImmunizationsList.get(position);
+					adapter.notifyDataSetChanged();
  					//TODO: need to show up dialog for reset
  			}
  		});

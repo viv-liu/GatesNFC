@@ -61,7 +61,7 @@ Comparator<Immunization>{
 	/**
 	 * Adapter for the listview
 	 */
-	private ImmunizationListAdapter adapter;
+	private static ImmunizationListAdapter adapter;
 
 	/**
 	 * Hold all Immunizations, sorted by Immunization name
@@ -188,7 +188,7 @@ Comparator<Immunization>{
 				
 				picker.setListener(new Curr_ImmunizationPickerListener() {
 					@Override
-					public void onSelectImmunization(String name, String TF) {
+					public void onSelectImmunization(String name) {
 						setValuesList.add(name);
 					}
 				});
@@ -204,7 +204,7 @@ Comparator<Immunization>{
 		
 		picker.setListener(new Add_ImmunizationPickerListener() {
 			@Override
-			public void onSelectImmunization(String name, String code) {
+			public void onSelectImmunization(String name) {
 				setValuesList.add(name);
 			}
 		});
@@ -235,6 +235,7 @@ Comparator<Immunization>{
  					int position, long id) {
  					selectedImmunization = selectedImmunizationsList.get(position);
  					showDatePickerDialog();
+ 					adapter.notifyDataSetChanged();
  			}
  		});
 
@@ -325,6 +326,11 @@ Comparator<Immunization>{
 		return result.toString();
 	}
 	
+	public static void updatingView()
+	{
+		adapter.notifyDataSetChanged();
+	}
+	
 	public void showDatePickerDialog() {
 		cal = Calendar.getInstance();
 	    DialogFragment newFragment = new DatePickerFragment();
@@ -369,6 +375,7 @@ Comparator<Immunization>{
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
 				}	
+			updatingView();
 		}	
 	}
 }

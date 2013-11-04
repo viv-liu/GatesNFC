@@ -5,5 +5,5 @@ package com.remove_immunepicker;
  *
  */
 public interface Curr_ImmunizationPickerListener {
-	public void onSelectImmunization(String name, String code);
+	public void onSelectImmunization(String name);
 }
