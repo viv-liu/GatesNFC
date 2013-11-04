@@ -49,8 +49,7 @@ public class NFC_read extends Activity implements OnClickListener {
 	private void displayMessage(String message) {
 		
 		AlertDialog.Builder dlgAlert= new AlertDialog.Builder(this)
-        .setTitle(message)
-        .setCancelable(false);
+        .setTitle(message);
 
 		AlertDialog box=dlgAlert.create();
         box.show();
@@ -90,7 +89,6 @@ public class NFC_read extends Activity implements OnClickListener {
 			e.putExtra("SentData", mMessage);
 			e.putExtra("SentCode", theID);
 			startActivity(e);
-//			}
 		}
     }
 	

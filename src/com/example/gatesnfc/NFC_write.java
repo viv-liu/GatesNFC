@@ -9,6 +9,7 @@ import com.example.gatesnfc.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.NdefMessage;
@@ -31,6 +32,7 @@ public class NFC_write extends Activity implements OnClickListener {
 	private String mToWrite;
 	private String mID;
 	private Tag mTag;
+	private AlertDialog box;
 	
 	
 	@Override
@@ -60,7 +62,7 @@ public class NFC_write extends Activity implements OnClickListener {
 			AlertDialog.Builder dlgAlert= new AlertDialog.Builder(this)
 	        .setTitle("Touch and Hold Tag to Device to Write")
 	        .setCancelable(true);
-			AlertDialog box=dlgAlert.create();
+			box=dlgAlert.create();
 	        box.show();
 			enableWriteMode();
 		}
@@ -72,6 +74,15 @@ public class NFC_write extends Activity implements OnClickListener {
 		disableWriteMode();
 	}
 	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (mInWriteMode)
+		{
+			enableWriteMode();
+		}
+	}
+	
 	/**
 	 * Called when our blank tag is scanned executing the PendingIntent
 	 */
@@ -80,19 +91,23 @@ public class NFC_write extends Activity implements OnClickListener {
 		if(mInWriteMode) {
 			mInWriteMode = false;
 			
+			//Dismiss Previous AlertDialog
+			box.cancel();
+			
 			mTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 			
 			byte[] tagId = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
 	        String theID = ByteArrayToHexString(tagId);
-	        Log.d("The ID", theID);
-	        Log.d("mID", mID);
+	        
+			 Log.d("mID", mID);
+			 Log.d("theID", theID);
 	        //TODO: For some odd reason... even though both mID and The ID are the same,
 	        //the below condition is not being satisfied
-			///if (mID == theID || mID == null)
-			//{
+			if (mID == theID || mID == null)
+			{
 				writeToTag();
-			//}
-			/*else
+			}
+			else
 			{
 				 AlertDialog.Builder dlgAlert= new AlertDialog.Builder(this)
 			        .setTitle("ID not Matching \n Are you sure you want to overwrite")
@@ -108,16 +123,24 @@ public class NFC_write extends Activity implements OnClickListener {
 			            	displayMessage("ID Not Matching");
 			            	returnIntent.putExtra("result", mMessage);
 			        		setResult(RESULT_CANCELED, returnIntent);
+
 			        		finish();
 			            }
 			        });
 				 
-					AlertDialog box=dlgAlert.create();
+					box = dlgAlert.create();
 		            box.show();
-			}*/
+			}
 
 		}
     }
+	
+	@Override
+	protected void onDestroy(){
+		super.onDestroy();
+		//Dismiss Alert Dialog's when activity closes
+		box.dismiss();
+	}
 	
 	private void writeToTag(){
 		// write to newly scanned tag
