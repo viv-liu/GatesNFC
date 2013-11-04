@@ -231,13 +231,11 @@ public class NewActivity extends FragmentActivity implements OnClickListener{
 	 */
 
 	private void store_Data() {
-		//TODO: Change this to ID = "None" After fully tested
-		String ID = "3D6509E0";
+		String ID = "None";
 		Intent i = new Intent(this, NFC_write.class);
 		i.putExtra("SendData", mMessage);
 		i.putExtra("ID", ID);
 		startActivityForResult(i, 1);
-		
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

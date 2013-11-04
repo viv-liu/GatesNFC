@@ -19,7 +19,6 @@ import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -39,22 +38,17 @@ public class NFC_write extends Activity implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nfc_write);
-        mID = null;
         Intent intent = getIntent();
         mToWrite = intent.getStringExtra("SendData");
         String ID = intent.getStringExtra("ID");
-        if (ID != "None")
-        {
-        	mID = ID;
-        }
+        mID = ID;
         // grab our NFC Adapter
         mAdapter = NfcAdapter.getDefaultAdapter(this);
         
         // button that starts the tag-write procedure
         mWriteTagButton = (Button)findViewById(R.id.write_nfc);
         mWriteTagButton.setOnClickListener(this);
-        
-        
+        mWriteTagButton.setBackgroundResource(R.drawable.rectangle);
     }
     
 	public void onClick(View v) {
@@ -99,11 +93,7 @@ public class NFC_write extends Activity implements OnClickListener {
 			byte[] tagId = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
 	        String theID = ByteArrayToHexString(tagId);
 	        
-			 Log.d("mID", mID);
-			 Log.d("theID", theID);
-	        //TODO: For some odd reason... even though both mID and The ID are the same,
-	        //the below condition is not being satisfied
-			if (mID == theID || mID == null)
+			if (mID.equals(theID) || mID.equals("None"))
 			{
 				writeToTag();
 			}
