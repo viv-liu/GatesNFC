@@ -23,6 +23,7 @@ public class NFC_read extends Activity implements OnClickListener {
 	private NfcAdapter mAdapter;
 	private boolean mInReadMode;
 	private Button mReadTagButton;
+	private AlertDialog box;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,7 @@ public class NFC_read extends Activity implements OnClickListener {
 		AlertDialog.Builder dlgAlert= new AlertDialog.Builder(this)
         .setTitle(message);
 
-		AlertDialog box=dlgAlert.create();
+		box = dlgAlert.create();
         box.show();
 	}
 
@@ -88,6 +89,7 @@ public class NFC_read extends Activity implements OnClickListener {
 			Intent e = new Intent(this, ExistingActivity.class);
 			e.putExtra("SentData", mMessage);
 			e.putExtra("SentCode", theID);
+			box.dismiss();
 			startActivity(e);
 		}
     }

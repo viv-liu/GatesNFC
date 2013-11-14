@@ -9,26 +9,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
-
 import org.json.JSONObject;
 
-import com.add_immunepicker.*;
 import com.example.gatesnfc.R;
 import com.immunepicker.*;
-import com.remove_immunepicker.*;
 
-import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
 import android.text.InputFilter;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +25,6 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -64,7 +52,6 @@ Comparator<Immunization>{
 	 */
 	private Change_Log_ImmunizationListAdapter adapter;
 	private Change_Log_ImmunizationListAdapter Nadapter;
-	private Change_Log_DemoListAdapter Dadapter;
 
 	/**
 	 * Hold all Immunizations, sorted by Immunization name
@@ -142,26 +129,6 @@ Comparator<Immunization>{
 		// Link layout elements to code        	
 		return rootView;
 	}
-	
-//	/**
-//	 * Search allImmunizationsList contains text and put result into
-//	 * selectedImmunizationsList
-//	 * 
-//	 * @param text
-//	 */
-//	@SuppressLint("DefaultLocale")
-//	private void search(String text) {
-//		selectedImmunizationsList.clear();
-//
-//		for (Immunization Immunization : allImmunizationsList) {
-//			if (Immunization.getName().toLowerCase(Locale.ENGLISH)
-//					.contains(text.toLowerCase())) {
-//				selectedImmunizationsList.add(Immunization);
-//			}
-//		}
-//
-//		adapter.notifyDataSetChanged();
-//	}
 
 	/**
 	 * Support sorting the Immunizations list
@@ -188,8 +155,6 @@ Comparator<Immunization>{
 		removedImmunizationsList.clear();
 		selectedImmunizationsList.clear();
  		// Get view components
-// 		searchEditText = (EditText) rootView
-// 				.findViewById(R.id.change_immunization_picker_search);
  		ImmunizationListView = (ListView) rootView
  				.findViewById(R.id.change_immunization_picker_listview);
  		NImmunizationListView = (ListView) rootView.findViewById(R.id.change_immunization_picker_listview_N);
@@ -221,32 +186,6 @@ Comparator<Immunization>{
  					//TODO: need to show up dialog for reset
  			}
  		});
-// 		
-// 		// Search for which Immunizations matched user query
-// 		searchEditText.addTextChangedListener(new TextWatcher() {
-//
-// 			@Override
-// 			public void onTextChanged(CharSequence s, int start, int before,
-// 					int count) {
-// 			}
-//
-// 			@Override
-// 			public void beforeTextChanged(CharSequence s, int start, int count,
-// 					int after) {
-// 			}
-// 			@Override
-//	 		public void afterTextChanged(Editable s) {
-//
-// 			try{
-//
-// 	 				search(s.toString());
-// 				} catch (NullPointerException e) {
-// 					e.printStackTrace();
-// 				}
-// 			}
-//
-// 		});
- 		
 	}
 	
 	
@@ -269,15 +208,15 @@ Comparator<Immunization>{
 			// Add the data to all Immunizations list
 			while (keys.hasNext()) {
 			String key = (String) keys.next();
-			//TODO: change getImmunization to also get the DATE and then compare the two
 				if(ExistingActivity.p_existing.getImmunization(jsonObject.getString(key)) 
 						!= ExistingActivity.p_reset.getImmunization(jsonObject.getString(key)))
 				{
 					Immunization Immunization = new Immunization();
 					Immunization.setName(jsonObject.getString(key));
+					//Sets the date of the immunizations
+					Immunization.setDate(ExistingActivity.p_existing.getImmunizationDate(jsonObject.getString(key)));
 					if(ExistingActivity.p_existing.getImmunization(jsonObject.getString(key)))
 					{
-
 						selectedList.add(Immunization);
 					}
 					else
@@ -298,8 +237,6 @@ Comparator<Immunization>{
 			removedImmunizationsList = new ArrayList<Immunization>();
 			removedImmunizationsList.addAll(removedList);
 			
-			// Return
-
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

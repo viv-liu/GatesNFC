@@ -30,6 +30,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.gatesnfc.R;
+import com.example.gatesnfc.New.NewActivity;
 import com.example.gatesnfc.existing.*;
 
 public class Curr_ImmunizationPicker extends DialogFragment implements
@@ -100,15 +101,25 @@ public class Curr_ImmunizationPicker extends DialogFragment implements
 				// Add the data to all Immunizations list
 				while (keys.hasNext()) {
 					String key = (String) keys.next();
-					if(ExistingActivity.p_existing.getImmunization(jsonObject.getString(key)))
+					if(NewActivity.patient != null)
 					{
-						//If its true then set as below
-						Curr_Immunization Immunization = new Curr_Immunization();
-						Immunization.setName(jsonObject.getString(key));
-						allImmunizationsList.add(Immunization);
+						if(NewActivity.patient.getImmunization(jsonObject.getString(key)))
+						{
+							//If its true then set as below
+							Curr_Immunization Immunization = new Curr_Immunization();
+							Immunization.setName(jsonObject.getString(key));
+							allImmunizationsList.add(Immunization);
+						}
 					}
-					//else don't display
-
+					if(ExistingActivity.p_existing != null)
+					{
+						if(ExistingActivity.p_existing.getImmunization(jsonObject.getString(key)))
+						{
+							Curr_Immunization Immunization = new Curr_Immunization();
+							Immunization.setName(jsonObject.getString(key));
+							allImmunizationsList.add(Immunization);
+						}
+					}
 				}
 
 				// Sort the all Immunizations list based on Immunization name

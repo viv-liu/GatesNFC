@@ -71,6 +71,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		case R.id.button_existing:
 			Intent e = new Intent(this, NFC_read.class);
+			e.setFlags(e.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
 			startActivity(e);
 			break;
 		case R.id.button_new:

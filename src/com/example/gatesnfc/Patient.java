@@ -97,7 +97,7 @@ public class Patient {
 		s += firstName + DIVIDER + lastName + DIVIDER;
 		s += getDOBString() + DIVIDER;
 		s += mom_firstName + DIVIDER + mom_lastName + DIVIDER;
-		s += dad_firstName +DIVIDER + dad_lastName + DIVIDER;
+		s += dad_firstName + DIVIDER + dad_lastName + DIVIDER;
 		s += constructAddressString() + DIVIDER;
 		s += getImmuneString() + DIVIDER;
 		s += notes;

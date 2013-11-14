@@ -20,16 +20,18 @@ import com.remove_immunepicker.*;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,8 +96,6 @@ Comparator<Immunization>{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.fragment_immunization_sum, container, false);
 		setValuesList = new ArrayList<String>();
-		// load the layout elements from an xml file
-//		FragmentManager fm = getActivity().getSupportFragmentManager();
 		
 		Button immunization_button = (Button) rootView.findViewById(R.id.add_immunization);
 		Button list_immune_button = (Button) rootView.findViewById(R.id.remove_immunization);
@@ -105,7 +105,6 @@ Comparator<Immunization>{
 	    
 	    updateView();
 	    
-		// Link layout elements to code        	
 		return rootView;
 	}
 	
@@ -137,6 +136,10 @@ Comparator<Immunization>{
 		return lhs.getName().compareTo(rhs.getName());
 	}
 
+	/**
+	 * Handles the click buttons that launch a immunization adapter to add or remove immunizations
+	 * which defaults to the current date when added to the patient.
+	 */
 
 	@Override
 	public void onClick(View view) {
@@ -172,11 +175,9 @@ Comparator<Immunization>{
 	    	   }
 	       }
 	    }
-	    else if (requestCode == 2)
-	    {
-	    	//TODO: Get date Picker Dialog
-	    }
-	    updateView(); //Always updateView
+	    updateView(); 
+	    //Always repopulate view for items have changed and to add or remove view items it 
+	    //requires repopulation
 	}
 	
 	
@@ -211,6 +212,12 @@ Comparator<Immunization>{
 		
 		picker.show(getFragmentManager(), "Immunization_PICKER");
 	}
+	
+	/**Function that repopulates the view
+	 * 
+	 * 
+	 * 
+	 */
 
 	public void updateView(){
 		
@@ -260,10 +267,7 @@ Comparator<Immunization>{
  		
 	}
 	
-	
-	/**
-	 * All below for List Adapter
-	 */
+
 	/**
 	 * Get all Immunizations with code and name from res/raw/Immunizations.json
 	 * 
@@ -282,7 +286,7 @@ Comparator<Immunization>{
 			String key = (String) keys.next();
 				if(ExistingActivity.p_existing.getImmunization(jsonObject.getString(key)))
 				{
-					//If its true then set as below
+					//If the patient has the immunization then set as below
 					Immunization Immunization = new Immunization();
 					Immunization.setName(jsonObject.getString(key));
 					Immunization.setDate(ExistingActivity.p_existing.getImmunizationDate(jsonObject.getString(key)));
@@ -304,11 +308,12 @@ Comparator<Immunization>{
 		return null;
 	}
 
-	/**
+	/**readFileAsString
+	 * 
 	 * Convenient function to read from raw file
 	 * 
 	 * @param context
-	 * @return
+	 * @return a local variable
 	 * @throws java.io.IOException
 	 */
 	private static String readFileAsString(Context context)
@@ -326,10 +331,22 @@ Comparator<Immunization>{
 		return result.toString();
 	}
 	
-	public static void updatingView()
-	{
-		adapter.notifyDataSetChanged();
-	}
+	
+	/**DatePickerDialogFragment
+	 * 
+	 * Functions that displays the Date on Click of Adapter item and edits that adapter's
+	 * item's date of immunization.
+	 * 
+	 * @field: cal 
+	 * is used to store the calendar object. This requires that the calendar be initialized
+	 * in fragment and then passed to dialogfragment. No problems to occur as calendar is 
+	 * then reset in dialogfragment
+	 * 
+	 * @field: selectedImmunization
+	 * the selectedImmunization field is obtained from the listadapter onClick event and is 
+	 * then used to get the date of the selectedImmunization to change
+	 * 
+	 */
 	
 	public void showDatePickerDialog() {
 		cal = Calendar.getInstance();
@@ -337,45 +354,85 @@ Comparator<Immunization>{
 	    newFragment.show(getActivity().getFragmentManager(), "datePicker");
 	}
 	
-	public void onDatePicked(DialogFragment dialog) {
-		//TODO: Update the View once clicked... it's proving difficult
-			updateView();
-    }
-	
-	public static class DatePickerFragment extends DialogFragment
-    implements DatePickerDialog.OnDateSetListener {
+	public static class DatePickerFragment extends DialogFragment {
+	    
+	    public static final String YEAR = "Year";
+	    public static final String MONTH = "Month";
+	    public static final String DAY = "Day";
 
-	    public interface DatePickerDialogListener {
-	        public void onDatePicked(DialogFragment dialog);
+	    private int year;
+	    private int month;
+	    private int day;
+	    
+	    private OnDateSetListener mListener;
+
+	    public DatePicker_Fix newInstance() {
+	    	DatePicker_Fix newDialog = new DatePicker_Fix();
+
+	        // Supply initial date to show in dialog.
+	        Bundle args = new Bundle();
+	        newDialog.setArguments(args);
+
+	        return newDialog;
+	    }
+
+	    // Added to original version in order to restore bundle saved by Activity
+	    @Override
+	    public void onCreate(Bundle savedInstanceState){
+	        super.onCreate(savedInstanceState);
+	        cal = selectedImmunization.getDate();
+			year = cal.get(Calendar.YEAR);
+			month = cal.get(Calendar.MONTH); 
+			day = cal.get(Calendar.DATE);
 	    }
 	    
-	 // Use this instance of the interface to deliver action events
-	    DatePickerDialogListener mListener;
-		
-		@Override
-		public Dialog onCreateDialog(Bundle savedInstanceState) {
-			// Use the current date as the date in the cal object
-			int year = cal.get(Calendar.YEAR);
-			int month = cal.get(Calendar.MONTH); 
-			int day = cal.get(Calendar.DATE);
-		// Create a new instance of DatePickerDialog and return it
-		return new DatePickerDialog(getActivity(), this, year, month, day);
-		}
-		
-		public void onDateSet(DatePicker view, int year, int month, int day) {
-			cal.set(Calendar.YEAR, year);
-			cal.set(Calendar.MONTH, month);
-			cal.set(Calendar.DATE, day);
-			try {
-				ExistingActivity.p_existing.setImmunizationDate(selectedImmunization.getName(), cal);
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (NoSuchFieldException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				}	
-			updatingView();
-		}	
+	    @Override
+	    public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+	        final DatePickerDialog picker = new DatePickerDialog(getActivity(), 
+	                getConstructorListener(), year, month, day);
+	        
+	        if (hasJellyBeanAndAbove()) {
+	            picker.setButton(DialogInterface.BUTTON_POSITIVE, 
+	                    getActivity().getString(android.R.string.ok),
+	                    new DialogInterface.OnClickListener() {
+	                @Override
+	                public void onClick(DialogInterface dialog, int which) {
+	                    DatePicker dp = picker.getDatePicker();
+	        			cal.set(Calendar.YEAR, dp.getYear());
+	        			cal.set(Calendar.MONTH, dp.getMonth());
+	        			cal.set(Calendar.DATE, dp.getDayOfMonth());
+	        			try {
+	        				//Change both the p_existing Immunization as well as the 
+	        				//selectedImmunization in the adapter for don't want to repopulate the adapter
+	        				ExistingActivity.p_existing.setImmunizationDate(selectedImmunization.getName(), cal);
+	        				selectedImmunization.setDate(cal);
+	        				adapter.notifyDataSetChanged();
+	        				} catch (IllegalArgumentException e) {
+	        					e.printStackTrace();
+	        				} catch (NoSuchFieldException e) {
+	        					e.printStackTrace();
+	        				} catch (IllegalAccessException e) {
+	        					e.printStackTrace();
+	        				}	
+	                }
+	            });
+	            picker.setButton(DialogInterface.BUTTON_NEGATIVE,
+	                    getActivity().getString(android.R.string.cancel),
+	                    new DialogInterface.OnClickListener() {
+	                @Override
+	                public void onClick(DialogInterface dialog, int which) {}
+	            });
+	        }
+	        return picker;
+	    }
+	    
+	    private static boolean hasJellyBeanAndAbove() {
+	        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
+	    }
+	    
+	    private OnDateSetListener getConstructorListener() {
+	        return hasJellyBeanAndAbove() ? null : mListener;
+	    }
 	}
 }

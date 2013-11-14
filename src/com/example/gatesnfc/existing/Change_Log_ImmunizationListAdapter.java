@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ public class Change_Log_ImmunizationListAdapter extends BaseAdapter {
 	private Context context;
 	List<Immunization> Immunizations;
 	LayoutInflater inflater;
+	
+	public static final String DATEFORMAT = "MMM dd, yyyy";
 
 	boolean mStatus;
 	/**
@@ -63,7 +66,6 @@ public class Change_Log_ImmunizationListAdapter extends BaseAdapter {
 			cellView = inflater.inflate(R.layout.change_log_row, null);
 			cell.immune_name = (TextView) cellView.findViewById(R.id.change_row_title);
 			cell.immune_date = (TextView) cellView.findViewById(R.id.change_row_date);
-			cell.immune_old_name = (TextView) cellView.findViewById(R.id.change_row_old_title);
 			cell.immune_old_date = (TextView) cellView.findViewById(R.id.change_row_old_date);
 			cellView.setTag(cell);
 		} else {
@@ -73,20 +75,54 @@ public class Change_Log_ImmunizationListAdapter extends BaseAdapter {
 		if (mStatus)
 		{
 			cell.immune_name.setText(Immunization.getName());
-			cell.immune_name.setBackgroundColor(Color.parseColor("#13ED1A"));
-			cell.immune_date.setText("The Date is Here");
+			cell.immune_date.setText(DateFormat.format(DATEFORMAT, Immunization.getDate()).toString());
 			cell.immune_date.setBackgroundColor(Color.parseColor("#13ED1A"));
-			cell.immune_old_name.setText(Immunization.getName());
-			cell.immune_old_date.setText("The Old Date is Here");
-			//TODO: create a find by Date and place it in there
+			
+			try {
+				cell.immune_old_date.setText(DateFormat.format(DATEFORMAT, (ExistingActivity.p_reset.getImmunizationDate(Immunization.getName()))).toString());
+			} catch (IllegalArgumentException e) {
+				cell.immune_old_date.setText("IllegalArgument");
+				e.printStackTrace();
+			} catch (NoSuchFieldException e) {
+				cell.immune_old_date.setText("NoSuchField");
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				cell.immune_old_date.setText("IllegalAccess");
+				e.printStackTrace();
+			} catch (NullPointerException e) {
+				cell.immune_old_date.setText("None");
+			}
+			
+			cell.immune_old_date.setBackgroundColor(Color.parseColor("#ED9213"));
 		}
 		else
 		{
 			cell.immune_name.setText(Immunization.getName());
-			cell.immune_date.setText("The Date is Here");
-			cell.immune_old_name.setText(Immunization.getName());
-			cell.immune_old_name.setBackgroundColor(Color.parseColor("#ED9213"));
-			cell.immune_old_date.setText("The Old Date is Here");
+			
+			try {
+				cell.immune_date.setText(DateFormat.format(DATEFORMAT, Immunization.getDate()).toString());
+			} catch (IllegalArgumentException e) {
+				cell.immune_old_date.setText("IllegalArgument");
+				e.printStackTrace();
+			} catch (NullPointerException e) {
+				cell.immune_old_date.setText("None");
+			}
+			
+			try {
+				cell.immune_old_date.setText(DateFormat.format(DATEFORMAT, (ExistingActivity.p_existing.getImmunizationDate(Immunization.getName()))).toString());
+			} catch (IllegalArgumentException e) {
+				cell.immune_old_date.setText("IllegalArgument");
+				e.printStackTrace();
+			} catch (NoSuchFieldException e) {
+				cell.immune_old_date.setText("NoSuchField");
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				cell.immune_old_date.setText("IllegalAccess");
+				e.printStackTrace();
+			} catch (NullPointerException e) {
+				cell.immune_old_date.setText("None");
+			}
+			
 			cell.immune_old_date.setBackgroundColor(Color.parseColor("#ED9213"));
 		}
 
@@ -101,7 +137,6 @@ public class Change_Log_ImmunizationListAdapter extends BaseAdapter {
 	 */
 	static class Cell {
 		public TextView immune_old_date;
-		public TextView immune_old_name;
 		public TextView immune_name;
 		public TextView immune_date;
 	}

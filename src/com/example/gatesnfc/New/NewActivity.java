@@ -1,5 +1,7 @@
 package com.example.gatesnfc.New;
 
+import java.util.Calendar;
+
 import com.countrypicker.CountryPicker;
 import com.countrypicker.CountryPickerListener;
 
@@ -86,6 +88,7 @@ public class NewActivity extends FragmentActivity implements OnClickListener{
 			public void onPageSelected(int arg0) {/*Nothing*/}
 	    });
 		patient = new Patient();
+		patient.birthday = Calendar.getInstance();
 	}	
 
 	

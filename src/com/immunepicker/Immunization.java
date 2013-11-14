@@ -3,7 +3,7 @@ package com.immunepicker;
 import java.util.Calendar;
 
 /**
- * POJO
+ * Immunization Class that contains the date and the name
  *
  */
 public class Immunization {

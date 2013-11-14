@@ -6,7 +6,7 @@ import com.example.gatesnfc.NFC_write;
 import com.example.gatesnfc.R;
 
 import android.app.AlertDialog;
-import android.app.DialogFragment;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,11 +22,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.DatePicker;
 
 import com.example.gatesnfc.Patient;
-import com.example.gatesnfc.existing.DatePickerFragment.DatePickerDialogListener;
 
-public class ExistingActivity extends FragmentActivity implements OnClickListener, DatePickerDialogListener{
+public class ExistingActivity extends FragmentActivity implements OnClickListener, DatePickerDialog.OnDateSetListener{
 	private final int DEMO = 0, IMMUNE = 1, CHANGE = 2;
 	
 	public SectionsPagerAdapter mSectionsPagerAdapter;
@@ -53,7 +53,6 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 	private String getCodeData;
 
 	private String mMessage;
-
 	private String mStatus;
 	
 
@@ -84,7 +83,6 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 		
 		Class<?> c_existing = p_existing.getClass();
 		Class<?> c_reset = p_reset.getClass();
-		
 	}	
 
 
@@ -172,24 +170,23 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 	}
 	
 	private void showDateofBirthDialog(){
-		DatePickerFragment dialog = new DatePickerFragment();
-		Bundle bundle = new Bundle();
-        bundle.putString("isFrom", "DateOfBirth");
-        dialog.setArguments(bundle);
-        dialog.show(getFragmentManager(), "dialog");
+		Calendar cal = p_existing.birthday;
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH); 
+		int day = cal.get(Calendar.DATE); 
+		DatePicker_Fix newFragment = DatePicker_Fix.newInstance(year, month, day);
+        newFragment.show(getSupportFragmentManager(), "DatePicker");
 	}
-
-	 public void onDatePicked(DialogFragment dialog, Calendar c, String calledFrom) {
-		 if (c != null)
-		 {
-			 Log.d("calledFrom", calledFrom);
-			 if (calledFrom == "DateOfBirth")
-			 {
-				 p_existing.birthday = c;
-			 }
-			 updateView();
-		 }
-	 }
+	
+	@Override
+    public void onDateSet(DatePicker view, int year, int month, int day) {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, year);
+		cal.set(Calendar.MONTH, month);
+		cal.set(Calendar.DATE, day);
+		p_existing.birthday = cal;
+		updateView();
+    }
 	 
 	 private void showEditAddressDialog(){
 	    EditAddressDialog dialog = new EditAddressDialog();
