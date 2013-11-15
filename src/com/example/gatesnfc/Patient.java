@@ -1,10 +1,7 @@
 package com.example.gatesnfc;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Calendar;
-
-import com.immunepicker.Immunization;
 
 import android.util.Log;
 

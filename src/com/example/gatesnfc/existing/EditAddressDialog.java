@@ -86,12 +86,12 @@ public class EditAddressDialog extends DialogFragment implements OnClickListener
 		btn_cancel.setOnClickListener(this);
 		
 		// Initialize country button
-				b_country = (Button) rootView.findViewById(R.id.button_country);
-				b_country.setOnClickListener((OnClickListener) getActivity());
-				String country = PrefUtils.getStringPreference(getActivity(), PrefUtils.COUNTRY_KEY);
-				if(country != null && !country.isEmpty()) {
-					b_country.setText(country);
-				} 
+		b_country = (Button) rootView.findViewById(R.id.button_country);
+		b_country.setOnClickListener((OnClickListener) getActivity());
+		String country = PrefUtils.getStringPreference(getActivity(), PrefUtils.COUNTRY_KEY);
+		if(country != null && !country.isEmpty()) {
+			b_country.setText(country);
+		} 
 
 		getDialog().setTitle("Change Address");
 		
@@ -103,7 +103,7 @@ public class EditAddressDialog extends DialogFragment implements OnClickListener
 		switch(v.getId())
 		{
 		case (R.id.confirm):
-			changeText();
+			save();
 			this.dismiss();
 			break;
 		case (R.id.cancel):
@@ -112,8 +112,8 @@ public class EditAddressDialog extends DialogFragment implements OnClickListener
 		}
 		
 	}	
-	
-	private void changeText()
+
+	private void save()
 	{
 		ExistingActivity.p_existing.number = et_number.getText().toString();
 		ExistingActivity.p_existing.street = et_street.getText().toString();
@@ -121,7 +121,9 @@ public class EditAddressDialog extends DialogFragment implements OnClickListener
 		ExistingActivity.p_existing.city = et_city.getText().toString();
 		ExistingActivity.p_existing.region = et_region.getText().toString();
 		ExistingActivity.p_existing.country = b_country.getText().toString();
+		// Update preferences 
+		PrefUtils.setStringPreference(getActivity(), PrefUtils.COUNTRY_KEY, b_country.getText().toString());
 		ExistingActivity.p_existing.postal = et_postal.getText().toString();
-		((ExistingActivity) getActivity()).updateView();
+		ExistingActivity.updateAllViews();
 	}
 }

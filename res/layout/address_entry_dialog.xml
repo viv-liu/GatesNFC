@@ -1,164 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView1"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center|left"
-    android:orientation="vertical" >
-    
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center|left"
-    android:orientation="vertical"
-    android:padding="10dip" >
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Number:" />
-
-    <EditText
-        android:id="@+id/editText_number"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="100"
-        android:inputType="number" >
-
-        <requestFocus />
-    </EditText>
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Address Line 1:" />
-
-    <EditText
-        android:id="@+id/editText_al1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:hint="Main St." />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Address Line 2: (Optional)" />
-
-    <EditText
-        android:id="@+id/editText_al2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:hint="Unit 5" />
-    
-    <TextView
-        android:id="@+id/TextView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="City/Town" />
-
-    <EditText
-        android:id="@+id/editText_city"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:hint="Toronto" />
-    
-    <RelativeLayout
-        android:id="@+id/RelativeLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <LinearLayout
-            android:id="@+id/linearLayout1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/TextView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Region" />
-
-            <EditText
-                android:id="@+id/editText_region"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:hint="Ontario" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/linearLayout1"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/TextView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Postal Code" />
-
-            <EditText
-                android:id="@+id/editText_postal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-		        android:hint="10120"
-		        android:ems="10"
-		        android:inputType="textPostalAddress" 
-                android:maxLength="6" />
-        </LinearLayout>
-    </RelativeLayout>
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Country" />
-
-    <Button
-        android:id="@+id/button_country"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Canada" />
-</LinearLayout>
+    android:layout_height="wrap_content" >
+	<LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:gravity="center|left"
+	    android:orientation="vertical" >
+		<LinearLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:gravity="center|left"
+		        android:orientation="vertical"
+		        android:padding="10dip" >
+		
+		        <TextView
+		            android:id="@+id/textView1"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:text="Number:" />
+		
+		        <EditText
+		            android:id="@+id/editText_number"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:hint="100"
+		            android:inputType="number" >
+		        </EditText>
+		
+		        <TextView
+		            android:id="@+id/textView2"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:text="Address Line 1:" />
+		
+		        <EditText
+		            android:id="@+id/editText_al1"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:hint="Main St."
+		            android:inputType="textPersonName" />
+		
+		        <TextView
+		            android:id="@+id/textView3"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:text="Address Line 2: (Optional)" />
+		
+		        <EditText
+		            android:id="@+id/editText_al2"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            android:hint="Unit 5"
+		            android:inputType="textPersonName" />
+		
+		        <TextView
+		            android:id="@+id/TextView1"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:text="City/Town" />
+		
+		        <EditText
+		            android:id="@+id/editText_city"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:hint="Toronto"
+		            android:inputType="textPersonName" />
+		
+		        <RelativeLayout
+		            android:id="@+id/RelativeLayout2"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content" >
+		
+		            <LinearLayout
+		                android:id="@+id/linearLayout1"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:layout_alignParentLeft="true"
+		                android:orientation="vertical" >
+		
+		                <TextView
+		                    android:id="@+id/TextView1"
+		                    android:layout_width="wrap_content"
+		                    android:layout_height="wrap_content"
+		                    android:text="Region" />
+		
+		                <EditText
+		                    android:id="@+id/editText_region"
+		                    android:layout_width="wrap_content"
+		                    android:layout_height="wrap_content"
+		                    android:hint="Ontario"
+		                    android:inputType="textPersonName" />
+		            </LinearLayout>
+		
+		            <LinearLayout
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:layout_alignParentTop="true"
+		                android:layout_toRightOf="@+id/linearLayout1"
+		                android:orientation="vertical" >
+		
+		                <TextView
+		                    android:id="@+id/TextView2"
+		                    android:layout_width="wrap_content"
+		                    android:layout_height="wrap_content"
+		                    android:text="Postal Code" />
+		
+		                <EditText
+		                    android:id="@+id/editText_postal"
+		                    android:layout_width="wrap_content"
+		                    android:layout_height="wrap_content"
+		                    android:ems="10"
+		                    android:hint="10120"
+		                    android:inputType="textPostalAddress"
+		                    android:maxLength="6" />
+		            </LinearLayout>
+		        </RelativeLayout>
+		
+		        <TextView
+		            android:id="@+id/textView5"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:text="Country" />
+		
+		        <Button
+		            android:id="@+id/button_country"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:text="Canada" />
+		    </LinearLayout>
 	
-	    	
-	<TableLayout
-        android:id="@+id/tableLayout1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" >
-
-        <TableRow
-            android:id="@+id/tableRow1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-
-            <Button
-                style="?android:attr/buttonBarButtonStyle"
-                android:id="@+id/confirm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Confirm Changes" />
-
-            <Button
-                style="?android:attr/buttonBarButtonStyle"
-                android:id="@+id/cancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Cancel Changes" />
-        </TableRow>
-        
-        </TableLayout>
-
+	    <LinearLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
 	
-</RelativeLayout>
+	        <Button
+	            android:id="@+id/cancel"
+	            style="?android:attr/buttonBarButtonStyle"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	            android:text="Cancel" />
+	
+	        <Button
+	            android:id="@+id/confirm"
+	            style="?android:attr/buttonBarButtonStyle"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	            android:text="Confirm" />
+	    </LinearLayout>
+	</LinearLayout>
+</ScrollView>
+
+    

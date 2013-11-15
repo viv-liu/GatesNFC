@@ -11,7 +11,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-
 import com.example.gatesnfc.existing.ExistingActivity;
 
 public class EditNameDialog extends DialogFragment implements OnClickListener {
@@ -35,7 +34,7 @@ public class EditNameDialog extends DialogFragment implements OnClickListener {
     
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		rootView = inflater.inflate(R.layout.edit_name_fragment, container, false);
+		rootView = inflater.inflate(R.layout.edit_name_dialog, container, false);
 		nameFilter = new InputFilter[2];
 		nameFilter[0] = new InputFilter() { 
 			@Override
@@ -101,7 +100,7 @@ public class EditNameDialog extends DialogFragment implements OnClickListener {
 			ExistingActivity.p_existing.dad_firstName = (et_firstname.getText().toString());
 			ExistingActivity.p_existing.dad_lastName = (et_lastname.getText().toString());
 		}
-		((ExistingActivity) getActivity()).updateView();
+		ExistingActivity.updateAllViews();
 	}
 
 }

@@ -1,6 +1,6 @@
 package com.example.gatesnfc;
 
-import com.example.gatesnfc.New.NewActivity;
+import com.example.gatesnfc.newpatient.NewActivity;
 
 import android.os.Bundle;
 import android.app.Activity;

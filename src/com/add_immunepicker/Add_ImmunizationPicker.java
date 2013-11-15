@@ -30,8 +30,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.gatesnfc.R;
-import com.example.gatesnfc.New.NewActivity;
 import com.example.gatesnfc.existing.*;
+import com.example.gatesnfc.newpatient.NewActivity;
 
 public class Add_ImmunizationPicker extends DialogFragment implements
 		Comparator<Add_Immunization>, OnClickListener {
@@ -106,7 +106,7 @@ public class Add_ImmunizationPicker extends DialogFragment implements
 					String key = (String) keys.next();
 					if(isNew)
 					{
-						if(!NewActivity.patient.getImmunization(jsonObject.getString(key)))
+						if(!NewActivity.p_new.getImmunization(jsonObject.getString(key)))
 						{
 							Add_Immunization Immunization = new Add_Immunization();
 							Immunization.setName(jsonObject.getString(key));

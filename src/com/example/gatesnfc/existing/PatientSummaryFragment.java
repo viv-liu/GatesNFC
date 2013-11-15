@@ -49,7 +49,6 @@ public class PatientSummaryFragment extends Fragment {
 		notes = (Button)rootView.findViewById(R.id.button_notes);
 				
 		// Set listener to ExistingActivity
-		code.setOnClickListener((OnClickListener) getActivity());
 		name.setOnClickListener((OnClickListener) getActivity());
 		birthdate.setOnClickListener((OnClickListener) getActivity());
 		mom.setOnClickListener((OnClickListener) getActivity());
@@ -58,16 +57,20 @@ public class PatientSummaryFragment extends Fragment {
 		notes.setOnClickListener((OnClickListener) getActivity());
 		
 		// Set text for all buttons
+		updateButtonTexts();
+		
+		return rootView;
+	}	
+	
+	public static void updateButtonTexts() {
 		code.setText(ExistingActivity.p_existing.getCode());
 		name.setText(ExistingActivity.p_existing.firstName + " " + ExistingActivity.p_existing.lastName);
 		birthdate.setText(DateFormat.format(DATEFORMAT, ExistingActivity.p_existing.birthday).toString());
 		mom.setText(ExistingActivity.p_existing.mom_firstName + " " + ExistingActivity.p_existing.mom_lastName);
 		dad.setText(ExistingActivity.p_existing.dad_firstName + " " + ExistingActivity.p_existing.dad_lastName);
 		address.setText(ExistingActivity.p_existing.getAddressString());
-		notes.setText(ExistingActivity.p_existing.notes);
-		
-		return rootView;
-	}	
+		notes.setText(ExistingActivity.p_existing.getNotes());
+	}
 	
 }
 

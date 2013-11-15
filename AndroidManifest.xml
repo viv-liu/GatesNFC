@@ -58,7 +58,7 @@
             >
         </activity>
          
-        <activity android:name="com.example.gatesnfc.New.NewActivity"
+        <activity android:name="com.example.gatesnfc.newpatient.NewActivity"
             android:screenOrientation="portrait"
    			android:configChanges="orientation|keyboardHidden"
    			android:windowSoftInputMode="adjustResize">

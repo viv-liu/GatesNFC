@@ -2,6 +2,8 @@ package com.example.gatesnfc.existing;
 
 import java.util.Calendar;
 
+import com.countrypicker.CountryPicker;
+import com.countrypicker.CountryPickerListener;
 import com.example.gatesnfc.NFC_write;
 import com.example.gatesnfc.R;
 
@@ -15,20 +17,19 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.DatePicker;
 
 import com.example.gatesnfc.Patient;
 
 public class ExistingActivity extends FragmentActivity implements OnClickListener, DatePickerDialog.OnDateSetListener{
-	private final int DEMO = 0, IMMUNE = 1, CHANGE = 2;
-	
+	private final int DEMO = 0, IMMUNE = 1;
 	public SectionsPagerAdapter mSectionsPagerAdapter;
 	
 	static ViewPager mViewPager;
@@ -38,7 +39,7 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 	protected static Object c_existing;	
 	protected static Object c_reset;
 	
-	static final int NUM_STEPS = 3;
+	static final int NUM_STEPS = 2;
 	
 	public static final String DATEFORMAT = "MMM dd, yyyy";
 	
@@ -86,9 +87,6 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 		p_reset = new Patient();
 		p_reset.decryptPatientString(getStringData);
 		p_reset.setCode(getCodeData);
-		
-		Class<?> c_existing = p_existing.getClass();
-		Class<?> c_reset = p_reset.getClass();
 	}	
 
 
@@ -110,8 +108,7 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 			if(position < NUM_STEPS){
 				switch(position) {
 				case DEMO: fragment = PatientSummaryFragment.newInstance(position); break;
-				case IMMUNE: fragment = immune_sum.newInstance(position); break;
-				case CHANGE: fragment = change_Log.newInstance(position); break;
+				case IMMUNE: fragment = ImmuneListFragment.newInstance(position); break;
 				}
 			} else {
 			}
@@ -129,18 +126,14 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 			switch (position) {
 			case DEMO:	return "Demographics";
 			case IMMUNE:return "Immunizations";
-			case CHANGE:return "Change Log";
 			}
 			return null;
 		}
 	}
 	
 	@Override
-	public void onClick(View v) {
+	public void onClick(final View v) {
 		switch(v.getId()) {
-		case R.id.button_id:
-			showIDDialog();
-			break;
 		case R.id.button_name:
 			mStatus = "Patient's Name";
 			showNameDialog();
@@ -157,22 +150,35 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 			showNameDialog();
 			break;
 		case R.id.button_address:
-			showEditAddressDialog();
+			showAddressDialog();
 			break;
 		case R.id.button_notes:
-			//TODO:Inflate a notes dialog
+			showNotesDialog();
 			break;
-			//Stores the data on click of change_confirm_log
-		case R.id.change_confirm_log:
-			store_Data();
+		case R.id.button_country:
+			// Open up CountryPicker 
+			final CountryPicker picker = CountryPicker.newInstance("Select Country");
+			picker.setListener(new CountryPickerListener() {
+
+				@Override
+				public void onSelectCountry(String name, String code) {
+					// Leave this blurb here as a reference
+					/*Toast.makeText(
+							NewActivity.this,
+							"Country Name: " + name + " - Code: " + code
+									+ " - Currency: "
+									+ CountryPicker.getCurrencyCode(code),
+							Toast.LENGTH_SHORT).show();*/
+					// Update the button
+					((Button)v).setText(name);
+					picker.dismiss();
+				}
+			});
+			picker.show(this.getSupportFragmentManager(), "COUNTRY_PICKER");
 			break;
 		}
+		PatientSummaryFragment.updateButtonTexts();
 	}
-	
-	private void showIDDialog() {
-        EditIDDialog dialog = new EditIDDialog();
-        dialog.show(getSupportFragmentManager(), "dialog");
-    }
 	
 	private void showNameDialog(){
         EditNameDialog dialog = new EditNameDialog();
@@ -195,12 +201,17 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 		cal.set(Calendar.MONTH, month);
 		cal.set(Calendar.DATE, day);
 		p_existing.birthday = cal;
-		updateView();
+		PatientSummaryFragment.updateButtonTexts();
     }
 	 
-	 private void showEditAddressDialog(){
+	 private void showAddressDialog(){
 	    EditAddressDialog dialog = new EditAddressDialog();
 	    dialog.show(getFragmentManager(), "dialog");
+	 }
+	 
+	 private void showNotesDialog() {
+		 EditNotesDialog dialog = new EditNotesDialog();
+		 dialog.show(getSupportFragmentManager(), "dialog");
 	 }
 	
 	public String getStatus() {
@@ -269,7 +280,7 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 		     }
 		  }
 		  
-		}//onActivityResult
+		}
 	
 	
 	/**reset_AllData()
@@ -282,63 +293,7 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 		String reset = p_reset.constructPatientString();
 		Log.d("p_reset string", reset);
 		p_existing.decryptPatientString(reset);
-		updateView();
-		
-		//TODO: force the other two fragments to update their views
-	}
-	
-	/**reset_ImmuneData(String immune)
-	 * Reset's the date and the immunization type
-	 * to previous values
-	 * @param immune is the name of the immunization you want to reset
-	 */
-	
-//	public void reset_ImmuneData(String immune){
-//		//TODO: force update views
-//		//TODO: Check if I'm getting the get and set values correct, I'm assuming they get null if not there
-//		try {
-//			if(p_reset.getImmunization(immune) != null)
-//			{	//If there originally was an immunization then get the date of that
-//				Calendar iDate = p_reset.getImmunizationDate(immune);
-//				if (p_existing.getImmunization(immune) != null)
-//				{	//If immunization exists then just set the date
-//					p_existing.setImmunizationDate(immune, iDate);
-//				}
-//				else
-//				{	//If immunization doesn't exist anymore, set it to true then set the Date
-//					p_existing.setImmunizationDate(immune, iDate);
-//				}
-//			}
-//			else //When there originally wasn't an immunization
-//			{
-//				if (p_existing.getImmunization(immune) != null)
-//				{
-//					//Set the immunization to false
-//					p_existing.setImmunizationDate(immune, null);
-//				}
-//				else
-//				{
-//					//do nothing for both are already set to false
-//				}
-//			}
-//		} catch (IllegalArgumentException e) {
-//			e.printStackTrace();
-//		} catch (NoSuchFieldException e) {
-//			e.printStackTrace();
-//		} catch (IllegalAccessException e) {
-//			e.printStackTrace();
-//		}
-//	}
-
-	public void updateView() {
-		// TODO Also force the Immunizations to updateView
-		PatientSummaryFragment.code.setText (ExistingActivity.p_existing.getCode());
-		PatientSummaryFragment.name.setText (ExistingActivity.p_existing.firstName + " " + ExistingActivity.p_existing.lastName);
-		PatientSummaryFragment.birthdate.setText(DateFormat.format(DATEFORMAT, ExistingActivity.p_existing.birthday).toString());
-		PatientSummaryFragment.mom.setText (ExistingActivity.p_existing.mom_firstName + " " + ExistingActivity.p_existing.mom_lastName);
-		PatientSummaryFragment.dad.setText (ExistingActivity.p_existing.dad_firstName + " " + ExistingActivity.p_existing.dad_lastName);
-		PatientSummaryFragment.address.setText (ExistingActivity.p_existing.getAddressString());
-		PatientSummaryFragment.notes.setText (ExistingActivity.p_existing.notes);
+		PatientSummaryFragment.updateButtonTexts();
 	}
 	
 	@Override
@@ -381,6 +336,9 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 	            return true;
 	     }
 		return false;
+	}
+	public static void updateAllViews() {
+		PatientSummaryFragment.updateButtonTexts();
 	}
 
 }

@@ -11,24 +11,36 @@
 			android:orientation="vertical" >
 			
 		     <TextView
+		         android:id = "@+id/tv_id"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="ID: " />
+		     
+		     <View
+			    android:layout_width="fill_parent"
+			    android:layout_height="1dp"
+			    android:background="@android:color/darker_gray"/>
 			<Button
 			    android:id="@+id/button_id"
-			    style="?android:attr/buttonStyleSmall"
+			    style="?android:attr/buttonBarButtonStyle"
 			    android:layout_width="match_parent"
 			    android:layout_height="wrap_content"
 			    android:gravity="center_vertical|left" 
+			    android:enabled="false"
 			    android:text="Poof" />
 		    
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="NAME: " />
+		     <View
+			    android:layout_width="fill_parent"
+			    android:layout_height="1dp"
+			    android:background="@android:color/darker_gray"/>
+			
 			<Button
 			    android:id="@+id/button_name"
-			    style="?android:attr/buttonStyleSmall"
+			    style="?android:attr/buttonBarButtonStyle"
 			    android:layout_width="match_parent"
 			    android:layout_height="wrap_content"
 			    android:gravity="center_vertical|left" 
@@ -38,10 +50,14 @@
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
 			    android:text="BIRTHDATE: " />
+		     <View
+			    android:layout_width="fill_parent"
+			    android:layout_height="1dp"
+			    android:background="@android:color/darker_gray"/>
 			
 			<Button
 			    android:id="@+id/button_birthdate"
-			    style="?android:attr/buttonStyleSmall"
+			    style="?android:attr/buttonBarButtonStyle"
 			    android:layout_width="match_parent"
 			    android:layout_height="wrap_content"
 			    android:gravity="center_vertical|left"
@@ -51,10 +67,14 @@
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
 			    android:text="MOTHER: " />
+		     <View
+			    android:layout_width="fill_parent"
+			    android:layout_height="1dp"
+			    android:background="@android:color/darker_gray"/>
 			
 			<Button
 			    android:id="@+id/button_mom"
-			    style="?android:attr/buttonStyleSmall"
+			    style="?android:attr/buttonBarButtonStyle"
 			    android:layout_width="match_parent"
 			    android:layout_height="wrap_content"
 			    android:gravity="center_vertical|left"
@@ -64,10 +84,14 @@
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
 			    android:text="FATHER: " />
+		     <View
+			    android:layout_width="fill_parent"
+			    android:layout_height="1dp"
+			    android:background="@android:color/darker_gray"/>
 			
 			<Button
 			    android:id="@+id/button_dad"
-			    style="?android:attr/buttonStyleSmall"
+			    style="?android:attr/buttonBarButtonStyle"
 			    android:layout_width="match_parent"
 			    android:layout_height="wrap_content"
 			    android:gravity="center_vertical|left" 
@@ -77,10 +101,14 @@
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
 			    android:text="ADDRESS: " />
+		     <View
+			    android:layout_width="fill_parent"
+			    android:layout_height="1dp"
+			    android:background="@android:color/darker_gray"/>
 			
 			<Button
 			    android:id="@+id/button_address"
-			    style="?android:attr/buttonStyleSmall"
+			    style="?android:attr/buttonBarButtonStyle"
 			    android:layout_width="match_parent"
 			    android:layout_height="wrap_content"
 			    android:gravity="center_vertical|left" 
@@ -90,16 +118,15 @@
 			<TextView
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
-			    android:text="VACCINES LOL TODO" />
-
-			<TextView
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
 			    android:text="NOTES" />
+		     <View
+			    android:layout_width="fill_parent"
+			    android:layout_height="1dp"
+			    android:background="@android:color/darker_gray"/>
 
 			<Button
 			    android:id="@+id/button_notes"
-			    style="?android:attr/buttonStyleSmall"
+			    style="?android:attr/buttonBarButtonStyle"
 			    android:layout_width="match_parent"
 			    android:layout_height="wrap_content"
 			    android:gravity="center_vertical|left" 
