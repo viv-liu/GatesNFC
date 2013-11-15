@@ -56,6 +56,14 @@ public class PatientSummaryFragment extends Fragment {
 		address.setOnClickListener((OnClickListener) getActivity());
 		notes.setOnClickListener((OnClickListener) getActivity());
 		
+		// By default, every button is DISABLED (villager mode)
+		name.setEnabled(false);
+		birthdate.setEnabled(false);
+		mom.setEnabled(false);
+		dad.setEnabled(false);
+		address.setEnabled(false);
+		notes.setEnabled(true);
+		
 		// Set text for all buttons
 		updateButtonTexts();
 		

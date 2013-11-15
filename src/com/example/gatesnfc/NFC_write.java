@@ -9,6 +9,7 @@ import com.example.gatesnfc.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -33,6 +34,7 @@ public class NFC_write extends Activity implements OnClickListener {
 	private String mToWrite;
 	private String mID;
 	private Tag mTag;
+	private ProgressDialog pdBox;
 	private AlertDialog box;
 	
 	
@@ -55,14 +57,19 @@ public class NFC_write extends Activity implements OnClickListener {
     
 	public void onClick(View v) {
 		if(v.getId() == R.id.write_nfc) {
-			AlertDialog.Builder dlgAlert= new AlertDialog.Builder(this)
-	        .setTitle("Touch and Hold Tag to Device to Write")
-	        .setCancelable(true);
-			box=dlgAlert.create();
-	        box.show();
+			displayMessage();
 			enableWriteMode();
 		}
 	}
+	private void displayMessage() {
+			
+			pdBox = new ProgressDialog(this);
+			pdBox.setTitle("Waiting...");
+			pdBox.setMessage("Please place card against device.");
+			pdBox.setCancelable(true);
+			pdBox.setIndeterminate(true);
+			pdBox.show();
+		}
 	
 	@Override
 	protected void onPause() {
@@ -87,8 +94,8 @@ public class NFC_write extends Activity implements OnClickListener {
 		if(mInWriteMode) {
 			mInWriteMode = false;
 			
-			//Dismiss Previous AlertDialog
-			box.cancel();
+			// dismiss all dialogs
+			pdBox.dismiss();
 			
 			mTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 			
@@ -101,21 +108,22 @@ public class NFC_write extends Activity implements OnClickListener {
 			}
 			else
 			{
+				
 				 AlertDialog.Builder dlgAlert= new AlertDialog.Builder(this)
 			        .setTitle("ID not Matching \n Are you sure you want to overwrite")
 			        .setCancelable(false)
-			        .setPositiveButton("Yes Done", new DialogInterface.OnClickListener() {
+			        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 			            public void onClick(DialogInterface dialog, int whichButton) {
 			            	writeToTag();
 			            }
 			        })
-			        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			        .setNegativeButton("No", new DialogInterface.OnClickListener() {
 			            public void onClick(DialogInterface dialog, int whichButton) {
 			            	Intent returnIntent = new Intent();
 			            	displayMessage("ID Not Matching");
 			            	returnIntent.putExtra("result", mMessage);
 			        		setResult(RESULT_CANCELED, returnIntent);
-
+			        		box.dismiss();
 			        		finish();
 			            }
 			        });
@@ -233,7 +241,6 @@ public class NFC_write extends Activity implements OnClickListener {
 
         return false;
     }
-
 	
 	private void displayMessage(String message) {
 		mMessage = message;

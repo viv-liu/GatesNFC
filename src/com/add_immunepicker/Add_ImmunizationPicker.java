@@ -201,10 +201,10 @@ public class Add_ImmunizationPicker extends DialogFragment implements
 				.findViewById(R.id.immunization_picker_listview);
 		
 		mConfirm = (Button) mView
-				.findViewById(R.id.confirm_picker);
+				.findViewById(R.id.confirm);
 		
 		mCancel = (Button) mView
-				.findViewById(R.id.cancel_picker);
+				.findViewById(R.id.cancel);
 		
 		mConfirm.setOnClickListener((android.view.View.OnClickListener) this);
 	    mCancel.setOnClickListener((android.view.View.OnClickListener) this);
@@ -284,12 +284,12 @@ public class Add_ImmunizationPicker extends DialogFragment implements
 	public void onClick(View view) {
 		
 		switch(view.getId()) {
-		case R.id.confirm_picker:
+		case R.id.confirm:
 			mStatus = "Add";
 			sendResult(1);
 			this.dismiss();
 			break;
-		case R.id.cancel_picker:
+		case R.id.cancel:
 			this.dismiss();
 		break;
 		}

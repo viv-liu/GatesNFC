@@ -26,9 +26,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
 import android.text.InputFilter;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +36,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -55,7 +52,6 @@ Comparator<Immunization>{
 	/**
 	 * View components
 	 */
-	private EditText searchEditText;
 	private ListView ImmunizationListView;
 
 	/**
@@ -73,10 +69,6 @@ Comparator<Immunization>{
 	 * Hold Immunizations that matched user query
 	 */
 	//private List<Immunization> originalImmunizationList;
-
-	public EditText getSearchEditText() {
-		return searchEditText;
-	}
 	
 	public static Fragment newInstance(int position) {
 		ImmuneListFragment myFragment = new ImmuneListFragment();
@@ -97,28 +89,6 @@ Comparator<Immunization>{
 		//setValuesList = new ArrayList<String>();
 		justChanged = new ArrayList<Immunization>();
 		completeImmunizationList = new ArrayList<Immunization>();
-		
-		// Get view components
- 		searchEditText = (EditText) rootView
- 				.findViewById(R.id.immunization_picker_search);
- 		// Search for which Immunizations matched user query
- 		searchEditText.addTextChangedListener(new TextWatcher() {
-
- 			@Override
- 			public void onTextChanged(CharSequence s, int start, int before,
- 					int count) {
- 			}
-
- 			@Override
- 			public void beforeTextChanged(CharSequence s, int start, int count,
- 					int after) {
- 			}
-
- 			@Override
- 			public void afterTextChanged(Editable s) {
- 				search(s.toString());
- 			}
- 		});
  		ImmunizationListView = (ListView) rootView
  				.findViewById(R.id.immunization_picker_listview);
  		// Init adapter
@@ -157,9 +127,6 @@ Comparator<Immunization>{
 			}
  		});
 		Button immunization_button = (Button) rootView.findViewById(R.id.add_immunization);
-		Button list_immune_button = (Button) rootView.findViewById(R.id.remove_immunization);
-		
-		list_immune_button.setOnClickListener(this);
 	    immunization_button.setOnClickListener(this);
 	    
 	    updateView();
@@ -205,9 +172,6 @@ Comparator<Immunization>{
 		switch(view.getId()) {
 		case R.id.add_immunization:
 			add_immunization();
-		break;
-		case R.id.remove_immunization:
-//			remove_immunization();
 		break;
 		}
 	}

@@ -228,12 +228,12 @@ public class NewActivity extends FragmentActivity implements OnClickListener, Da
 		    	 
 		    	 AlertDialog.Builder dlgAlert= new AlertDialog.Builder(this)
 		        .setTitle(result + "\n Do you wish to Exit?")
-		        .setPositiveButton("Yes, leave", new DialogInterface.OnClickListener() {
+		        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 		            public void onClick(DialogInterface dialog, int whichButton) {
 		            	finish();
 		            }
 		        })
-		        .setNegativeButton("No, stay.", new DialogInterface.OnClickListener() {
+		        .setNegativeButton("No.", new DialogInterface.OnClickListener() {
 		            public void onClick(DialogInterface dialog, int whichButton) {
 		            }
 		        });

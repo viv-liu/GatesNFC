@@ -28,9 +28,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
 import android.text.InputFilter;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,28 +101,7 @@ Comparator<Immunization>{
 		originalImmunizationList.addAll(getOriginalImmunizationList());
 		completeImmunizationList = new ArrayList<Immunization>();
 		completeImmunizationList.addAll(originalImmunizationList);
-		
-		// Get view components
- 		searchEditText = (EditText) rootView
- 				.findViewById(R.id.immunization_picker_search);
- 		// Search for which Immunizations matched user query
- 		searchEditText.addTextChangedListener(new TextWatcher() {
 
- 			@Override
- 			public void onTextChanged(CharSequence s, int start, int before,
- 					int count) {
- 			}
-
- 			@Override
- 			public void beforeTextChanged(CharSequence s, int start, int count,
- 					int after) {
- 			}
-
- 			@Override
- 			public void afterTextChanged(Editable s) {
- 				search(s.toString());
- 			}
- 		});
  		ImmunizationListView = (ListView) rootView
  				.findViewById(R.id.immunization_picker_listview);
  		// Init adapter
@@ -163,9 +140,6 @@ Comparator<Immunization>{
 			}
  		});
 		Button immunization_button = (Button) rootView.findViewById(R.id.add_immunization);
-		Button list_immune_button = (Button) rootView.findViewById(R.id.remove_immunization);
-		
-		list_immune_button.setOnClickListener(this);
 	    immunization_button.setOnClickListener(this);
 	    
 	    updateView();
@@ -211,9 +185,6 @@ Comparator<Immunization>{
 		switch(view.getId()) {
 		case R.id.add_immunization:
 			add_immunization();
-		break;
-		case R.id.remove_immunization:
-//			remove_immunization();
 		break;
 		}
 	}
@@ -346,6 +317,14 @@ Comparator<Immunization>{
 		return result.toString();
 	}
 	
+	public static void enableGodMode() {
+		for(int i = 0; i < completeImmunizationList.size(); i++) {
+			if(completeImmunizationList.get(i).isGreyed()) {
+				completeImmunizationList.get(i).setGreyed(false);
+			}
+		}
+		adapter.notifyDataSetChanged();
+	}
 	public static void resetImmuneChanges() {
 		Log.d("original", originalImmunizationList.toString());
 		Log.d("complete", completeImmunizationList.toString());

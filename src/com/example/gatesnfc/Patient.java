@@ -182,7 +182,15 @@ public class Patient {
 	}
 	
 	public String getAddressString() {
-		return number + " " + street + ", " + optional + ", " + city + " " + region + ", " + country + " " + postal; 
+		String s = "";
+		s += (number != null) ? number + " ": "";
+		s += (street != null && !street.isEmpty()) ? street + ", ": "";
+		s += (optional != null && !optional.isEmpty()) ? optional + ", ":"";
+		s += (city != null && !city.isEmpty()) ? city + ", ": "";
+		s += (region != null && !region.isEmpty()) ? region + ", ":"";
+		s += (country != null && !country.isEmpty()) ? country + " ": "";
+		s += (postal != null && !postal.isEmpty()) ? postal:"";
+		return s;
 	}
 	
 	private String constructAddressString() {

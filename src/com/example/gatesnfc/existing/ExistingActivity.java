@@ -249,12 +249,12 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 		    	 
 		    	 AlertDialog.Builder dlgAlert= new AlertDialog.Builder(this)
 		        .setTitle(result + "\n Do you wish to Exit?")
-		        .setPositiveButton("Yes Exit", new DialogInterface.OnClickListener() {
+		        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 		            public void onClick(DialogInterface dialog, int whichButton) {
 		            	finish();
 		            }
 		        })
-		        .setNegativeButton("No Stay on the page", new DialogInterface.OnClickListener() {
+		        .setNegativeButton("No", new DialogInterface.OnClickListener() {
 		            public void onClick(DialogInterface dialog, int whichButton) {
 		            }
 		        });
@@ -334,11 +334,44 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 	        case R.id.reset_all:
 	        	resetAllData();
 	            return true;
+	        case R.id.godMode:
+	        	godMode();
+	        	return true;
 	        case R.id.help:
 	            //TODO: Create Help Function
 	            return true;
 	     }
 		return false;
+	}
+	
+	private void godMode() {
+		// Alert dialog:
+		AlertDialog.Builder dlgAlert= new AlertDialog.Builder(this)
+        .setMessage("Editing previously entered information will change past records in this card. " +
+        		"However, you can still revert these changes. Are you sure you want to continue?")
+        .setCancelable(true)
+        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+            	enablePatientSummaryViews();
+            	ImmuneListFragment.enableGodMode();
+            }
+        })
+        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+            	// Nada
+            }
+        });
+		AlertDialog box=dlgAlert.create();
+        box.show();
+	}
+	
+	private void enablePatientSummaryViews() {
+		PatientSummaryFragment.name.setEnabled(true);
+		PatientSummaryFragment.birthdate.setEnabled(true);
+		PatientSummaryFragment.mom.setEnabled(true);
+		PatientSummaryFragment.dad.setEnabled(true);
+		PatientSummaryFragment.address.setEnabled(true);
+		PatientSummaryFragment.notes.setEnabled(true);
 	}
 	public static void updateAllViews() {
 		PatientSummaryFragment.updateButtonTexts();

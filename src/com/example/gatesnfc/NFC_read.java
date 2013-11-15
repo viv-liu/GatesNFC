@@ -4,8 +4,8 @@ import com.example.gatesnfc.R;
 import com.example.gatesnfc.existing.ExistingActivity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.NdefMessage;
@@ -23,7 +23,7 @@ public class NFC_read extends Activity implements OnClickListener {
 	private NfcAdapter mAdapter;
 	private boolean mInReadMode;
 	private Button mReadTagButton;
-	private AlertDialog box;
+	private ProgressDialog  box;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,18 +42,19 @@ public class NFC_read extends Activity implements OnClickListener {
 	
 	public void onClick(View v) {
 		if(v.getId() == R.id.read_nfc) {
-			displayMessage("Touch and hold tag against phone to Read.");
+			displayMessage();
 			enableReadMode();
 		}
 	}
 	
-	private void displayMessage(String message) {
+	private void displayMessage() {
 		
-		AlertDialog.Builder dlgAlert= new AlertDialog.Builder(this)
-        .setTitle(message);
-
-		box = dlgAlert.create();
-        box.show();
+		box = new ProgressDialog(this);
+		box.setTitle("Waiting...");
+		box.setMessage("Please place card against device.");
+		box.setCancelable(true);
+		box.setIndeterminate(true);
+		box.show();
 	}
 
 	@Override
@@ -78,7 +79,9 @@ public class NFC_read extends Activity implements OnClickListener {
 		if(mInReadMode) {
 			mInReadMode = false;
 	        Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-	        NdefMessage msg = (NdefMessage) rawMsgs[0];
+	        try{
+	        	NdefMessage msg = (NdefMessage) rawMsgs[0];
+	        
 	        NdefRecord cardRecord = msg.getRecords()[0];
 	        
 	        mMessage = new String(cardRecord.getPayload());
@@ -91,6 +94,11 @@ public class NFC_read extends Activity implements OnClickListener {
 			e.putExtra("SentCode", theID);
 			box.dismiss();
 			startActivity(e);
+	        } catch (Exception e) {
+	        	e.printStackTrace();
+	        	mInReadMode = true;
+	        	return;
+	        }
 		}
     }
 	

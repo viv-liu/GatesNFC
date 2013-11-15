@@ -1,50 +1,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical" >
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-        
-        <TableLayout
-        android:id="@+id/tableLayout1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" >
-
-        <TableRow
-            android:id="@+id/tableRow1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-
-            <Button
-                style="?android:attr/buttonBarButtonStyle"
-                android:id="@+id/add_immunization"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add" />
-
-            <Button
-                style="?android:attr/buttonBarButtonStyle"
-                android:id="@+id/remove_immunization"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Remove" />
-        </TableRow>
-        
-        </TableLayout>
-        
-    </RelativeLayout>
-
-    <EditText
-        android:id="@+id/immunization_picker_search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:hint="@string/search"
-        android:drawableLeft="@drawable/search_icon" />
+	<Button
+		android:id="@+id/add_immunization"
+		style="?android:attr/buttonBarButtonStyle"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Add new..." />
 
     <ListView
         android:id="@+id/immunization_picker_listview"
