@@ -100,10 +100,12 @@ public class Patient {
 		s += constructAddressString() + DIVIDER;
 		s += constructImmuneString() + DIVIDER;
 		s += notes;
+		Log.d("constructPatientString", s);
 		return s;
 	}
 
 	public boolean decryptPatientString(String s) {
+		Log.d("decryptPatientString", s);
 		String frag = "";
 		char letter = 'a';
 		int count = 0;
@@ -158,7 +160,7 @@ public class Patient {
 	}
 
 	//*******************************************************************
-	// Private methods for constructing & decryting Patient string
+	// Private methods for constructing & decrypting Patient string
 	//*******************************************************************
 	/**
 	 * Get Date of Birth string
@@ -179,7 +181,7 @@ public class Patient {
 		String frag = "";
 		int immArrayIndex = 0;
 		for(int i = 0; i < s.length(); i++) {
-			if(String.valueOf(s.charAt(i)) == SMALL_DIVIDER) {
+			if(s.charAt(i) == SMALL_DIVIDER.charAt(0)) {
 				immDatesArray[immArrayIndex++] = decryptCalendarString(frag);
 				frag = "";
 			} else {
@@ -200,7 +202,7 @@ public class Patient {
 		String s = "";
 		for(int i = 0; i < immDatesArray.length; i++) {
 			if(immDatesArray[i] != null) {
-				s += constructCalendarString(immDatesArray[i]);
+				s += constructCalendarString(immDatesArray[i]) + SMALL_DIVIDER;
 			} else {
 				s += SMALL_DIVIDER;
 			}
@@ -225,7 +227,13 @@ public class Patient {
 				switch(i) {
 				case 1:
 					calField = Integer.parseInt(frag);
-					c.set(Calendar.YEAR, calField + 2000);
+					Calendar now = Calendar.getInstance();
+					if(calField + 2000 > now.get(Calendar.YEAR)) {
+						calField += 1900;
+					} else {
+						calField += 2000;
+					}
+					c.set(Calendar.YEAR, calField);
 					frag = "";	
 					break;
 				case 3:
@@ -240,8 +248,9 @@ public class Patient {
 					break;
 				}
 			}
+			return c;
 		}
-		return c;
+		return null;
 	}
 	/** Converts a calendar object into numbers and into a string sequence
 	 * ie October 31, 2013 is converted to "130931"~
@@ -249,7 +258,13 @@ public class Patient {
 	 * ~ Year = Current year - 2000
 	 * Returns a string of byte length: 6*/
 		private String constructCalendarString(Calendar c) {	
-			int year = c.get(Calendar.YEAR)- 2000;
+			// Reduce year to last 2 digits: check if year > 2000. 
+			int year = c.get(Calendar.YEAR);
+			if(year > 2000) {
+				year -= 2000;
+			} else { // assume we're in the 1900s
+				year -= 1900;
+			}
 			int month = c.get(Calendar.MONTH);	// month is an index 0 - 11, where January = 0
 			int date = c.get(Calendar.DATE);
 			String s = "";
@@ -258,7 +273,7 @@ public class Patient {
 			} else {
 				s += String.valueOf(year);
 			}
-			if (month < 10) {
+			if (month - 9 <= 0) {
 				// Pad the single digit of month
 				s += "0" + String.valueOf(month); 
 			} else {

@@ -191,7 +191,7 @@ public class Add_ImmunizationPicker extends DialogFragment implements
 		getAllImmunizations();
 
 		// Set dialog title if show as dialog
-		dialogTitle = "Remove Immunization";
+		dialogTitle = "Add Immunization";
 		getDialog().setTitle(dialogTitle);
 
 		// Get view components
@@ -285,7 +285,7 @@ public class Add_ImmunizationPicker extends DialogFragment implements
 		
 		switch(view.getId()) {
 		case R.id.confirm_picker:
-			mStatus = "T";
+			mStatus = "Add";
 			sendResult(1);
 			this.dismiss();
 			break;

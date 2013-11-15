@@ -13,5 +13,5 @@ public class MimeType {
 	 * 		- an NFC chip is detected
 	 * 		- the type of data in the NFC == NFC_DEMO
 	 * */
-	public static final String NFC_DEMO = "application/vnd.example.gatesnfc.existing";
+	public static final String NFC_DEMO = "application/vnd.gatesnfc";
 }

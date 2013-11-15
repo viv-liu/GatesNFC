@@ -64,7 +64,8 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 		Intent intent = getIntent();
 		getStringData = intent.getStringExtra("SentData"); //Data in string form
 		getCodeData = intent.getStringExtra("SentCode"); 
-
+		Log.d("StringData", getStringData);
+		
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the app.
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -75,6 +76,11 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 
 		p_existing = new Patient();
 		p_existing.decryptPatientString(getStringData);
+		//TEST
+		getStringData = p_existing.constructPatientString();
+		Log.d("p_existing", getStringData);
+		
+		
 		p_existing.setCode(getCodeData);
 		Log.d("ExistingActivity readMessage", getStringData);
 		p_reset = new Patient();
@@ -287,42 +293,42 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 	 * @param immune is the name of the immunization you want to reset
 	 */
 	
-	public void reset_ImmuneData(String immune){
-		//TODO: force update views
-		//TODO: Check if I'm getting the get and set values correct, I'm assuming they get null if not there
-		try {
-			if(p_reset.getImmunization(immune) != null)
-			{	//If there originally was an immunization then get the date of that
-				Calendar iDate = p_reset.getImmunizationDate(immune);
-				if (p_existing.getImmunization(immune) != null)
-				{	//If immunization exists then just set the date
-					p_existing.setImmunizationDate(immune, iDate);
-				}
-				else
-				{	//If immunization doesn't exist anymore, set it to true then set the Date
-					p_existing.setImmunizationDate(immune, iDate);
-				}
-			}
-			else //When there originally wasn't an immunization
-			{
-				if (p_existing.getImmunization(immune) != null)
-				{
-					//Set the immunization to false
-					p_existing.setImmunizationDate(immune, null);
-				}
-				else
-				{
-					//do nothing for both are already set to false
-				}
-			}
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (NoSuchFieldException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
-	}
+//	public void reset_ImmuneData(String immune){
+//		//TODO: force update views
+//		//TODO: Check if I'm getting the get and set values correct, I'm assuming they get null if not there
+//		try {
+//			if(p_reset.getImmunization(immune) != null)
+//			{	//If there originally was an immunization then get the date of that
+//				Calendar iDate = p_reset.getImmunizationDate(immune);
+//				if (p_existing.getImmunization(immune) != null)
+//				{	//If immunization exists then just set the date
+//					p_existing.setImmunizationDate(immune, iDate);
+//				}
+//				else
+//				{	//If immunization doesn't exist anymore, set it to true then set the Date
+//					p_existing.setImmunizationDate(immune, iDate);
+//				}
+//			}
+//			else //When there originally wasn't an immunization
+//			{
+//				if (p_existing.getImmunization(immune) != null)
+//				{
+//					//Set the immunization to false
+//					p_existing.setImmunizationDate(immune, null);
+//				}
+//				else
+//				{
+//					//do nothing for both are already set to false
+//				}
+//			}
+//		} catch (IllegalArgumentException e) {
+//			e.printStackTrace();
+//		} catch (NoSuchFieldException e) {
+//			e.printStackTrace();
+//		} catch (IllegalAccessException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	public void updateView() {
 		// TODO Also force the Immunizations to updateView

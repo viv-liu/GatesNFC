@@ -19,6 +19,8 @@ import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -126,10 +128,14 @@ public class NFC_write extends Activity implements OnClickListener {
     }
 	
 	@Override
-	protected void onDestroy(){
-		super.onDestroy();
-		//Dismiss Alert Dialog's when activity closes
-		box.dismiss();
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_BACK){
+			Log.d("KeyDown Pressed", "Back Pressed)");
+			Intent returnIntent = new Intent();
+			returnIntent.putExtra("result", "Canceled by User");
+			setResult(RESULT_CANCELED, returnIntent);
+		} 
+		return super.onKeyDown(keyCode, event);
 	}
 	
 	private void writeToTag(){
