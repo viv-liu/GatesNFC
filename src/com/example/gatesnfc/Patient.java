@@ -2,14 +2,13 @@ package com.example.gatesnfc;
 
 import java.lang.reflect.Field;
 import java.util.Calendar;
-
 import android.util.Log;
 
 public class Patient {
 	// String dividers. Note: Can't be accessed on keyboard! 1 byte long
 	private final static String DIVIDER = Character.toString((char) 0);		// Separates FIELDS
 	private final static String SMALL_DIVIDER = Character.toString((char) 2);	// Separates parts of fields
-	
+	//public static final String DATEFORMAT = "MMM dd, yyyy";
 	private final static int EXPECTED_NUM_DATE_BYTES = 6;
 	// Indices for immArray
 	public final static int BCG = 0;
@@ -99,12 +98,13 @@ public class Patient {
 		s += mom_firstName + DIVIDER + mom_lastName + DIVIDER;
 		s += dad_firstName + DIVIDER + dad_lastName + DIVIDER;
 		s += constructAddressString() + DIVIDER;
-		s += getImmuneString() + DIVIDER;
+		s += constructImmuneString() + DIVIDER;
 		s += notes;
 		return s;
 	}
-	
+
 	public boolean decryptPatientString(String s) {
+		Log.d("decryptPatientString", s);
 		String frag = "";
 		char letter = 'a';
 		int count = 0;
@@ -135,6 +135,31 @@ public class Patient {
 		}
 		return false;
 	}
+
+	/**
+	 * Checks if immDatesArray entry has a valid Calendar object. 
+	 * @param mI
+	 * @return
+	 * @throws NoSuchFieldException
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 */
+	
+	public Boolean getImmunization(String mI) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException
+	{
+		Class<?> c = this.getClass();
+		Field f = c.getDeclaredField(mI);
+		f.setAccessible(true);
+		if(immDatesArray[(Integer) f.get(this)] != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	//*******************************************************************
+	// Private methods for constructing & decryting Patient string
+	//*******************************************************************
 	/**
 	 * Get Date of Birth string
 	 * @return
@@ -143,24 +168,25 @@ public class Patient {
 		return constructCalendarString(birthday);
 	}
 	
-	private String constructAddressString() {
-		return number + DIVIDER + street + DIVIDER + optional + DIVIDER + city + DIVIDER + region + DIVIDER + country + DIVIDER + postal; 
-	}
 	public String getAddressString() {
 		return number + " " + street + ", " + optional + ", " + city + " " + region + ", " + country + " " + postal; 
 	}
 	
+	private String constructAddressString() {
+		return number + DIVIDER + street + DIVIDER + optional + DIVIDER + city + DIVIDER + region + DIVIDER + country + DIVIDER + postal; 
+	}
 	private void decryptImmuneString(String s) {
 		String frag = "";
 		int immArrayIndex = 0;
 		for(int i = 0; i < s.length(); i++) {
-			frag += s.charAt(i);
-			if(s.charAt(i) == SMALL_DIVIDER.charAt(0)) {
+			if(String.valueOf(s.charAt(i)) == SMALL_DIVIDER) {
+				Log.d("Calendar frag to decrypt", frag);
 				immDatesArray[immArrayIndex++] = decryptCalendarString(frag);
 				frag = "";
+			} else {
+				frag += s.charAt(i);
 			}
 		}
-		Log.d("decryptImmuneString: final immArrayIndex", String.valueOf(immArrayIndex));
 	}
 	/**
 	 * Converts entire immDatesArray of Calendar objects into a string
@@ -168,10 +194,10 @@ public class Patient {
 	 * Empty entries of the array are loaded with a 1 byte SMALL_DIVIDER.
 	 * 
 	 * ie. 		date + SMALL_DIVIDER + date + date +SMALL_DIVIDER
-	 * 	Bytes:		6				1				6			6				1
+	 * 	Bytes:		6				1							6			6				1
 	 * @return
 	 */
-	public String getImmuneString() {
+	private String constructImmuneString() {
 		String s = "";
 		for(int i = 0; i < immDatesArray.length; i++) {
 			if(immDatesArray[i] != null) {
@@ -180,7 +206,6 @@ public class Patient {
 				s += SMALL_DIVIDER;
 			}
 		}
-		Log.d("ImmString bytes: ", String.valueOf(s.getBytes().length));
 		return s;
 	}
 	
@@ -195,24 +220,26 @@ public class Patient {
 		Calendar c = Calendar.getInstance();
 		String frag = "";
 		int calField = 0;
-		for (int i = 0; i < s.length(); i++) {
-			frag += s.charAt(i);
-			switch(i) {
-			case 1:
-				calField = Integer.parseInt(frag);
-				c.set(Calendar.YEAR, calField + 2000);
-				frag = "";	
-				break;
-			case 3:
-				calField = Integer.parseInt(frag);
-				c.set(Calendar.MONTH, calField);
-				frag = "";	
-				break;
-			case 5:
-				calField = Integer.parseInt(frag);
-				c.set(Calendar.DATE, calField);
-				frag = "";	
-				break;
+		if(s != null && !s.isEmpty()) {
+			for (int i = 0; i < s.length(); i++) {
+				frag += s.charAt(i);
+				switch(i) {
+				case 1:
+					calField = Integer.parseInt(frag);
+					c.set(Calendar.YEAR, calField + 2000);
+					frag = "";	
+					break;
+				case 3:
+					calField = Integer.parseInt(frag);
+					c.set(Calendar.MONTH, calField);
+					frag = "";	
+					break;
+				case 5:
+					calField = Integer.parseInt(frag);
+					c.set(Calendar.DATE, calField);
+					frag = "";	
+					break;
+				}
 			}
 		}
 		return c;
@@ -226,7 +253,12 @@ public class Patient {
 			int year = c.get(Calendar.YEAR)- 2000;
 			int month = c.get(Calendar.MONTH);	// month is an index 0 - 11, where January = 0
 			int date = c.get(Calendar.DATE);
-			String s = String.valueOf(year);
+			String s = "";
+			if(year - 9 <= 0) {
+				s += "0" + String.valueOf(year);
+			} else {
+				s += String.valueOf(year);
+			}
 			if (month < 10) {
 				// Pad the single digit of month
 				s += "0" + String.valueOf(month); 
@@ -243,46 +275,4 @@ public class Patient {
 			assert(s.getBytes().length == EXPECTED_NUM_DATE_BYTES);
 			return s;
 		}
-
-	/**
-	 * LEGACY METHOD
-	 * 
-	 * Checks if immDatesArray entry has a valid Calendar object. 
-	 * @param mI
-	 * @return
-	 * @throws NoSuchFieldException
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
-	 */
-	public Boolean getImmunization(String mI) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException
-	{
-		Class<?> c = this.getClass();
-		Field f = c.getDeclaredField(mI);
-		f.setAccessible(true);
-		if(immDatesArray[(Integer) f.get(this)] != null) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	/**
-	 * LEGACY METHOD
-	 * 
-	 * Sets immDatesArray entry with a Calendar object with current date and time
-	 * 
-	 * @param mI
-	 * @throws NoSuchFieldException
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
-	 */
-	public void setImmunization(String mI) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException
-	{
-		Class<?> c = this.getClass();
-		Field f = c.getDeclaredField(mI);
-		f.setAccessible(true);
-		//Toggles the Boolean on click
-		int index = (Integer) f.get(this);
-		immDatesArray[index] = (immDatesArray[index] == null) ? Calendar.getInstance() : null;
-	}
 }

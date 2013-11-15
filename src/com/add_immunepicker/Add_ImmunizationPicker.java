@@ -35,6 +35,8 @@ import com.example.gatesnfc.existing.*;
 
 public class Add_ImmunizationPicker extends DialogFragment implements
 		Comparator<Add_Immunization>, OnClickListener {
+	
+	private static boolean isNew;
 	/**
 	 * Private Status Value
 	 */
@@ -67,6 +69,7 @@ public class Add_ImmunizationPicker extends DialogFragment implements
 	 * Listener to which Immunization user selected
 	 */
 	private Add_ImmunizationPickerListener listener;
+	private CharSequence dialogTitle;
 
 	/**
 	 * Set listener
@@ -101,7 +104,7 @@ public class Add_ImmunizationPicker extends DialogFragment implements
 				// Add the data to all Immunizations list
 				while (keys.hasNext()) {
 					String key = (String) keys.next();
-					if(NewActivity.patient != null)
+					if(isNew)
 					{
 						if(!NewActivity.patient.getImmunization(jsonObject.getString(key)))
 						{
@@ -110,7 +113,7 @@ public class Add_ImmunizationPicker extends DialogFragment implements
 							allImmunizationsList.add(Immunization);
 						}
 					}
-					if(ExistingActivity.p_existing != null)
+					if(!isNew)
 					{
 						if(!ExistingActivity.p_existing.getImmunization(jsonObject.getString(key)))
 						{
@@ -164,14 +167,12 @@ public class Add_ImmunizationPicker extends DialogFragment implements
 	/**
 	 * To support show as dialog
 	 * 
-	 * @param dialogTitle
+	 * @param where it is from
 	 * @return
 	 */
-	public static Add_ImmunizationPicker newInstance(String dialogTitle) {
+	public static Add_ImmunizationPicker newInstance(String isFrom) {
 		Add_ImmunizationPicker picker = new Add_ImmunizationPicker();
-		Bundle bundle = new Bundle();
-		bundle.putString("dialogTitle", dialogTitle);
-		picker.setArguments(bundle);
+		isNew = isFrom.equals("New");
 		return picker;
 	}
 	
@@ -190,17 +191,8 @@ public class Add_ImmunizationPicker extends DialogFragment implements
 		getAllImmunizations();
 
 		// Set dialog title if show as dialog
-		Bundle args = getArguments();
-		if (args != null) {
-			String dialogTitle = args.getString("dialogTitle");
-			getDialog().setTitle(dialogTitle);
-
-			int width = getResources().getDimensionPixelSize(
-					R.dimen.cp_dialog_width);
-			int height = getResources().getDimensionPixelSize(
-					R.dimen.cp_dialog_height);
-			getDialog().getWindow().setLayout(width, height);
-		}
+		dialogTitle = "Remove Immunization";
+		getDialog().setTitle(dialogTitle);
 
 		// Get view components
 		searchEditText = (EditText) mView

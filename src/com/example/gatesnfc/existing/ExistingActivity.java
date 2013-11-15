@@ -156,6 +156,10 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 		case R.id.button_notes:
 			//TODO:Inflate a notes dialog
 			break;
+			//Stores the data on click of change_confirm_log
+		case R.id.change_confirm_log:
+			store_Data();
+			break;
 		}
 	}
 	
@@ -205,19 +209,61 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 	 * for it is a new patient.
 	 * In other types of writes would need to pass it the Unique ID code of the
 	 * read NFC tag
+	 * 
+	 * Expects mMessage to be loaded.
 	 */
 
 	private void store_Data() {
-		//TODO: put the real data to be stored here
-		//TODO: get ID matching working
-		mMessage = p_existing.constructPatientString();
 		String ID = p_existing.getCode();
 		Intent i = new Intent(this, NFC_write.class);
+		mMessage = p_existing.constructPatientString();
 		i.putExtra("SendData", mMessage);
 		i.putExtra("ID", ID);
 		startActivityForResult(i, 1);
-		
 	}
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		  if (requestCode == 1) {
+
+		     if(resultCode == RESULT_OK){    
+		    	 
+				 String result=data.getStringExtra("result"); 
+		    	 
+		    	 AlertDialog.Builder dlgAlert= new AlertDialog.Builder(this)
+		        .setTitle(result + "\n Do you wish to Exit?")
+		        .setPositiveButton("Yes Exit", new DialogInterface.OnClickListener() {
+		            public void onClick(DialogInterface dialog, int whichButton) {
+		            	finish();
+		            }
+		        })
+		        .setNegativeButton("No Stay on the page", new DialogInterface.OnClickListener() {
+		            public void onClick(DialogInterface dialog, int whichButton) {
+		            }
+		        });
+				AlertDialog box=dlgAlert.create();
+		        box.show();         
+		     }
+		     if (resultCode == RESULT_CANCELED) { 
+		    	 String result=data.getStringExtra("result"); 
+		    	 AlertDialog.Builder dlgAlert= new AlertDialog.Builder(this)
+			        .setTitle(result + " Please Write Again")
+			        .setCancelable(true)
+			        .setPositiveButton("Write Again", new DialogInterface.OnClickListener() {
+			            public void onClick(DialogInterface dialog, int whichButton) {
+			            	store_Data();
+			            }
+			        })
+			        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			            public void onClick(DialogInterface dialog, int whichButton) {
+			            }
+			        });
+					AlertDialog box=dlgAlert.create();
+			        box.show();
+		     }
+		  }
+		  
+		}//onActivityResult
 	
 	
 	/**reset_AllData()
@@ -254,7 +300,6 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 				}
 				else
 				{	//If immunization doesn't exist anymore, set it to true then set the Date
-					p_existing.setImmunization(immune);
 					p_existing.setImmunizationDate(immune, iDate);
 				}
 			}
@@ -263,7 +308,7 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 				if (p_existing.getImmunization(immune) != null)
 				{
 					//Set the immunization to false
-					p_existing.setImmunization(immune);
+					p_existing.setImmunizationDate(immune, null);
 				}
 				else
 				{

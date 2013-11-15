@@ -162,9 +162,10 @@ Comparator<Immunization>{
 	    	   for (i = 0; i < setValuesList.size(); i++)
 	    	   {
 	    		   try {
+	    			    Calendar cal = Calendar.getInstance();
 						//Set the selected Immunization to True, by default the date is set to today
 	    			    //User can change date once it appears in list
-						ExistingActivity.p_existing.setImmunization(setValuesList.get(i));
+						ExistingActivity.p_existing.setImmunizationDate(setValuesList.get(i), cal);
 					} catch (IllegalArgumentException e) {
 						e.printStackTrace();
 					} catch (NoSuchFieldException e) {
@@ -184,6 +185,7 @@ Comparator<Immunization>{
 	private void remove_immunization() {
 				
 				Curr_ImmunizationPicker picker = new Curr_ImmunizationPicker();
+				Curr_ImmunizationPicker.newInstance("Existing");
 				picker.setTargetFragment(this, 1);
 				setValuesList.clear();
 				
@@ -200,6 +202,7 @@ Comparator<Immunization>{
 	private void add_immunization() {
 		
 		Add_ImmunizationPicker picker = new Add_ImmunizationPicker();
+		Add_ImmunizationPicker.newInstance("Existing");
 		picker.setTargetFragment(this, 1);
 		setValuesList.clear();
 		

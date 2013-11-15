@@ -13,12 +13,14 @@ import java.util.Locale;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -48,6 +50,8 @@ public class Curr_ImmunizationPicker extends DialogFragment implements
 	private Button mCancel;
 	private View mView;
 
+	
+	private static boolean isNew;
 	/**
 	 * Adapter for the listview
 	 */
@@ -67,6 +71,10 @@ public class Curr_ImmunizationPicker extends DialogFragment implements
 	 * Listener to which Immunization user selected
 	 */
 	private Curr_ImmunizationPickerListener listener;
+	private CharSequence dialogTitle;
+
+
+
 
 	/**
 	 * Set listener
@@ -83,6 +91,7 @@ public class Curr_ImmunizationPicker extends DialogFragment implements
 		return searchEditText;
 	}
 
+	
 	/**
 	 * Get all Immunizations with code and name from res/raw/Immunizations.json
 	 * 
@@ -101,7 +110,7 @@ public class Curr_ImmunizationPicker extends DialogFragment implements
 				// Add the data to all Immunizations list
 				while (keys.hasNext()) {
 					String key = (String) keys.next();
-					if(NewActivity.patient != null)
+					if(isNew) //The NewActivity one called it
 					{
 						if(NewActivity.patient.getImmunization(jsonObject.getString(key)))
 						{
@@ -111,7 +120,7 @@ public class Curr_ImmunizationPicker extends DialogFragment implements
 							allImmunizationsList.add(Immunization);
 						}
 					}
-					if(ExistingActivity.p_existing != null)
+					if(!isNew) //if the existing activity one called it
 					{
 						if(ExistingActivity.p_existing.getImmunization(jsonObject.getString(key)))
 						{
@@ -168,14 +177,12 @@ public class Curr_ImmunizationPicker extends DialogFragment implements
 	 * @param dialogTitle
 	 * @return
 	 */
-	public static Curr_ImmunizationPicker newInstance(String dialogTitle) {
+	public static Curr_ImmunizationPicker newInstance(String isFrom) {
 		Curr_ImmunizationPicker picker = new Curr_ImmunizationPicker();
-		Bundle bundle = new Bundle();
-		bundle.putString("dialogTitle", dialogTitle);
-		picker.setArguments(bundle);
+		isNew = isFrom.equals("New");
 		return picker;
 	}
-	
+
 	/**
 	 * Create view
 	 */
@@ -190,18 +197,16 @@ public class Curr_ImmunizationPicker extends DialogFragment implements
 		// Get Immunizations from the json
 		getAllImmunizations();
 
-		// Set dialog title if show as dialog
-		Bundle args = getArguments();
-		if (args != null) {
-			String dialogTitle = args.getString("dialogTitle");
-			getDialog().setTitle(dialogTitle);
-
-			int width = getResources().getDimensionPixelSize(
-					R.dimen.cp_dialog_width);
-			int height = getResources().getDimensionPixelSize(
-					R.dimen.cp_dialog_height);
-			getDialog().getWindow().setLayout(width, height);
-		}
+		// Set dialog title
+		dialogTitle = "Remove Immunization";
+		getDialog().setTitle(dialogTitle);
+		
+		
+		int width = getResources().getDimensionPixelSize(
+				R.dimen.cp_dialog_width);
+		int height = getResources().getDimensionPixelSize(
+				R.dimen.cp_dialog_height);
+		getDialog().getWindow().setLayout(width, height);
 
 		// Get view components
 		searchEditText = (EditText) mView

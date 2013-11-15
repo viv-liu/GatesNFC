@@ -90,8 +90,11 @@ Comparator<Immunization>{
 		Button confirm_log = (Button) rootView.findViewById(R.id.change_confirm_log);
 		Button reset_log = (Button) rootView.findViewById(R.id.change_reset_log);
 		
-		confirm_log.setOnClickListener(this);
-	    reset_log.setOnClickListener(this);
+//		confirm_log.setOnClickListener(this);
+//	    reset_log.setOnClickListener(this);
+		
+		// Set listener to ExistingActivity
+		confirm_log.setOnClickListener((OnClickListener) getActivity());
 	    
 	    ImmunizationListView = (ListView) rootView
  				.findViewById(R.id.change_immunization_picker_listview);
@@ -141,14 +144,14 @@ Comparator<Immunization>{
 
 	@Override
 	public void onClick(View view) {
-		switch(view.getId()) {
-		case R.id.change_confirm_log:
-			//TODO: Either put this in Existing or in this
-			//TODO: temp testing measure to updateView
-			Log.d("Confirm", "Clicked");
-			updateView();
-			break;
-		}
+//		switch(view.getId()) {
+//		case R.id.change_confirm_log:
+//			//TODO: Either put this in Existing or in this
+//			//TODO: temp testing measure to updateView
+//			Log.d("Confirm", "Clicked");
+//			updateView();
+//			break;
+//		}
 	}
 
 	public void updateView(){

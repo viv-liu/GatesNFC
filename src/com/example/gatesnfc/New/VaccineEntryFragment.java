@@ -185,6 +185,7 @@ Comparator<Immunization>{
 	private void remove_immunization() {
 				
 				Curr_ImmunizationPicker picker = new Curr_ImmunizationPicker();
+				Curr_ImmunizationPicker.newInstance("New");
 				picker.setTargetFragment(this, 1);
 				setValuesList.clear();
 				
@@ -201,6 +202,7 @@ Comparator<Immunization>{
 	private void add_immunization() {
 		
 		Add_ImmunizationPicker picker = new Add_ImmunizationPicker();
+		Add_ImmunizationPicker.newInstance("New");
 		picker.setTargetFragment(this, 1);
 		setValuesList.clear();
 		
