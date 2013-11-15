@@ -219,7 +219,7 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 	}
 	
 	/**
-	 * store_Data()
+	 * storeData()
 	 * 
 	 * Starts NFC_write activity which will allow the user to write to the NFC
 	 * Set up mMessage and pass it an ID of "None" so it can overwrite anything
@@ -230,7 +230,7 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 	 * Expects mMessage to be loaded.
 	 */
 
-	private void store_Data() {
+	private void storeData() {
 		String ID = p_existing.getCode();
 		Intent i = new Intent(this, NFC_write.class);
 		mMessage = p_existing.constructPatientString();
@@ -268,7 +268,7 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 			        .setCancelable(true)
 			        .setPositiveButton("Write Again", new DialogInterface.OnClickListener() {
 			            public void onClick(DialogInterface dialog, int whichButton) {
-			            	store_Data();
+			            	storeData();
 			            }
 			        })
 			        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -287,12 +287,12 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 	 * Resets all p_existing data to the scanned NFC data
 	 */
 	
-	public void reset_AllData(){
-		//TODO: For some odd reason this crashes..
-		//seems to be trying to parse the First Name to the Calendar for some reason?
+	public void resetAllData(){
 		String reset = p_reset.constructPatientString();
-		Log.d("p_reset string", reset);
+		p_existing = new Patient();
+		p_existing.setCode(p_reset.getCode());
 		p_existing.decryptPatientString(reset);
+		ImmuneListFragment.resetImmuneChanges();
 		PatientSummaryFragment.updateButtonTexts();
 	}
 	
@@ -328,8 +328,11 @@ public class ExistingActivity extends FragmentActivity implements OnClickListene
 	
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
+		    case R.id.done:
+	        	storeData();
+	            return true;
 	        case R.id.reset_all:
-	        	reset_AllData();
+	        	resetAllData();
 	            return true;
 	        case R.id.help:
 	            //TODO: Create Help Function

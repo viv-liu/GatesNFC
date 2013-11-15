@@ -69,7 +69,7 @@ Comparator<Immunization>{
 	 * Immunization Lists used in this file
 	 */
 	private List<Immunization>justChanged;	// holds recent changes (adds and removes), is cleared before use
-	private List<Immunization> originalImmunizationList; // holds original (old stuff)
+	private static List<Immunization> originalImmunizationList; // holds original (old stuff)
 	private static List<Immunization> completeImmunizationList; // holds orignal + just changed, updated in update view
 
 	/**
@@ -103,6 +103,65 @@ Comparator<Immunization>{
 		originalImmunizationList.addAll(getOriginalImmunizationList());
 		completeImmunizationList = new ArrayList<Immunization>();
 		completeImmunizationList.addAll(originalImmunizationList);
+		
+		// Get view components
+ 		searchEditText = (EditText) rootView
+ 				.findViewById(R.id.immunization_picker_search);
+ 		// Search for which Immunizations matched user query
+ 		searchEditText.addTextChangedListener(new TextWatcher() {
+
+ 			@Override
+ 			public void onTextChanged(CharSequence s, int start, int before,
+ 					int count) {
+ 			}
+
+ 			@Override
+ 			public void beforeTextChanged(CharSequence s, int start, int count,
+ 					int after) {
+ 			}
+
+ 			@Override
+ 			public void afterTextChanged(Editable s) {
+ 				search(s.toString());
+ 			}
+ 		});
+ 		ImmunizationListView = (ListView) rootView
+ 				.findViewById(R.id.immunization_picker_listview);
+ 		// Init adapter
+ 		adapter = new ImmunizationListAdapter(getActivity(), completeImmunizationList);
+ 		ImmunizationListView.setAdapter(adapter);
+
+ 		// Inform listener
+ 		ImmunizationListView.setOnItemClickListener(new OnItemClickListener() {
+
+ 			@Override
+ 			public void onItemClick(AdapterView<?> parent, View view,
+ 					int position, long id) {
+ 					selectedImmunization = completeImmunizationList.get(position);
+ 					showDatePickerDialog();
+ 					adapter.notifyDataSetChanged();
+ 			}
+ 		});
+ 		ImmunizationListView.setLongClickable(true);
+ 		ImmunizationListView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					int position, long arg3) {
+					Immunization im = completeImmunizationList.remove(position);
+			    	try {
+						ExistingActivity.p_existing.setImmunizationDate(im.getName(), null);
+					} catch (IllegalArgumentException e) {
+						e.printStackTrace();
+					} catch (NoSuchFieldException e) {
+						e.printStackTrace();
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+					}
+					adapter.notifyDataSetChanged();
+				return true;
+			}
+ 		});
 		Button immunization_button = (Button) rootView.findViewById(R.id.add_immunization);
 		Button list_immune_button = (Button) rootView.findViewById(R.id.remove_immunization);
 		
@@ -139,7 +198,7 @@ Comparator<Immunization>{
 	 */
 	@Override
 	public int compare(Immunization lhs, Immunization rhs) {
-		return lhs.getName().compareTo(rhs.getName());
+		return lhs.getDate().compareTo(rhs.getDate());
 	}
 
 	/**
@@ -188,30 +247,6 @@ Comparator<Immunization>{
 	    //requires repopulation
 	}
 	
-	
-//	private void remove_immunization() {
-//				
-//				Curr_ImmunizationPicker picker = new Curr_ImmunizationPicker();
-//				Curr_ImmunizationPicker.newInstance("Existing");
-//				picker.setTargetFragment(this, 1);
-//				//setValuesList.clear();
-//				justChanged.clear();
-//				
-//				picker.setListener(new Curr_ImmunizationPickerListener() {
-//					@Override
-//					public void onSelectImmunization(String name) {
-//						//setValuesList.add(name);
-//						Calendar c = Calendar.getInstance();
-//						Immunization i = new Immunization(); // default not greyed
-//						i.setName(name);
-//						i.setDate(c);
-//						justChanged.add(i);
-//					}
-//				});
-//				
-//				picker.show(getFragmentManager(), "Curr_Immunization_PICKER");
-//	}
-	
 	private void add_immunization() {
 		
 		Add_ImmunizationPicker picker = new Add_ImmunizationPicker();
@@ -239,85 +274,16 @@ Comparator<Immunization>{
 		
 		picker.show(getFragmentManager(), "Immunization_PICKER");
 	}
-	
-	/**Function that repopulates the view
-	 * 
-	 * 
-	 * 
-	 */
 
 	public void updateView(){
-		
- 		// Get view components
- 		searchEditText = (EditText) rootView
- 				.findViewById(R.id.immunization_picker_search);
- 		ImmunizationListView = (ListView) rootView
- 				.findViewById(R.id.immunization_picker_listview);
- 	
-		// Get Immunizations from the json
- 		completeImmunizationList = getCompleteImmunizationList();
- 		
- 		// Set adapter
- 		adapter = new ImmunizationListAdapter(getActivity(), completeImmunizationList);
- 		ImmunizationListView.setAdapter(adapter);
-
- 		// Inform listener
- 		ImmunizationListView.setOnItemClickListener(new OnItemClickListener() {
-
- 			@Override
- 			public void onItemClick(AdapterView<?> parent, View view,
- 					int position, long id) {
- 					selectedImmunization = completeImmunizationList.get(position);
- 					showDatePickerDialog();
- 					adapter.notifyDataSetChanged();
- 			}
- 		});
- 		ImmunizationListView.setLongClickable(true);
- 		ImmunizationListView.setOnItemLongClickListener(new OnItemLongClickListener() {
-
-			@Override
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-					int position, long arg3) {
-					Immunization im = completeImmunizationList.remove(position);
-			    	try {
-						ExistingActivity.p_existing.setImmunizationDate(im.getName(), null);
-					} catch (IllegalArgumentException e) {
-						e.printStackTrace();
-					} catch (NoSuchFieldException e) {
-						e.printStackTrace();
-					} catch (IllegalAccessException e) {
-						e.printStackTrace();
-					}
-					adapter.notifyDataSetChanged();
-				return true;
-			}
- 		});
- 		
-
- 		// Search for which Immunizations matched user query
- 		searchEditText.addTextChangedListener(new TextWatcher() {
-
- 			@Override
- 			public void onTextChanged(CharSequence s, int start, int before,
- 					int count) {
- 			}
-
- 			@Override
- 			public void beforeTextChanged(CharSequence s, int start, int count,
- 					int after) {
- 			}
-
- 			@Override
- 			public void afterTextChanged(Editable s) {
- 				search(s.toString());
- 			}
- 		});
- 		
+ 		completeImmunizationList = getCompleteImmunizationList(); 		
+ 		adapter.notifyDataSetChanged();
 	}
 	
 	private List<Immunization> getCompleteImmunizationList() {
 		Collections.sort(justChanged, this);
 		completeImmunizationList.addAll(justChanged);
+		adapter.notifyDataSetChanged();
 		return completeImmunizationList;
 	}
 	/**
@@ -349,9 +315,6 @@ Comparator<Immunization>{
 			}
 			//TODO: sort by calendar
 			Collections.sort(originalShots, this);
-			/*// Initialize selected Immunizations with all Immunizations
-			originalImmunizationList.addAll(originalShots);*/
-			// Return
 			return originalShots;
 
 			} catch (Exception e) {
@@ -383,7 +346,13 @@ Comparator<Immunization>{
 		return result.toString();
 	}
 	
-	
+	public static void resetImmuneChanges() {
+		Log.d("original", originalImmunizationList.toString());
+		Log.d("complete", completeImmunizationList.toString());
+		completeImmunizationList.clear();
+		completeImmunizationList.addAll(originalImmunizationList);
+		adapter.notifyDataSetChanged();
+	}
 	/**DatePickerDialogFragment
 	 * 
 	 * Functions that displays Date on Click of Adapter item and edits that adapter's

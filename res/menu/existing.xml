@@ -2,10 +2,14 @@
     
     <item android:id="@+id/help"
           android:title="Help"
-          android:showAsAction="ifRoom"
+          android:showAsAction="never"
           />
     <item android:id="@+id/reset_all"
           android:title="Reset All"
-          android:showAsAction="ifRoom"
+          android:showAsAction="never"
+          />
+   <item android:id="@+id/done"
+          android:title="Done"
+          android:showAsAction="always"
           />
 </menu>

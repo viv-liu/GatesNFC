@@ -64,7 +64,7 @@ public class EditNameDialog extends DialogFragment implements OnClickListener {
 		btn_cancel.setOnClickListener(this);
 
 		mType = ((ExistingActivity) getActivity()).getStatus();
-		getDialog().setTitle("Change " + mType);
+		getDialog().setTitle(mType);
 		
 		return rootView;
 	}

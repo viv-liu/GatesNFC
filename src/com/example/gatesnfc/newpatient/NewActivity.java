@@ -17,7 +17,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,9 +47,6 @@ public class NewActivity extends FragmentActivity implements OnClickListener, Da
 	public String notes;
 	public String address;
 	public String unique_id;
-	
-	private String getStringData;
-	private String getCodeData;
 
 	private String mMessage;
 	private String mStatus;
@@ -202,7 +198,7 @@ public class NewActivity extends FragmentActivity implements OnClickListener, Da
 	}
 	
 	/**
-	 * store_Data()
+	 * storeData()
 	 * 
 	 * Starts NFC_write activity which will allow the user to write to the NFC
 	 * Set up mMessage and pass it an ID of "None" so it can overwrite anything
@@ -213,8 +209,8 @@ public class NewActivity extends FragmentActivity implements OnClickListener, Da
 	 * Expects mMessage to be loaded.
 	 */
 
-	private void store_Data() {
-		String ID = p_new.getCode();
+	private void storeData() {
+		String ID = "None";
 		Intent i = new Intent(this, NFC_write.class);
 		mMessage = p_new.constructPatientString();
 		i.putExtra("SendData", mMessage);
@@ -232,12 +228,12 @@ public class NewActivity extends FragmentActivity implements OnClickListener, Da
 		    	 
 		    	 AlertDialog.Builder dlgAlert= new AlertDialog.Builder(this)
 		        .setTitle(result + "\n Do you wish to Exit?")
-		        .setPositiveButton("Yes Exit", new DialogInterface.OnClickListener() {
+		        .setPositiveButton("Yes, leave", new DialogInterface.OnClickListener() {
 		            public void onClick(DialogInterface dialog, int whichButton) {
 		            	finish();
 		            }
 		        })
-		        .setNegativeButton("No Stay on the page", new DialogInterface.OnClickListener() {
+		        .setNegativeButton("No, stay.", new DialogInterface.OnClickListener() {
 		            public void onClick(DialogInterface dialog, int whichButton) {
 		            }
 		        });
@@ -251,7 +247,7 @@ public class NewActivity extends FragmentActivity implements OnClickListener, Da
 			        .setCancelable(true)
 			        .setPositiveButton("Write Again", new DialogInterface.OnClickListener() {
 			            public void onClick(DialogInterface dialog, int whichButton) {
-			            	store_Data();
+			            	storeData();
 			            }
 			        })
 			        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -265,20 +261,6 @@ public class NewActivity extends FragmentActivity implements OnClickListener, Da
 		  
 		}
 	
-	
-	/**reset_AllData()
-	 * Resets all p_new data to the scanned NFC data
-	 */
-	
-/*	public void reset_AllData(){
-		//TODO: For some odd reason this crashes..
-		//seems to be trying to parse the First Name to the Calendar for some reason?
-		String reset = p_reset.constructPatientString();
-		Log.d("p_reset string", reset);
-		p_new.decryptPatientString(reset);
-		PatientSummaryFragment.updateButtonTexts();
-	}
-	*/
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if(keyCode == KeyEvent.KEYCODE_BACK){
@@ -305,14 +287,14 @@ public class NewActivity extends FragmentActivity implements OnClickListener, Da
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.existing, menu);
+		getMenuInflater().inflate(R.menu.newpatient, menu);
 		return true;
 	}
 	
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
-	        case R.id.reset_all:
-	        	//reset_AllData();
+	        case R.id.done:
+	        	storeData();
 	            return true;
 	        case R.id.help:
 	            //TODO: Create Help Function
