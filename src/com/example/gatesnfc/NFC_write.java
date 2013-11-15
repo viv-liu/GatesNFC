@@ -173,13 +173,14 @@ public class NFC_write extends Activity implements OnClickListener {
 	 */
 	private boolean writeTag(Tag tag) {
 		// record to launch Play Store if app is not installed
-		NdefRecord appRecord = NdefRecord.createApplicationRecord("com.example.gatesnfc");
+		// decided not to let it access the Play Store as users probably won't have access to internet
+//		NdefRecord appRecord = NdefRecord.createApplicationRecord("com.example.gatesnfc");
 		
 		byte[] payload1 = mToWrite.getBytes();
 		byte[] mimeBytes = MimeType.NFC_DEMO.getBytes(Charset.forName("US-ASCII"));
         NdefRecord cardRecord = new NdefRecord(NdefRecord.TNF_MIME_MEDIA, mimeBytes, 
         										new byte[0], payload1);
-		NdefMessage message = new NdefMessage(new NdefRecord[] { cardRecord, appRecord });
+		NdefMessage message = new NdefMessage(new NdefRecord[] { cardRecord});
         
 		try {
 			// see if tag is already NDEF formatted

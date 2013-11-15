@@ -32,6 +32,7 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -156,16 +157,19 @@ Comparator<Immunization>{
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 	    if (requestCode == 1) //make sure fragment codes match up
 	    {
-	    int i;
-	       if (data.getStringExtra("Status") == "T")
+	    	Log.d("Status", data.getStringExtra("Status"));
+	       if (!data.getStringExtra("Status").equals("F"))
 	       {
-	    	   for (i = 0; i < setValuesList.size(); i++)
+	    	   for (int i = 0; i < setValuesList.size(); i++)
 	    	   {
 	    		   try {
 	    			    Calendar cal = Calendar.getInstance();
 						//Set the selected Immunization to True, by default the date is set to today
 	    			    //User can change date once it appears in list
+	    			    if (data.getStringExtra("Status").equals("Add"))
 						ExistingActivity.p_existing.setImmunizationDate(setValuesList.get(i), cal);
+	    			    else if (data.getStringExtra("Status").equals("Remove"))
+	    			    	ExistingActivity.p_existing.setImmunizationDate(setValuesList.get(i), null);
 					} catch (IllegalArgumentException e) {
 						e.printStackTrace();
 					} catch (NoSuchFieldException e) {
@@ -193,6 +197,7 @@ Comparator<Immunization>{
 					@Override
 					public void onSelectImmunization(String name) {
 						setValuesList.add(name);
+						Log.d("Added", name);
 					}
 				});
 				

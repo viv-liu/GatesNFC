@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import com.add_immunepicker.*;
 import com.example.gatesnfc.R;
 import com.example.gatesnfc.existing.DatePicker_Fix;
+import com.example.gatesnfc.existing.ExistingActivity;
 import com.immunepicker.*;
 import com.remove_immunepicker.*;
 
@@ -157,15 +158,19 @@ Comparator<Immunization>{
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 	    if (requestCode == 1) //make sure fragment codes match up
 	    {
-	    int i;
-	       if (data.getStringExtra("Status") == "T")
+	       if (!data.getStringExtra("Status").equals("F"))
 	       {
-	    	   for (i = 0; i < setValuesList.size(); i++)
+	    	   for (int i = 0; i < setValuesList.size(); i++)
 	    	   {
 	    		   try {
 						//Set the selected Immunization to True, by default the date is set to today
 	    			    //User can change date once it appears in list
-						NewActivity.patient.setImmunization(setValuesList.get(i));
+	    			   Calendar cal = Calendar.getInstance();
+	    			   
+	    			   if (data.getStringExtra("Status").equals("Add"))
+	    				   NewActivity.patient.setImmunizationDate(setValuesList.get(i), cal);
+	    			   else if (data.getStringExtra("Status").equals("Remove"))
+		    			   NewActivity.patient.setImmunizationDate(setValuesList.get(i), null);
 					} catch (IllegalArgumentException e) {
 						e.printStackTrace();
 					} catch (NoSuchFieldException e) {

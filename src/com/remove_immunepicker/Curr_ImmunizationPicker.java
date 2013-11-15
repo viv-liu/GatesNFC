@@ -13,14 +13,12 @@ import java.util.Locale;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -299,7 +297,7 @@ public class Curr_ImmunizationPicker extends DialogFragment implements
 		
 		switch(view.getId()) {
 		case R.id.confirm_picker:
-			mStatus = "T";
+			mStatus = "Remove";
 			sendResult(1);
 			this.dismiss();
 			break;

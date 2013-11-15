@@ -21,6 +21,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -197,7 +198,6 @@ public class NewActivity extends FragmentActivity implements OnClickListener{
 			picker.show(this.getSupportFragmentManager(), "COUNTRY_PICKER");
 			break;
 		case R.id.button_complete:
-			mMessage = patient.constructPatientString();
 			store_Data();
 			break;
 		case R.id.button_name:
@@ -236,6 +236,8 @@ public class NewActivity extends FragmentActivity implements OnClickListener{
 	private void store_Data() {
 		String ID = "None";
 		Intent i = new Intent(this, NFC_write.class);
+		mMessage = patient.constructPatientString();
+		Log.d("Writing", mMessage);
 		i.putExtra("SendData", mMessage);
 		i.putExtra("ID", ID);
 		startActivityForResult(i, 1);

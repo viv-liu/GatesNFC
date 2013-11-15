@@ -13,6 +13,7 @@ import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -88,6 +89,7 @@ public class NFC_read extends Activity implements OnClickListener {
 	            
 			Intent e = new Intent(this, ExistingActivity.class);
 			e.putExtra("SentData", mMessage);
+			Log.d("Reading", mMessage);
 			e.putExtra("SentCode", theID);
 			box.dismiss();
 			startActivity(e);

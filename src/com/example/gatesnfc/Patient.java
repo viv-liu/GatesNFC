@@ -104,13 +104,11 @@ public class Patient {
 	}
 
 	public boolean decryptPatientString(String s) {
-		Log.d("decryptPatientString", s);
 		String frag = "";
 		char letter = 'a';
 		int count = 0;
 		for(int i = 0; i < s.length(); i++) {
 			letter = s.charAt(i);
-			frag += s.charAt(i);
 			if(letter == DIVIDER.charAt(0)) {		// compares letter to DIVIDER char
 				switch (count++) {
 				case 0: firstName = frag; break;
@@ -131,6 +129,8 @@ public class Patient {
 				case 15: notes = frag; break;
 				}
 				frag = "";
+			} else {
+				frag += s.charAt(i);
 			}
 		}
 		return false;
@@ -180,7 +180,6 @@ public class Patient {
 		int immArrayIndex = 0;
 		for(int i = 0; i < s.length(); i++) {
 			if(String.valueOf(s.charAt(i)) == SMALL_DIVIDER) {
-				Log.d("Calendar frag to decrypt", frag);
 				immDatesArray[immArrayIndex++] = decryptCalendarString(frag);
 				frag = "";
 			} else {

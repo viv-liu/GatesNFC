@@ -90,8 +90,7 @@ Comparator<Immunization>{
 		Button confirm_log = (Button) rootView.findViewById(R.id.change_confirm_log);
 		Button reset_log = (Button) rootView.findViewById(R.id.change_reset_log);
 		
-//		confirm_log.setOnClickListener(this);
-//	    reset_log.setOnClickListener(this);
+	    reset_log.setOnClickListener(this);
 		
 		// Set listener to ExistingActivity
 		confirm_log.setOnClickListener((OnClickListener) getActivity());
