@@ -155,7 +155,7 @@ Comparator<Immunization>{
 			add_immunization();
 		break;
 		case R.id.remove_immunization:
-			remove_immunization();
+//			remove_immunization();
 		break;
 		}
 	}
@@ -190,28 +190,28 @@ Comparator<Immunization>{
 	}
 	
 	
-	private void remove_immunization() {
-				
-				Curr_ImmunizationPicker picker = new Curr_ImmunizationPicker();
-				Curr_ImmunizationPicker.newInstance("Existing");
-				picker.setTargetFragment(this, 1);
-				//setValuesList.clear();
-				justChanged.clear();
-				
-				picker.setListener(new Curr_ImmunizationPickerListener() {
-					@Override
-					public void onSelectImmunization(String name) {
-						//setValuesList.add(name);
-						Calendar c = Calendar.getInstance();
-						Immunization i = new Immunization(); // default not greyed
-						i.setName(name);
-						i.setDate(c);
-						justChanged.add(i);
-					}
-				});
-				
-				picker.show(getFragmentManager(), "Curr_Immunization_PICKER");
-	}
+//	private void remove_immunization() {
+//				
+//				Curr_ImmunizationPicker picker = new Curr_ImmunizationPicker();
+//				Curr_ImmunizationPicker.newInstance("Existing");
+//				picker.setTargetFragment(this, 1);
+//				//setValuesList.clear();
+//				justChanged.clear();
+//				
+//				picker.setListener(new Curr_ImmunizationPickerListener() {
+//					@Override
+//					public void onSelectImmunization(String name) {
+//						//setValuesList.add(name);
+//						Calendar c = Calendar.getInstance();
+//						Immunization i = new Immunization(); // default not greyed
+//						i.setName(name);
+//						i.setDate(c);
+//						justChanged.add(i);
+//					}
+//				});
+//				
+//				picker.show(getFragmentManager(), "Curr_Immunization_PICKER");
+//	}
 	
 	private void add_immunization() {
 		
@@ -227,7 +227,14 @@ Comparator<Immunization>{
 				Immunization i = new Immunization();
 				i.setDate(c);
 				i.setName(name);
-				justChanged.add(i);
+				if(justChanged.contains(i))
+				{
+					justChanged.remove(i);
+				}
+				else
+				{
+					justChanged.add(i);
+				}
 			}
 		});
 		

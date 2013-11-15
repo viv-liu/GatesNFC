@@ -77,12 +77,11 @@ public class ImmunizationListAdapter extends BaseAdapter {
 		cell.immune_name.setText(immunization.getName());
 		cell.immune_date.setText(DateFormat.format(DATEFORMAT, immunization.getDate()).toString());
 		
-		/*// Greyed out or not?
 		if(immunization.isGreyed()) {
-			cellView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+			cellView.setBackgroundColor(Color.parseColor("#BABABA"));
 		} else {
-			cellView.setBackgroundColor(Color.parseColor("#FF22FF"));
-		}*/
+			cellView.setBackgroundColor(Color.parseColor("#00000000"));
+		}
 		return cellView;
 	}
 	

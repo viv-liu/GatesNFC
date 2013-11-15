@@ -11,6 +11,19 @@ public class Immunization {
 	private String name;
 	private boolean isGreyed;
 	
+	@Override
+	public boolean equals(Object other){
+	    if (other == null) return false;
+	    if (other == this) return true;
+	    if (!(other instanceof Immunization))return false;
+	    Immunization otherMyClass = (Immunization)other;
+	    if(otherMyClass.getName().equals(this.name))
+	    {
+	    	return true;
+	    }
+		return false;
+	}
+	
 	public Immunization() {
 		isGreyed = false;
 	}
