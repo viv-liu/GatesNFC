@@ -29,9 +29,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.example.gatesnfc.R;
-import com.example.gatesnfc.existing.*;
-import com.example.gatesnfc.newpatient.NewActivity;
+import com.gatesnfc.R;
+import com.gatesnfc.existing.*;
+import com.gatesnfc.newpatient.NewActivity;
 
 public class Add_ImmunizationPicker extends DialogFragment implements
 		Comparator<Add_Immunization>, OnClickListener {

@@ -27,7 +27,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.example.gatesnfc.R;
+import com.gatesnfc.R;
 
 public class CountryPicker extends DialogFragment implements
 		Comparator<Country> {

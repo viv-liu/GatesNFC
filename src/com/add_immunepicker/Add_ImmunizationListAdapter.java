@@ -10,7 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.gatesnfc.R;
+import com.gatesnfc.R;
 
 public class Add_ImmunizationListAdapter extends BaseAdapter {
 

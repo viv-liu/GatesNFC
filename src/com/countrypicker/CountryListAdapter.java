@@ -13,8 +13,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.gatesnfc.R;
-import com.example.gatesnfc.R.drawable;
+import com.gatesnfc.R;
+import com.gatesnfc.R.drawable;
 
 public class CountryListAdapter extends BaseAdapter {
 

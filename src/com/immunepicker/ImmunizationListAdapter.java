@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.gatesnfc.R;
+import com.gatesnfc.R;
 
 public class ImmunizationListAdapter extends BaseAdapter {
 
