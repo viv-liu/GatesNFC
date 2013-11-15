@@ -401,6 +401,19 @@ Comparator<Immunization>{
 	                getConstructorListener(), year, month, day);
 	        
 	        if (hasJellyBeanAndAbove()) {
+	        	/*
+	        	 * Restriction of Date from 1980 Jan 1st to Current Date
+	        	 */
+	        	Calendar c = Calendar.getInstance();
+	        	picker.getDatePicker().setMaxDate(c.getTimeInMillis());
+	        	c.set(Calendar.YEAR, 1980);
+	        	c.set(Calendar.MONTH, c.getMinimum(Calendar.MONTH));
+	        	c.set(Calendar.DATE, c.getMinimum(Calendar.DATE));
+	        	c.set(Calendar.HOUR_OF_DAY, c.getMinimum(Calendar.HOUR_OF_DAY));
+	            c.set(Calendar.MINUTE, c.getMinimum(Calendar.MINUTE));
+	            c.set(Calendar.SECOND, c.getMinimum(Calendar.SECOND));
+	            c.set(Calendar.MILLISECOND, c.getMinimum(Calendar.MILLISECOND));
+	        	picker.getDatePicker().setMinDate(c.getTimeInMillis());
 	            picker.setButton(DialogInterface.BUTTON_POSITIVE, 
 	                    getActivity().getString(android.R.string.ok),
 	                    new DialogInterface.OnClickListener() {

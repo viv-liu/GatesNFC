@@ -3,6 +3,7 @@ package com.immunepicker;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ public class ImmunizationListAdapter extends BaseAdapter {
 	private Context context;
 	List<Immunization> Immunizations;
 	LayoutInflater inflater;
+	private boolean godMode; // allows changing all the old records too!
 	
 	public static final String DATEFORMAT = "MMM dd, yyyy";
 
@@ -48,6 +50,10 @@ public class ImmunizationListAdapter extends BaseAdapter {
 	public long getItemId(int arg0) {
 		return 0;
 	}
+	
+	public void setGodMode(boolean b) {
+		godMode = b;
+	}
 
 	/**
 	 * Return row for each Immunization
@@ -56,7 +62,7 @@ public class ImmunizationListAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View cellView = convertView;
 		Cell cell;
-		Immunization Immunization = Immunizations.get(position);
+		Immunization immunization = Immunizations.get(position);
 
 		if (convertView == null) {
 			cell = new Cell();
@@ -68,12 +74,26 @@ public class ImmunizationListAdapter extends BaseAdapter {
 			cell = (Cell) cellView.getTag();
 		}
 
-		cell.immune_name.setText(Immunization.getName());
-		cell.immune_date.setText(DateFormat.format(DATEFORMAT, Immunization.getDate()).toString());
+		cell.immune_name.setText(immunization.getName());
+		cell.immune_date.setText(DateFormat.format(DATEFORMAT, immunization.getDate()).toString());
 		
+		/*// Greyed out or not?
+		if(immunization.isGreyed()) {
+			cellView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+		} else {
+			cellView.setBackgroundColor(Color.parseColor("#FF22FF"));
+		}*/
 		return cellView;
 	}
-
+	
+	@Override
+	public boolean isEnabled(int position) {
+		if(Immunizations.get(position).isGreyed() && !godMode) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 	/**
 	 * Holder for the cell
 	 * 

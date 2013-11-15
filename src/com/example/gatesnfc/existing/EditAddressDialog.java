@@ -72,8 +72,8 @@ public class EditAddressDialog extends DialogFragment implements OnClickListener
 		//TODO: Decide whether or not this is useful?
 		//Pre-sets the Values for Easier Changing of one value?
 		et_number.setText(ExistingActivity.p_existing.number);
-		et_street.setText(ExistingActivity.p_existing.optional);
-		et_optional.setText(ExistingActivity.p_existing.street);
+		et_street.setText(ExistingActivity.p_existing.street);
+		et_optional.setText(ExistingActivity.p_existing.optional);
 		et_city.setText(ExistingActivity.p_existing.city);
 		et_region.setText(ExistingActivity.p_existing.region);
 		et_postal.setText(ExistingActivity.p_existing.postal);

@@ -38,6 +38,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -52,7 +53,6 @@ Comparator<Immunization>{
 	public static View rootView;
 	private static Calendar cal;
 	
-	private List<String> setValuesList;
 	private static Immunization selectedImmunization;
 	
 	/**
@@ -67,14 +67,16 @@ Comparator<Immunization>{
 	private static ImmunizationListAdapter adapter;
 
 	/**
-	 * Hold all Immunizations, sorted by Immunization name
+	 * Immunization Lists used in this file
 	 */
-	private List<Immunization> allImmunizationsList;
+	private List<Immunization>justChanged;	// holds recent changes (adds and removes), is cleared before use
+	private List<Immunization> originalImmunizationList; // holds original (old stuff)
+	private static List<Immunization> completeImmunizationList; // holds orignal + just changed, updated in update view
 
 	/**
 	 * Hold Immunizations that matched user query
 	 */
-	private List<Immunization> selectedImmunizationsList;
+	//private List<Immunization> originalImmunizationList;
 
 	public EditText getSearchEditText() {
 		return searchEditText;
@@ -96,8 +98,12 @@ Comparator<Immunization>{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.fragment_immunization_sum, container, false);
-		setValuesList = new ArrayList<String>();
-		
+		//setValuesList = new ArrayList<String>();
+		justChanged = new ArrayList<Immunization>();
+		originalImmunizationList = new ArrayList<Immunization>();
+		originalImmunizationList.addAll(getOriginalImmunizationList());
+		completeImmunizationList = new ArrayList<Immunization>();
+		completeImmunizationList.addAll(originalImmunizationList);
 		Button immunization_button = (Button) rootView.findViewById(R.id.add_immunization);
 		Button list_immune_button = (Button) rootView.findViewById(R.id.remove_immunization);
 		
@@ -110,19 +116,19 @@ Comparator<Immunization>{
 	}
 	
 	/**
-	 * Search allImmunizationsList contains text and put result into
-	 * selectedImmunizationsList
+	 * Search originalImmunizationList contains text and put result into
+	 * originalImmunizationList
 	 * 
 	 * @param text
 	 */
 	@SuppressLint("DefaultLocale")
 	private void search(String text) {
-		selectedImmunizationsList.clear();
+		completeImmunizationList.clear();
 
-		for (Immunization Immunization : allImmunizationsList) {
-			if (Immunization.getName().toLowerCase(Locale.ENGLISH)
+		for (Immunization immunization : completeImmunizationList) {
+			if (immunization.getName().toLowerCase(Locale.ENGLISH)
 					.contains(text.toLowerCase())) {
-				selectedImmunizationsList.add(Immunization);
+				completeImmunizationList.add(immunization);
 			}
 		}
 
@@ -160,16 +166,14 @@ Comparator<Immunization>{
 	    	Log.d("Status", data.getStringExtra("Status"));
 	       if (!data.getStringExtra("Status").equals("F"))
 	       {
-	    	   for (int i = 0; i < setValuesList.size(); i++)
+	    	   for (int i = 0; i < justChanged.size(); i++)
 	    	   {
 	    		   try {
 	    			    Calendar cal = Calendar.getInstance();
 						//Set the selected Immunization to True, by default the date is set to today
 	    			    //User can change date once it appears in list
 	    			    if (data.getStringExtra("Status").equals("Add"))
-						ExistingActivity.p_existing.setImmunizationDate(setValuesList.get(i), cal);
-	    			    else if (data.getStringExtra("Status").equals("Remove"))
-	    			    	ExistingActivity.p_existing.setImmunizationDate(setValuesList.get(i), null);
+	    			    	ExistingActivity.p_existing.setImmunizationDate(justChanged.get(i).getName(), cal);
 					} catch (IllegalArgumentException e) {
 						e.printStackTrace();
 					} catch (NoSuchFieldException e) {
@@ -191,13 +195,18 @@ Comparator<Immunization>{
 				Curr_ImmunizationPicker picker = new Curr_ImmunizationPicker();
 				Curr_ImmunizationPicker.newInstance("Existing");
 				picker.setTargetFragment(this, 1);
-				setValuesList.clear();
+				//setValuesList.clear();
+				justChanged.clear();
 				
 				picker.setListener(new Curr_ImmunizationPickerListener() {
 					@Override
 					public void onSelectImmunization(String name) {
-						setValuesList.add(name);
-						Log.d("Added", name);
+						//setValuesList.add(name);
+						Calendar c = Calendar.getInstance();
+						Immunization i = new Immunization(); // default not greyed
+						i.setName(name);
+						i.setDate(c);
+						justChanged.add(i);
 					}
 				});
 				
@@ -209,12 +218,16 @@ Comparator<Immunization>{
 		Add_ImmunizationPicker picker = new Add_ImmunizationPicker();
 		Add_ImmunizationPicker.newInstance("Existing");
 		picker.setTargetFragment(this, 1);
-		setValuesList.clear();
-		
+		//setValuesList.clear();
+		justChanged.clear();
 		picker.setListener(new Add_ImmunizationPickerListener() {
 			@Override
 			public void onSelectImmunization(String name) {
-				setValuesList.add(name);
+				Calendar c = Calendar.getInstance();
+				Immunization i = new Immunization();
+				i.setDate(c);
+				i.setName(name);
+				justChanged.add(i);
 			}
 		});
 		
@@ -236,10 +249,10 @@ Comparator<Immunization>{
  				.findViewById(R.id.immunization_picker_listview);
  	
 		// Get Immunizations from the json
- 		allImmunizationsList = getAllImmunizations();
+ 		completeImmunizationList = getCompleteImmunizationList();
  		
  		// Set adapter
- 		adapter = new ImmunizationListAdapter(getActivity(), selectedImmunizationsList);
+ 		adapter = new ImmunizationListAdapter(getActivity(), completeImmunizationList);
  		ImmunizationListView.setAdapter(adapter);
 
  		// Inform listener
@@ -248,11 +261,32 @@ Comparator<Immunization>{
  			@Override
  			public void onItemClick(AdapterView<?> parent, View view,
  					int position, long id) {
- 					selectedImmunization = selectedImmunizationsList.get(position);
+ 					selectedImmunization = completeImmunizationList.get(position);
  					showDatePickerDialog();
  					adapter.notifyDataSetChanged();
  			}
  		});
+ 		ImmunizationListView.setLongClickable(true);
+ 		ImmunizationListView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					int position, long arg3) {
+					Immunization im = completeImmunizationList.remove(position);
+			    	try {
+						ExistingActivity.p_existing.setImmunizationDate(im.getName(), null);
+					} catch (IllegalArgumentException e) {
+						e.printStackTrace();
+					} catch (NoSuchFieldException e) {
+						e.printStackTrace();
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+					}
+					adapter.notifyDataSetChanged();
+				return true;
+			}
+ 		});
+ 		
 
  		// Search for which Immunizations matched user query
  		searchEditText.addTextChangedListener(new TextWatcher() {
@@ -275,40 +309,44 @@ Comparator<Immunization>{
  		
 	}
 	
-
+	private List<Immunization> getCompleteImmunizationList() {
+		Collections.sort(justChanged, this);
+		completeImmunizationList.addAll(justChanged);
+		return completeImmunizationList;
+	}
 	/**
 	 * Get all Immunizations with code and name from res/raw/Immunizations.json
 	 * 
 	 * @return
 	 */
-	private List<Immunization> getAllImmunizations() {
+	private List<Immunization> getOriginalImmunizationList() {
 		try {
-			List<Immunization> theList = new ArrayList<Immunization>();
+			List<Immunization> originalShots = new ArrayList<Immunization>();
 
 			// Read from local file
 			String allImmunizationsString = readFileAsString(getActivity());
 			JSONObject jsonObject = new JSONObject(allImmunizationsString);
 			Iterator<?> keys = jsonObject.keys();
-			// Add the data to all Immunizations list
+			// Add original data to all Immunizations list
 			while (keys.hasNext()) {
 			String key = (String) keys.next();
-				if(ExistingActivity.p_existing.getImmunization(jsonObject.getString(key)))
+				if(ExistingActivity.p_reset.getImmunization(jsonObject.getString(key)))
 				{
 					//If the patient has the immunization then set as below
-					Immunization Immunization = new Immunization();
-					Immunization.setName(jsonObject.getString(key));
-					Immunization.setDate(ExistingActivity.p_existing.getImmunizationDate(jsonObject.getString(key)));
-					theList.add(Immunization);
+					Immunization immunization = new Immunization();
+					immunization.setGreyed(true);
+					immunization.setName(jsonObject.getString(key));
+					immunization.setDate(ExistingActivity.p_existing.getImmunizationDate(jsonObject.getString(key)));
+					originalShots.add(immunization);
 				}
 				//else don't display
 			}
-			// Sort the all Immunizations list based on Immunization name
-			Collections.sort(theList, this);
-			// Initialize selected Immunizations with all Immunizations
-			selectedImmunizationsList = new ArrayList<Immunization>();
-			selectedImmunizationsList.addAll(theList);
+			//TODO: sort by calendar
+			Collections.sort(originalShots, this);
+			/*// Initialize selected Immunizations with all Immunizations
+			originalImmunizationList.addAll(originalShots);*/
 			// Return
-			return theList;
+			return originalShots;
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -342,7 +380,7 @@ Comparator<Immunization>{
 	
 	/**DatePickerDialogFragment
 	 * 
-	 * Functions that displays the Date on Click of Adapter item and edits that adapter's
+	 * Functions that displays Date on Click of Adapter item and edits that adapter's
 	 * item's date of immunization.
 	 * 
 	 * @field: cal 
@@ -401,6 +439,19 @@ Comparator<Immunization>{
 	                getConstructorListener(), year, month, day);
 	        
 	        if (hasJellyBeanAndAbove()) {
+	        	/*
+	        	 * Restriction of Date from 1980 Jan 1st to Current Date
+	        	 */
+	        	Calendar c = Calendar.getInstance();
+	        	picker.getDatePicker().setMaxDate(c.getTimeInMillis());
+	        	c.set(Calendar.YEAR, 1980);
+	        	c.set(Calendar.MONTH, c.getMinimum(Calendar.MONTH));
+	        	c.set(Calendar.DATE, c.getMinimum(Calendar.DATE));
+	        	c.set(Calendar.HOUR_OF_DAY, c.getMinimum(Calendar.HOUR_OF_DAY));
+	            c.set(Calendar.MINUTE, c.getMinimum(Calendar.MINUTE));
+	            c.set(Calendar.SECOND, c.getMinimum(Calendar.SECOND));
+	            c.set(Calendar.MILLISECOND, c.getMinimum(Calendar.MILLISECOND));
+	        	picker.getDatePicker().setMinDate(c.getTimeInMillis());
 	            picker.setButton(DialogInterface.BUTTON_POSITIVE, 
 	                    getActivity().getString(android.R.string.ok),
 	                    new DialogInterface.OnClickListener() {

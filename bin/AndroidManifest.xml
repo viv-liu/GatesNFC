@@ -54,12 +54,14 @@
             android:name="com.example.gatesnfc.existing.ExistingActivity"
             android:screenOrientation="portrait"
    			android:configChanges="orientation|keyboardHidden"
+   			android:windowSoftInputMode="adjustResize"
             >
         </activity>
          
         <activity android:name="com.example.gatesnfc.New.NewActivity"
             android:screenOrientation="portrait"
-   			android:configChanges="orientation|keyboardHidden">
+   			android:configChanges="orientation|keyboardHidden"
+   			android:windowSoftInputMode="adjustResize">
             
         </activity>
         

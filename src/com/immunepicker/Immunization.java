@@ -9,7 +9,11 @@ import java.util.Calendar;
 public class Immunization {
 	private Calendar Date;
 	private String name;
+	private boolean isGreyed;
 	
+	public Immunization() {
+		isGreyed = false;
+	}
 	public Calendar getDate() {
 		return Date;
 	}
@@ -25,6 +29,14 @@ public class Immunization {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public boolean isGreyed() {
+		return isGreyed;
+	}
+	
+	public void setGreyed(boolean b) {
+		isGreyed = b;
 	}
 
 }

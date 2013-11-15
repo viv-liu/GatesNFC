@@ -1,7 +1,11 @@
 package com.example.gatesnfc;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Calendar;
+
+import com.immunepicker.Immunization;
+
 import android.util.Log;
 
 public class Patient {
@@ -158,6 +162,16 @@ public class Patient {
 			return false;
 		}
 	}
+	
+/*	public ArrayList<Immunization> getAllMyShotsList() {
+		for(int i = 0; i < immDatesArray.length; i++) {
+			if(immDatesArray[i] != null) {
+				Immunization im = new Immunization();
+				im.setGreyed(true);
+				
+			}
+		}
+	}*/
 
 	//*******************************************************************
 	// Private methods for constructing & decrypting Patient string
